@@ -7,8 +7,11 @@ Rails.application.routes.draw do
 
   get "/blog/new", to: "blog_posts#new", as: :blog_new
   get "/blog/:id", to: "blog_posts#show", as: :blog
+  patch "/blog/:id", to: "blog_posts#show"
+  get "/blog/edit/:id", to: "blog_posts#edit", as: :blog_edit
   post "/blog_posts ", to: "blog_posts#create", as: :blog_posts
  
+
   # Defines the root path route ("/")
   root "blog_posts#index"
 end
