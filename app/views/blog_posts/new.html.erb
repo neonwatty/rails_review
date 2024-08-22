@@ -1,0 +1,23 @@
+<div>
+  <h1> New blog post </h1>
+  <%= form_with model: @blog_post do |form|%>
+    <% if form.object.errors.any? %>
+      <% form.object.errors.full_messages.each do |message| %>
+        <div>
+          <%= message %>
+        </div>
+      <%end %>
+    <% end %>
+    <div>
+      <%= form.label :title%>
+      <%= form.text_field :title%>
+    </div>
+    <div>
+      <%= form.label :body %>
+      <%= form.text_area :body%>
+    </div>
+    <div class="mt-4">
+      <%= form.submit "Save", class: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    </div>
+  <% end %>
+</div>
