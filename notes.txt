@@ -1,0 +1,4 @@
+- generate a model Upload that belongs to Users and has one Active Storage attachment:
+
+rails g model Upload user:belongs_to video:attachment
+
