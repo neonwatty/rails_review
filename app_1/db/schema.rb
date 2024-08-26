@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_26_211524) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_26_225109) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -60,6 +60,24 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_26_211524) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "outputs", force: :cascade do |t|
+    t.bigint "upload_id", null: false
+    t.string "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["upload_id"], name: "index_outputs_on_upload_id"
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.bigint "upload_id", null: false
+    t.string "delivery"
+    t.string "preprocess"
+    t.string "process"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["upload_id"], name: "index_statuses_on_upload_id"
+  end
+
   create_table "uploads", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -81,5 +99,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_26_211524) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "outputs", "uploads"
+  add_foreign_key "statuses", "uploads"
   add_foreign_key "uploads", "users"
 end

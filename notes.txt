@@ -26,3 +26,6 @@ rails g model Upload user:belongs_to video:attachment
 
 # create Status table
 rails g model Status upload:belongs_to delivery:string preprocess:string action:string
+
+# create Output table
+rails g model Output upload:belongs_to result:string
