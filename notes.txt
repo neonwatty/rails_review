@@ -1,4 +1,11 @@
-- generate a model Upload that belongs to Users and has one Active Storage attachment:
+# create app with postgres and tailwind
+rails new MY_APP -d=postgresql --css=tailwind
 
+# create user (for backend use)
+rails g model User email:string password_digest:string
+
+# create upload with active attachment
 rails g model Upload user:belongs_to video:attachment
 
+# create Status table
+rails g model Status upload:belongs_to delivery:string preprocess:string action:string
