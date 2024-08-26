@@ -1,0 +1,21 @@
+<h1>New Upload</h1>
+<%= form_with(model: @upload, local: true) do |form| %>
+  <% if @upload.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@upload.errors.count, "error") %> prohibited this upload from being saved:</h2>
+      <ul>
+        <% @upload.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= form.label :video %>
+    <%= form.file_field :video %>
+  </div>
+  <div class="actions">
+    <%= form.submit 'Submit', class: 'bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-150 ease-in-out' %>
+  </div>
+<% end %>
+<%= link_to 'Back', uploads_path %>

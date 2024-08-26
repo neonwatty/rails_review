@@ -4,6 +4,9 @@ rails new MY_APP -d=postgresql --css=tailwind
 # create user (for backend use)
 rails g model User email:string password_digest:string
 
+# go to rails console, create user
+User.create({email: "neonwatty@gmail.com", password: "MY_PASSWORD", password_confirmation: "MY_PASSWORD"})
+
 # create upload with active attachment
 rails g model Upload user:belongs_to video:attachment
 
