@@ -1,5 +1,6 @@
 class UploadsController < ApplicationController
   before_action :set_upload, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
 
   def index
     @uploads = Upload.all

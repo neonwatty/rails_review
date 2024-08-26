@@ -1,8 +1,22 @@
 # create app with postgres and tailwind
 rails new MY_APP -d=postgresql --css=tailwind
 
+# create action storage record tables
+rails active_storage:install
+rails db:migrate
+
 # create user (for backend use)
-rails g model User email:string password_digest:string
+### just use devise
+# add it to gemfile
+bundle add devise
+
+# then follow setup instructions
+...
+
+# create User model via devise
+rails generate devise User
+
+# rails g model User email:string password_digest:string
 
 # go to rails console, create user
 User.create({email: "neonwatty@gmail.com", password: "MY_PASSWORD", password_confirmation: "MY_PASSWORD"})

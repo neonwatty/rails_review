@@ -1,6 +1,6 @@
-# has email and password_digest fields
-# has_secure_password password string and password_confirmation virtual objects
 class User < ApplicationRecord
-  validates :email, presence: true, uniqueness: true
-  has_secure_password
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
 end
