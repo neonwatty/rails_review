@@ -4,3 +4,7 @@
 **/._.DS_Store
 **/node_modules/
 **/.env
+# Environments
+.venv
+venv/
+venv.bak/

@@ -1,4 +1,4 @@
-class LambdaController < ApplicationController
+class LambdaFileController < ApplicationController
   skip_before_action :verify_authenticity_token # For API requests
   before_action :authenticate_request
 

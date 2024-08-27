@@ -14,3 +14,4 @@ ruff
 regex
 docker
 pydantic[email]
+requests

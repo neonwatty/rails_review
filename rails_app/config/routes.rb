@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # lambda test route 
-  post 'lambda/processed_image', to: 'lambda#processed_image'
+  post 'lambda_file/processed_image', to: 'lambda_file#processed_image'
 
 
   # Defines the root path route ("/")
