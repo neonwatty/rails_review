@@ -1,0 +1,65 @@
+service: dispatch-receiver
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: python3.10
+  stage: ${opt:stage, 'dev'}
+  region: ${env:AWS_REGION}
+  profile: ${env:AWS_PROFILE}
+  memorySize: 256 
+  timeout: 300
+  architecture: arm64
+  logRetentionInDays: 7
+  stackTags:
+    product: s3-receivers
+    customer-impact: true
+  iam:
+    role:
+      name: ${self:custom.serviceName}-${opt:stage, 'dev'}
+      statements:
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource: "*"
+  deploymentBucket:
+    name: promo-serverless-artifacts
+  deploymentPrefix: ${self:service}
+  environment:
+    STAGE: ${opt:stage, 'dev'}
+    CRUD_QUEUE: ${env:CRUD_QUEUE}
+  
+functions:
+  handler:
+    handler: dispatch.lambda_function.handler
+    description: 'dispatch handler'
+    package: 
+      individually: true
+      exclude:
+        - '**/*'
+      include:
+        - '../dispatch/*.py'
+        - '../sqs/messages/*.py'
+    events:
+      - s3:
+          bucket: app-1-user-files
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: dev/
+            - suffix: '.mp3'
+          existing: true
+      - s3:
+          bucket: app-1-user-files
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: sta/
+            - suffix: '.mp3'
+          existing: true
+      - s3:
+          bucket: app-1-user-files
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: pro/
+            - suffix: '.mp3'
+          existing: true

@@ -1,0 +1,3 @@
+krixik
+boto3==1.28.53
+supabase==2.6.0

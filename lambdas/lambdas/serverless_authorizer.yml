@@ -1,0 +1,46 @@
+service: gateway-authorizer
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: ${env:AWS_REGION}
+  profile: ${env:AWS_PROFILE}
+  runtime: python3.10
+  timeout: 300
+  architecture: arm64
+  stackTags:
+    product: gateway-functions
+    customer-impact: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:ListTables
+            - dynamodb:DescribeTable
+            - dynamodb:GetItem
+            - dynamodb:Query
+          Resource: "*"
+  deploymentBucket:
+    name: promo-serverless-artifacts
+  deploymentPrefix: ${self:service}
+  environment:
+    STAGE: ${opt:stage, 'dev'}
+
+package:
+  exclude:
+    - '**/*'
+  include:
+    - '../gateway/authorizer/*.py'
+    - '../tables/secrets/__init__.py'
+    - '../tables/secrets/row_read.py'
+    - '../tables/gateway/__init__.py'
+    - '../tables/gateway/row_read.py'
+
+functions:
+  handler:
+    handler: gateway.authorizer.authorizer.handler
+    description: 'api gateway authorizer lambda function'
+  

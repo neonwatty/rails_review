@@ -1,0 +1,16 @@
+boto3
+types-boto3
+httpx
+requests
+ffmpeg-python
+moviepy
+pydub
+pytest
+pytest-subtests
+pytest-xdist
+pyaml
+python-dotenv
+ruff
+regex
+docker
+pydantic[email]

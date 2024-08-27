@@ -1,0 +1,5 @@
+moviepy==1.0.3
+pydub==0.25.1
+boto3==1.28.53
+ffmpeg-python==0.2.0
+supabase==2.6.0

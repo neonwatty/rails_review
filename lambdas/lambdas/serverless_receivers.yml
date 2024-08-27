@@ -1,0 +1,117 @@
+service: receivers
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: ${env:AWS_REGION}
+  profile: ${env:AWS_PROFILE}
+  runtime: python3.10
+  timeout: 240
+  architecture: arm64
+  stackTags:
+    product: receiver-functions
+    customer-impact: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+            - s3:GetObject
+            - s3:PutObject
+          Resource:
+            - arn:aws:s3:::${env:BUCKET_MAIN}
+            - arn:aws:s3:::${env:BUCKET_MAIN}/*
+            - arn:aws:s3:::${env:BUCKET_TEST}
+            - arn:aws:s3:::${env:BUCKET_TEST}/*
+        - Effect: Allow
+          Action:
+            - dynamodb:ListTables
+            - dynamodb:UpdateTable
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:GetItem
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource: "*"
+
+  deploymentBucket:
+    name: promo-serverless-artifacts
+  deploymentPrefix: ${self:service}
+
+functions:
+  receiver_preprocess:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_preprocess:${opt:stage, 'dev'}
+    description: 'receiver preprocess lambda function'
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
+          batchSize: 1
+    environment:
+      STAGE: ${opt:stage, 'dev'}
+      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
+      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
+      SUPABASE_URL: ${env:SUPABASE_URL}
+      SUPABASE_KEY: ${env:SUPABASE_KEY}
+
+
+  receiver_step_1:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_step_1:${opt:stage, 'dev'}
+    description: ' receiver step 1 lambda function'
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_STEP_1}
+          batchSize: 1
+    environment:
+      STAGE: ${opt:stage, 'dev'}
+      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
+      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
+      SUPABASE_URL: ${env:SUPABASE_URL}
+      SUPABASE_KEY: ${env:SUPABASE_KEY}
+      KRIXIK_URL: ${env:KRIXIK_URL}
+      KRIXIK_KEY: ${env:KRIXIK_KEY}
+
+
+  receiver_end:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_end:${opt:stage, 'dev'}
+    description: 'end receiver lambda function'
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_END}
+          batchSize: 1
+    environment:
+      STAGE: ${opt:stage, 'dev'}
+      BUCKET_MAIN: ${env:BUCKET_MAIN}
+      BUCKET_TEST: ${env:BUCKET_TEST}
+      BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
+      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
+      FILE_LEDGER_MAIN: ${env:FILE_LEDGER_MAIN}
+      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
+      SUPABASE_URL: ${env:SUPABASE_URL}
+      SUPABASE_KEY: ${env:SUPABASE_KEY}
+      
+
+  receiver_rails:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_rails:${opt:stage, 'dev'}
+    description: 'test rails receiver lambda function'
+    environment:
+      STAGE: ${opt:stage, 'dev'}
+      BUCKET_MAIN: ${env:BUCKET_MAIN}
+      BUCKET_TEST: ${env:BUCKET_TEST}
+      BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
+      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
+      FILE_LEDGER_MAIN: ${env:FILE_LEDGER_MAIN}
+      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
+      SUPABASE_URL: ${env:SUPABASE_URL}
+      SUPABASE_KEY: ${env:SUPABASE_KEY}
+      RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}

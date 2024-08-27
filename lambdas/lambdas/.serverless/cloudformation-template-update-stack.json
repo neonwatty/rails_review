@@ -1,0 +1,383 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ReceiverUnderscorepreprocessLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/receivers-dev-receiver_preprocess"
+      }
+    },
+    "ReceiverUnderscorestepUnderscore1LogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/receivers-dev-receiver_step_1"
+      }
+    },
+    "ReceiverUnderscoreendLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/receivers-dev-receiver_end"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "receivers",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/receivers-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/receivers-dev*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket",
+                    "s3:GetObject",
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::app-1-main",
+                    "arn:aws:s3:::app-1-main/*",
+                    "arn:aws:s3:::app-1-test",
+                    "arn:aws:s3:::app-1-test/*"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:ListTables",
+                    "dynamodb:UpdateTable",
+                    "dynamodb:DescribeTable",
+                    "dynamodb:Query",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:GetItem"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:ReceiveMessage",
+                    "sqs:DeleteMessage",
+                    "sqs:GetQueueAttributes"
+                  ],
+                  "Resource": [
+                    "arn:aws:sqs:us-west-2:211125698903:queue_receiver_preprocess",
+                    "arn:aws:sqs:us-west-2:211125698903:queue_receiver_step_1",
+                    "arn:aws:sqs:us-west-2:211125698903:queue_receiver_end"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "receivers",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "ReceiverUnderscorepreprocessLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/receiver_preprocess@sha256:73133e9c4eec269dbb0bc42cc3b8eafbb89a8e071db72bbeb1d857fb8332913a"
+        },
+        "PackageType": "Image",
+        "FunctionName": "receivers-dev-receiver_preprocess",
+        "MemorySize": 1024,
+        "Timeout": 240,
+        "Architectures": [
+          "arm64"
+        ],
+        "Description": "receiver preprocess lambda function",
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev",
+            "FILE_LEDGER_TEMP": "temp-file-ledger",
+            "HISTORY_LEDGER_MAIN": "history-ledger",
+            "SUPABASE_URL": "https://merotdzixpuefupqkqdu.supabase.co",
+            "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcm90ZHppeHB1ZWZ1cHFrcWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI5OTc1NTcsImV4cCI6MjAzODU3MzU1N30.gYUtb1yrA018S3KVTRLEI0K0fcFP63CWBbTdMjV_GFM"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ReceiverUnderscorepreprocessLogGroup"
+      ]
+    },
+    "ReceiverUnderscorepreprocessLambdaVersion9fXavmu8KcQ0nEuRa8SVk5eOskJD1CfN43OE7DG4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReceiverUnderscorepreprocessLambdaFunction"
+        },
+        "CodeSha256": "73133e9c4eec269dbb0bc42cc3b8eafbb89a8e071db72bbeb1d857fb8332913a",
+        "Description": "receiver preprocess lambda function"
+      }
+    },
+    "ReceiverUnderscorestepUnderscore1LambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/receiver_step_1@sha256:171fac0d596bd68da51fe319028ce54df86021c687334304e8a91917e484d162"
+        },
+        "PackageType": "Image",
+        "FunctionName": "receivers-dev-receiver_step_1",
+        "MemorySize": 1024,
+        "Timeout": 240,
+        "Architectures": [
+          "arm64"
+        ],
+        "Description": " receiver step 1 lambda function",
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev",
+            "FILE_LEDGER_TEMP": "temp-file-ledger",
+            "HISTORY_LEDGER_MAIN": "history-ledger",
+            "SUPABASE_URL": "https://merotdzixpuefupqkqdu.supabase.co",
+            "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcm90ZHppeHB1ZWZ1cHFrcWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI5OTc1NTcsImV4cCI6MjAzODU3MzU1N30.gYUtb1yrA018S3KVTRLEI0K0fcFP63CWBbTdMjV_GFM",
+            "KRIXIK_URL": "https://cmtu49idb1.execute-api.us-west-2.amazonaws.com/pro",
+            "KRIXIK_KEY": "1d84d70e-5fe3-4623-9a74-7d5aced981d8"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ReceiverUnderscorestepUnderscore1LogGroup"
+      ]
+    },
+    "ReceiverUnderscorestepUnderscore1LambdaVersionIP0dNuPTQsxhAQZNKPy7ge5GJppHBoHLzwYmndV4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReceiverUnderscorestepUnderscore1LambdaFunction"
+        },
+        "CodeSha256": "171fac0d596bd68da51fe319028ce54df86021c687334304e8a91917e484d162",
+        "Description": " receiver step 1 lambda function"
+      }
+    },
+    "ReceiverUnderscoreendLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/receiver_end@sha256:5b1386ce8924a4a591f3fcb13c583c02749ec5924234b3b47db8cea82d806190"
+        },
+        "PackageType": "Image",
+        "FunctionName": "receivers-dev-receiver_end",
+        "MemorySize": 1024,
+        "Timeout": 240,
+        "Architectures": [
+          "arm64"
+        ],
+        "Description": "end receiver lambda function",
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev",
+            "BUCKET_MAIN": "app-1-main",
+            "BUCKET_TEST": "app-1-test",
+            "BUCKET_TRIGGER": "app-1-trigger",
+            "FILE_LEDGER_TEMP": "temp-file-ledger",
+            "FILE_LEDGER_MAIN": "file-ledger",
+            "HISTORY_LEDGER_MAIN": "history-ledger",
+            "SUPABASE_URL": "https://merotdzixpuefupqkqdu.supabase.co",
+            "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lcm90ZHppeHB1ZWZ1cHFrcWR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI5OTc1NTcsImV4cCI6MjAzODU3MzU1N30.gYUtb1yrA018S3KVTRLEI0K0fcFP63CWBbTdMjV_GFM"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ReceiverUnderscoreendLogGroup"
+      ]
+    },
+    "ReceiverUnderscoreendLambdaVersionsRvnxisjSvEgNK0qsJJBVpCCCoWYhWXt4pSW89UOMU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReceiverUnderscoreendLambdaFunction"
+        },
+        "CodeSha256": "5b1386ce8924a4a591f3fcb13c583c02749ec5924234b3b47db8cea82d806190",
+        "Description": "end receiver lambda function"
+      }
+    },
+    "ReceiverUnderscorepreprocessEventSourceMappingSQSQueuereceiverpreprocess": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:queue_receiver_preprocess",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ReceiverUnderscorepreprocessLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Enabled": true
+      }
+    },
+    "ReceiverUnderscorestepUnderscore1EventSourceMappingSQSQueuereceiverstep1": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:queue_receiver_step_1",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ReceiverUnderscorestepUnderscore1LambdaFunction",
+            "Arn"
+          ]
+        },
+        "Enabled": true
+      }
+    },
+    "ReceiverUnderscoreendEventSourceMappingSQSQueuereceiverend": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:queue_receiver_end",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ReceiverUnderscoreendLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Enabled": true
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": "promo-serverless-artifacts",
+      "Export": {
+        "Name": "sls-receivers-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ReceiverUnderscorepreprocessLambdaVersion9fXavmu8KcQ0nEuRa8SVk5eOskJD1CfN43OE7DG4"
+      },
+      "Export": {
+        "Name": "sls-receivers-dev-ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn"
+      }
+    },
+    "ReceiverUnderscorestepUnderscore1LambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ReceiverUnderscorestepUnderscore1LambdaVersionIP0dNuPTQsxhAQZNKPy7ge5GJppHBoHLzwYmndV4"
+      },
+      "Export": {
+        "Name": "sls-receivers-dev-ReceiverUnderscorestepUnderscore1LambdaFunctionQualifiedArn"
+      }
+    },
+    "ReceiverUnderscoreendLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ReceiverUnderscoreendLambdaVersionsRvnxisjSvEgNK0qsJJBVpCCCoWYhWXt4pSW89UOMU"
+      },
+      "Export": {
+        "Name": "sls-receivers-dev-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# FROM public.ecr.aws/lambda/python:3.12
+FROM public.ecr.aws/lambda/python:3.12-arm64
+
+# Set up environment variables and paths
+ENV PYTHONPATH=.
+
+# make new directory for app home
+ENV APP_HOME=${LAMBDA_TASK_ROOT}/app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+# copy and install requirements
+COPY --from=app_root lambdas/requirements/entrypoint_input.txt .
+RUN pip install -r entrypoint_input.txt
+
+# copy files
+COPY --from=app_root entrypoints/entrypoint_input.py ./entrypoints/entrypoint_input.py
+COPY --from=app_root entrypoints/utilities ./entrypoints/utilities
+COPY --from=app_root decorators ./decorators
+COPY --from=app_root tables/secrets ./tables/secrets
+COPY --from=app_root tables/public ./tables/public
+COPY --from=app_root s3 ./s3
+
+
+# Set cmd
+CMD [ "entrypoints/entrypoint_input.handler" ]
