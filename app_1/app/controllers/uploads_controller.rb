@@ -28,10 +28,12 @@ class UploadsController < ApplicationController
   end
 
   def update
-    if @upload.update(upload_params)
-      redirect_to @upload, notice: 'Upload was successfully updated.'
+    @upload = Upload.find(params[:user_id])
+    @upload.files.attach(params[:processed_image_key])
+    if @upload.save
+      redirect_to @upload, notice: 'Update was successfully created.'
     else
-      render :edit
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
