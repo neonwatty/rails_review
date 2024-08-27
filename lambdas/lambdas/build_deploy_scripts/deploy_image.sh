@@ -13,7 +13,8 @@ SERVICE_NAME=$2
 # Define the local and source .env file paths
 RELATIVE_PATH="../../"
 LOCAL_ENV_FILE=".env"
-SOURCE_ENV_FILE="${RELATIVE_PATH}.env"
+ROOT_PATH="../../../"
+SOURCE_ENV_FILE="${ROOT_PATH}.env"
 
 # Source the env_utils.sh script and check for failure
 source ${RELATIVE_PATH}/env_utils.sh

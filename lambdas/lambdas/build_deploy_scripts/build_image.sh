@@ -14,7 +14,8 @@ SERVICE_NAME=$2
 RELATIVE_PATH="../../"
 DOCKERFILES_DIR="../Dockerfiles"
 LOCAL_ENV_FILE=".env"
-SOURCE_ENV_FILE="${RELATIVE_PATH}.env"
+ROOT_PATH="../../../"
+SOURCE_ENV_FILE="${ROOT_PATH}.env"
 
 # Source the env_utils.sh script and check for failure
 source ${RELATIVE_PATH}/env_utils.sh

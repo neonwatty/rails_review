@@ -23,6 +23,13 @@ module App1
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    root = "../"
+    Dotenv.load(
+      File.join(root, ".env")
+    )
+
+
     config.lambda_api_key = ENV["LAMBDA_API_KEY"]
 
   end

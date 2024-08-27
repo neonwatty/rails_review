@@ -20,7 +20,7 @@ class UploadsController < ApplicationController
     if @upload.save
       redirect_to @upload, notice: 'Upload was successfully created.'
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
 
