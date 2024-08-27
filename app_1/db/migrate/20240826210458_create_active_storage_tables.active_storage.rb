@@ -11,7 +11,7 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
       t.text     :metadata
       t.string   :service_name, null: false
       t.bigint   :byte_size,    null: false
-      t.string   :checksum, unique: true, null: false
+      t.string   :checksum,     null: false
 
       if connection.supports_datetime_with_precision?
         t.datetime :created_at, precision: 6, null: false
@@ -20,6 +20,7 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
       end
 
       t.index [ :key ], unique: true
+      t.index [ :checksum ], unique: true
     end
 
     create_table :active_storage_attachments, id: primary_key_type do |t|
