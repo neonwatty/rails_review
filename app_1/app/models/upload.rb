@@ -1,12 +1,12 @@
 class Upload < ApplicationRecord
   belongs_to :user
-  has_one_attached :video
+  has_many_attached :files
   has_one :status, dependent: :destroy
   has_one :output, dependent: :destroy
   after_create :create_status
   after_create :create_output
 
-
+  validates :files, presence: true
   before_validation :set_default_user, if: -> { user_id.nil? }
 
   private

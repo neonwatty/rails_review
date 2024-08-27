@@ -5,7 +5,7 @@
     <thead class="bg-gray-100 border-b border-gray-200">
       <tr>
         <th class="py-3 px-6 text-left text-gray-600 font-medium uppercase">Name</th>
-        <th class="py-3 px-6 text-left text-gray-600 font-medium uppercase">File</th>
+        <th class="py-3 px-6 text-left text-gray-600 font-medium uppercase">Files</th>
         <th class="py-3 px-6 text-left text-gray-600 font-medium uppercase">Actions</th>
       </tr>
     </thead>
@@ -13,13 +13,25 @@
       <% @uploads.each do |upload| %>
         <tr class="border-b border-gray-200">
           <td class="py-3 px-6 text-gray-800">
-            <%= upload.video.attached? ? upload.video.filename.to_s : 'No file attached' %>
+            <% if upload.files.attached? %>
+              <% upload.files.each do |file| %>
+                <div class="mb-1">
+                  <%= file.filename.to_s %>
+                </div>
+              <% end %>
+            <% else %>
+              <span class="text-gray-500">No files attached</span>
+            <% end %>
           </td>
           <td class="py-3 px-6">
-            <% if upload.video.attached? %>
-              <%= link_to 'Download', rails_blob_path(upload.video, disposition: "attachment"), class: 'text-blue-500 hover:text-blue-600' %>
+            <% if upload.files.attached? %>
+              <% upload.files.each do |file| %>
+                <div class="mb-1">
+                  <%= link_to 'Download', rails_blob_path(file, disposition: "attachment"), class: 'text-blue-500 hover:text-blue-600' %>
+                </div>
+              <% end %>
             <% else %>
-              <span class="text-gray-500">No video attached</span>
+              <span class="text-gray-500">No files attached</span>
             <% end %>
           </td>
           <td class="py-3 px-6">
