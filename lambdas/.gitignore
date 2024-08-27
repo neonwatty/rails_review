@@ -12,7 +12,7 @@ bug_reports/
 scratch_notebooks/
 !.ruff.toml
 push_pypi.sh
-
+**/node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
