@@ -5,6 +5,8 @@ import time
 import uuid
 import requests
 import boto3
+from sqs.messages.message_poll import message_poll_no_id
+from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import step_setup, check_success, clean_up, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
@@ -35,6 +37,7 @@ STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_start"
 USER_ID = os.getenv("USER_ID_TEST_1")
+TEST_QUEUE = f"{APP_NAME}-test"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
@@ -116,7 +119,49 @@ def test_success(container_controller, subtests):
         print_container_logs(IMAGE_NAME)
         
         # check response successful, and tables / files look as they should given success
-        check_success(subtests, response)
+        assert response.status_code == 200
+        if s3_key_save is not None:
+            body = json.loads(response.json()["body"])        
+            assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
+            assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
+            s3_key_save = body["s3_key_save"]
+            bucket_name_save = body["bucket_name_save"]
+        content = json.loads(response.content.decode('utf-8'))
+        assert content["statusCode"] == 200
+        
+        # check for message in test queue
+        receipt_handle = None
+        with subtests.test(msg="check message queue"):
+            # poll queue
+            queue_data = message_poll_no_id(TEST_QUEUE)
+            
+            # unpack queue data
+            message_id = queue_data["message_id"]
+            message = queue_data["message"]
+            receipt_handle = queue_data["receipt_handle"]
+            
+            # unpack message
+            print(f"message --> {message}")
+            print(f"type of message --> {type(message)}")
+            assert message["url"] == "status_update"
+            assert message["lambda"] == "receiver_start"
+            assert message["status"] == "complete"
+            
+        # delete message
+        with subtests.test(msg="delete message"):
+            delete_response = message_delete(TEST_QUEUE, receipt_handle)
+            assert delete_response is True
+       
+        # check output file exists
+        with subtests.test(msg="check that output file now exists"):
+            s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
+            
+        # delete input test file
+        with subtests.test(msg="delete test file"):
+            response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
+            assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"
 
-    ### clean up files and tables ###
-    clean_up(subtests, s3_key, s3_key_save)
+        # delete output test file
+        with subtests.test(msg="delete test output file"):
+            response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key_save)
+            assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"

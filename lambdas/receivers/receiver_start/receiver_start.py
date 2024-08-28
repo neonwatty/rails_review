@@ -8,12 +8,12 @@ from receivers.utilities.create_io_dir import local_input_file_path, local_outpu
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
 
+STATUS_QUEUE = f"{APP_NAME}-test"
+BUCKET_NAME_SAVE = f"{APP_NAME}-test"
 if STAGE in ["development", "production"]:
     STATUS_QUEUE = f"{APP_NAME}-status"
-elif STAGE == "test":
-    STATUS_QUEUE = f"{APP_NAME}-test"
-else:
-    STATUS_QUEUE = f"{APP_NAME}-unknown"
+    BUCKET_NAME_SAVE = f"{APP_NAME}-trigger"
+
 
 @warmer
 def lambda_handler(event, context):
@@ -29,26 +29,19 @@ def lambda_handler(event, context):
         user_id = event["user_id"]
         upload_id = event["upload_id"]
         
-        # route file copy to appropriate bucket based on stage
-        bucket_name_save = f"{APP_NAME}-{STAGE}"
-        if stage == "test":
-            pass
-        if stage == "development":
-            pass
-        if stage == "production": 
-            pass
-        
+
         # download file to lambda
         s3_client.download_file(bucket_name, file_key, local_input_file_path)
         print(f"SUCCESS: File downloaded to {local_input_file_path}")
         
         # save file back to s3
         s3_key_save = f"{user_id}/{upload_id}/receiver_start"
-        s3_client.upload_file(local_input_file_path, bucket_name_save, s3_key_save)
+        s3_client.upload_file(local_input_file_path, BUCKET_NAME_SAVE, s3_key_save)
         print("SUCCESS: File uploaded to s3")
         
         # send status update to queue
         status = {
+            "url": "status_update",
             "lambda": "receiver_start",
             "user_id": user_id,
             "upload_id": upload_id,
@@ -58,7 +51,7 @@ def lambda_handler(event, context):
         if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
             return {
                 'statusCode': 200,
-                'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": bucket_name_save})
+                'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": BUCKET_NAME_SAVE})
             }
         else:
             failure_message = f"sqs status queue did not accept status message --> {STATUS_QUEUE}"
@@ -72,6 +65,7 @@ def lambda_handler(event, context):
         try:
             # send status update to queue   
             status = {
+                "url": "status_update",
                 "lambda": "receiver_start",
                 "user_id": user_id,
                 "upload_id": upload_id,
