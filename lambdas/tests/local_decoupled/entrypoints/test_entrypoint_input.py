@@ -25,7 +25,7 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 BUCKET_TEST = os.environ["BUCKET_TEST"]
 IMAGE_NAME = "entrypoint_input"
 LAMBDA_FUNCTION_NAME = f"entrypoints-{STAGE}-{IMAGE_NAME}"

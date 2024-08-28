@@ -4,7 +4,7 @@ from tests.utilities.execute_subprocess import execute_subprocess_command
 
 current_directory = os.getcwd()
 
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 
 configs = ["serverless_entrypoints.yml"]
 

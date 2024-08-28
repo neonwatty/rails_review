@@ -31,7 +31,8 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # Define your test parameters
-STAGE = os.environ.get("STAGE", "dev")
+APP_NAME=os.environ["APP_NAME"]
+STAGE = os.environ.get("STAGE", "development")
 BUCKET_TEST = os.environ["BUCKET_TEST"]
 IMAGE_NAME = "entrypoint_input"
 LAMBDA_FUNCTION_NAME = f"entrypoints-{STAGE}-{IMAGE_NAME}"
@@ -61,7 +62,7 @@ def build_deploy():
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
 
     # deploy image
-    command = ["bash", "deploy_image.sh", STAGE, IMAGE_NAME]
+    command = ["bash", "deploy_image.sh", APP_NAME, STAGE, IMAGE_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
 
     # deploy lambdas

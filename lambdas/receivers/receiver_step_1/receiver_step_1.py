@@ -10,7 +10,7 @@ from tables.public.row_create import create
 from tables.public.row_read import read
 
 
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 FILE_LEDGER_TEMP = os.environ["FILE_LEDGER_TEMP"]
 HISTORY_LEDGER_MAIN = os.environ["HISTORY_LEDGER_MAIN"]
 LAMBDA_FUNCTION_NAME = os.environ.get("AWS_LAMBDA_FUNCTION_NAME", "local-test")

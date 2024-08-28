@@ -8,5 +8,5 @@ if aws_profile:
 else:
     session = boto3.Session(region_name="us-west-2")
 
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 s3_client = session.client("s3")

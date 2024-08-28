@@ -32,7 +32,7 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # Define your test parameters
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 BUCKET_TEST = os.environ["BUCKET_TEST"]
 BUCKET_TRIGGER = os.environ["BUCKET_TRIGGER"]
 BUCKET_MAIN = os.environ["BUCKET_MAIN"]

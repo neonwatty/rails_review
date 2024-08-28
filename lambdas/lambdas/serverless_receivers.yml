@@ -49,51 +49,50 @@ provider:
     name: promo-serverless-artifacts
   deploymentPrefix: ${self:service}
 
-functions:
-  receiver_preprocess:
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_preprocess:${opt:stage, 'dev'}
-    description: 'receiver preprocess lambda function'
-    events:
-      - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
-          batchSize: 1
-    environment:
-      STAGE: ${opt:stage, 'dev'}
-
-
-  receiver_step_1:
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_step_1:${opt:stage, 'dev'}
-    description: ' receiver step 1 lambda function'
-    events:
-      - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_STEP_1}
-          batchSize: 1
-    environment:
-      STAGE: ${opt:stage, 'dev'}
-      KRIXIK_URL: ${env:KRIXIK_URL}
-      KRIXIK_KEY: ${env:KRIXIK_KEY}
-
-
-  receiver_end:
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_end:${opt:stage, 'dev'}
-    description: 'end receiver lambda function'
-    events:
-      - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_END}
-          batchSize: 1
-    environment:
-      STAGE: ${opt:stage, 'dev'}
-      BUCKET_MAIN: ${env:BUCKET_MAIN}
-      BUCKET_TEST: ${env:BUCKET_TEST}
-      BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
-      
-
-  receiver_rails:
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/receiver_rails:${opt:stage, 'dev'}
+  receiver_start:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'development'}
     description: 'test rails receiver lambda function'
     environment:
-      STAGE: ${opt:stage, 'dev'}
+      STAGE: ${opt:stage, 'development'}
       BUCKET_MAIN: ${env:BUCKET_MAIN}
       BUCKET_TEST: ${env:BUCKET_TEST}
       BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
       RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
+
+# functions:
+#   receiver_preprocess:
+#     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'development'}
+#     description: 'receiver preprocess lambda function'
+#     events:
+#       - sqs:
+#           arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
+#           batchSize: 1
+#     environment:
+#       STAGE: ${opt:stage, 'dev'}
+
+
+#   receiver_step_1:
+#     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_step_1:${opt:stage, 'development'}
+#     description: ' receiver step 1 lambda function'
+#     events:
+#       - sqs:
+#           arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_STEP_1}
+#           batchSize: 1
+#     environment:
+#       STAGE: ${opt:stage, 'dev'}
+#       KRIXIK_URL: ${env:KRIXIK_URL}
+#       KRIXIK_KEY: ${env:KRIXIK_KEY}
+
+
+#   receiver_end:
+#     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_end:${opt:stage, 'development'}
+#     description: 'end receiver lambda function'
+#     events:
+#       - sqs:
+#           arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_END}
+#           batchSize: 1
+#     environment:
+#       STAGE: ${opt:stage, 'dev'}
+#       BUCKET_MAIN: ${env:BUCKET_MAIN}
+#       BUCKET_TEST: ${env:BUCKET_TEST}
+#       BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}

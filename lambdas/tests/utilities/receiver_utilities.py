@@ -23,7 +23,7 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # import variables
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 BUCKET_TEST = os.environ["BUCKET_TEST"]
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"

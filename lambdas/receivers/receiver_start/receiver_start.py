@@ -6,7 +6,8 @@ from tables.public.row_update import update
 from tables.public.row_read import read
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
-BUCKET_TEST = os.environ["BUCKET_TEST"]
+STAGE = os.environ["STAGE"]
+APP_NAME = os.environ["APP_NAME"]
 BUCKET_TRIGGER = os.environ["BUCKET_TRIGGER"]
 
 
@@ -25,7 +26,7 @@ def lambda_handler(event, context):
         upload_id = event["upload_id"]
         
         # route file copy to appropriate bucket based on stage
-        bucket_name_save = BUCKET_TEST
+        bucket_name_save = f"{APP_NAME}-{STAGE}"
         if stage == "test":
             pass
         if stage == "development":

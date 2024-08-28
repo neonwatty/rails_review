@@ -11,7 +11,7 @@ from tables.public.row_read import read
 from s3.client_utilities import list_subdir, upload, download, delete
 
 
-STAGE = os.environ.get("STAGE", "dev")
+STAGE = os.environ.get("STAGE", "development")
 FILE_LEDGER_TEMP = os.environ["FILE_LEDGER_TEMP"]
 FILE_LEDGER_MAIN = os.environ["FILE_LEDGER_MAIN"]
 BUCKET_MAIN = os.environ["BUCKET_MAIN"]
