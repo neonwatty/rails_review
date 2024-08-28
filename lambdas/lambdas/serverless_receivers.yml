@@ -33,7 +33,6 @@ provider:
 
   deploymentBucket:
     name: ${env:APP_NAME}-serverless-artifacts
-  # deploymentPrefix: ${self:service}
 
 functions:
   receiver_start:

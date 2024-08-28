@@ -1,12 +1,19 @@
 import os
 import json
 from receivers import s3_client
+from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
 
+if STAGE in ["development", "production"]:
+    STATUS_QUEUE = f"{APP_NAME}-status"
+elif STAGE == "test":
+    STATUS_QUEUE = f"{APP_NAME}-test"
+else:
+    STATUS_QUEUE = f"{APP_NAME}-unknown"
 
 @warmer
 def lambda_handler(event, context):
@@ -39,21 +46,41 @@ def lambda_handler(event, context):
         s3_key_save = f"{user_id}/{upload_id}/receiver_start"
         s3_client.upload_file(local_input_file_path, bucket_name_save, s3_key_save)
         print("SUCCESS: File uploaded to s3")
-
-        return {
-            'statusCode': 200,
-            'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": bucket_name_save})
-        }
         
-    except json.JSONDecodeError:
-        failure_message = "Invalid JSON payload"
-        print(f"FAILURE: status code --> {400}")
-        print(failure_message)
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'status': 'error', 'message': failure_message})
+        # send status update to queue
+        status = {
+            "lambda": "receiver_start",
+            "user_id": user_id,
+            "upload_id": upload_id,
+            "status": "complete"
         }
+        response = message_create(STATUS_QUEUE, status)
+        if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": bucket_name_save})
+            }
+        else:
+            failure_message = f"sqs status queue did not accept status message --> {STATUS_QUEUE}"
+            print(f"FAILURE: status code --> {500}")
+            print(failure_message)
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'status': 'error', 'message': failure_message})
+            }
     except Exception as e:
+        try:
+            # send status update to queue   
+            status = {
+                "lambda": "receiver_start",
+                "user_id": user_id,
+                "upload_id": upload_id,
+                "status": "fail"
+            }
+            response = message_create(STATUS_QUEUE, status)
+        except:
+            pass
+            
         failure_message = str(e)
         print(f"FAILURE: status code --> {500}")
         print(failure_message)
