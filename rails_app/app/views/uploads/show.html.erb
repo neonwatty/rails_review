@@ -6,5 +6,5 @@
 <% else %>
   <p>No files attached.</p>
 <% end %>
-<%= link_to 'Edit', edit_upload_path(@upload) %> |
-<%= link_to 'Back', uploads_path %>
+<%= link_to 'Back', uploads_path, class: 'text-blue-500 hover:text-blue-700 font-medium' %>
+<%= button_to "Delete" , upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600' %>
