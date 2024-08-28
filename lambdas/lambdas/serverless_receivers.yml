@@ -59,10 +59,6 @@ functions:
           batchSize: 1
     environment:
       STAGE: ${opt:stage, 'dev'}
-      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
-      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
-      SUPABASE_URL: ${env:SUPABASE_URL}
-      SUPABASE_KEY: ${env:SUPABASE_KEY}
 
 
   receiver_step_1:
@@ -74,10 +70,6 @@ functions:
           batchSize: 1
     environment:
       STAGE: ${opt:stage, 'dev'}
-      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
-      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
-      SUPABASE_URL: ${env:SUPABASE_URL}
-      SUPABASE_KEY: ${env:SUPABASE_KEY}
       KRIXIK_URL: ${env:KRIXIK_URL}
       KRIXIK_KEY: ${env:KRIXIK_KEY}
 
@@ -94,11 +86,6 @@ functions:
       BUCKET_MAIN: ${env:BUCKET_MAIN}
       BUCKET_TEST: ${env:BUCKET_TEST}
       BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
-      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
-      FILE_LEDGER_MAIN: ${env:FILE_LEDGER_MAIN}
-      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
-      SUPABASE_URL: ${env:SUPABASE_URL}
-      SUPABASE_KEY: ${env:SUPABASE_KEY}
       
 
   receiver_rails:
@@ -109,9 +96,4 @@ functions:
       BUCKET_MAIN: ${env:BUCKET_MAIN}
       BUCKET_TEST: ${env:BUCKET_TEST}
       BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
-      FILE_LEDGER_TEMP: ${env:FILE_LEDGER_TEMP}
-      FILE_LEDGER_MAIN: ${env:FILE_LEDGER_MAIN}
-      HISTORY_LEDGER_MAIN: ${env:HISTORY_LEDGER_MAIN}
-      SUPABASE_URL: ${env:SUPABASE_URL}
-      SUPABASE_KEY: ${env:SUPABASE_KEY}
       RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
