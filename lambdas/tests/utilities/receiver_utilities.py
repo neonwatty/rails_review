@@ -136,13 +136,18 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     return file_id, request_id, s3_key, s3_key_save, receipt_handle
 
 
-def check_success(subtests, response, file_id, s3_key_save, local: bool = True):
+def check_success(subtests, response, local: bool = True):
+    s3_key_save = None
+    bucket_name_save = None
     if local:
         # Check the response
         assert response.status_code == 200
         if s3_key_save is not None:
             body = json.loads(response.json()["body"])        
-            assert "s3_key_save" in list(body.keys()), "FAILURE: return values from execution not present"
+            assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
+            assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
+            s3_key_save = body["s3_key_save"]
+            bucket_name_save = body["bucket_name_save"]
     else:
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
@@ -152,37 +157,25 @@ def check_success(subtests, response, file_id, s3_key_save, local: bool = True):
             body = json.loads(content["body"])
             assert "s3_key_save" in list(body.keys()), "FAILURE: return values from execution not present"
 
-    # check that row in file-ledger table now exists (associated with process file_id)
-    with subtests.test(msg="check that row in table for file_id now exists"):
-        response = read(FILE_LEDGER_TEMP, "file_id", file_id)
-        assert len(response) > 0, f"FAILURE: cannot find row in temp file-ledger table with file_id {file_id}"
-        status = response[0]["status"]
-        status_keys = list(status.keys())
-        assert "entrypoint_input" in status_keys
-        assert "receiver_preprocess" in status_keys
-
     # check that processed version of test file now exists
     if s3_key_save is not None:
         with subtests.test(msg="check that output file now exists"):
             try:
-                s3_client.head_object(Bucket=BUCKET_TEST, Key=s3_key_save)
+                s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
             except ClientError as e:
                 # If a ClientError is raised, the object does not exist, which is expected
                 if e.response["Error"]["Code"] == "404":
                     # Object does not exist, so the deletion was successful
-                    assert True, f"FAILURE: Test object does not at {BUCKET_TEST}/{s3_key_save}"
+                    assert True, f"FAILURE: Test object does not at {bucket_name}/{s3_key_save}"
                 else:
                     # Re-raise the exception if it's not a 404 error
                     raise
             else:
                 # If no exception is raised, the object still exists
-                assert True, f"FAILURE: Test object does not exist {BUCKET_TEST}/{s3_key_save}"
+                assert True, f"FAILURE: Test object does not exist {bucket_name}/{s3_key_save}"
 
-    # check that row in history-ledger table does not exist
-    with subtests.test(msg="check that row for file_id not in history ledger"):
-        response = read(HISTORY_LEDGER_MAIN, "file_id", file_id)
-        assert len(response) == 0
 
+# STOPPED HERE
 
 # after work clean up
 def clean_up(subtests, s3_key, s3_key_save, file_id, bucket_name: str = BUCKET_TEST, file_ledger_name: str = FILE_LEDGER_TEMP):

@@ -42,7 +42,7 @@ def lambda_handler(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps({'status': 'success', 'message': message})
+            'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": bucket_name_save})
         }
         
     except json.JSONDecodeError:

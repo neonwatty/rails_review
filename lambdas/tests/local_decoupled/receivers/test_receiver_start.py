@@ -86,41 +86,36 @@ def container_controller():
 
 
 def test_success(container_controller, subtests):
-    # construct event from app
+    # construct event payload for app
     upload_id = 0
     user_id = 0
     file_key = str(uuid.uuid32())
-    s3_key = f"{user_id}/{upload_id}/{file_key}"
-    bucket_name = f"{APP_NAME}-test"
     payload = {
       "message": 'File uploaded successfully',
       "upload_id": upload_id,
       "user_id": user_id,
       "file_key": file_key,
-      "bucket_name": "#{ENV['APP_NAME']}-#{Rails.env}",
-      "stage": "#{Rails.env}"
+      "bucket_name": BUCKET_TEST,
+      "stage": "test"
     }
   
-    # upload test file
+    # upload test file - first create s3_key
+    s3_key = f"{user_id}/{upload_id}/{file_key}"
+
     with subtests.test(msg="create a test file"):
         with open(test_file_path, "rb") as file_data:
             s3_client.put_object(Bucket=BUCKET_TEST, Key=s3_key, Body=file_data)
-
-            
-    ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="not started")  
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
     
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
         # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
+        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(payload), headers={"Content-Type": "application/json"})
 
         # print docker logs
         print_container_logs(IMAGE_NAME)
         
         # check response successful, and tables / files look as they should given success
-        check_success(subtests, response, file_id, s3_key_save)
+        check_success(subtests, response)
 
     ### clean up files and tables ###
     clean_up(subtests, s3_key, s3_key_save, file_id)
