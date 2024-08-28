@@ -26,13 +26,11 @@ def lambda_handler(event, context):
         }
         
     except json.JSONDecodeError:
-        # Handle JSON decode errors
         return {
             'statusCode': 400,
             'body': json.dumps({'status': 'error', 'message': 'Invalid JSON payload'})
         }
     except Exception as e:
-        # Handle other potential errors
         return {
             'statusCode': 500,
             'body': json.dumps({'status': 'error', 'message': str(e)})

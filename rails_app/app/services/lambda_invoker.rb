@@ -6,10 +6,14 @@ class LambdaInvoker
     @client = Aws::Lambda::Client.new(region: ENV['AWS_REGION'])
   end
 
-  def invoke_function(file_key)
+  def invoke_function(file_key, upload_id, user_id)
     payload = {
       message: 'File uploaded successfully',
-      file_key: file_key
+      upload_id: upload_id,
+      user_id: user_id,
+      file_key: file_key,
+      bucket_name: ENV["AWS_RAILS_INBOUND_BUCKET"],
+      stage: Rails.env 
     }.to_json
 
     response = @client.invoke({

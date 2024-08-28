@@ -1,8 +1,0 @@
-
-{
-  "requestContext": {
-      "apiId": "v2gewbfpag"
-  },
-  "event": "{\"pipeline\": \"scratch-docs\", \"file_id\": \"e63c43b4-9ef3-4390-81dc-eea7f73dfafc\"}",
-  "context": "{\"pipeline\": \"scratch-docs\", \"file_id\": \"e63c43b4-9ef3-4390-81dc-eea7f73dfafc\"}"
-}

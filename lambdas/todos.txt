@@ -1,15 +1,1 @@
-2.  Change "upload" to "preprocess" - all references and resources
-3.  Update "upload" --> "preprocess" queue receiver with suffix "input"
-5.  Re-evaluate need for "history_this" decorator - deletes and history ledger recording can be bespoke
-6.  Carry over whisper lambda
-7.  Complete all local / cloud decoupled tests
-8.  Build / complete full backend cloud tests
-
-
-- check hash
-- Make file_size_mb adjustable in test mode
-  - create test for history catch
-    - should
-      - delete file
-      - delete row in file ledger
-      - create row in history table
+- complete receiver start and test individually
