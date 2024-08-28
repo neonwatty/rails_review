@@ -8,8 +8,19 @@ class Upload < ApplicationRecord
 
   validates :files, presence: true
   before_validation :set_default_user, if: -> { user_id.nil? }
+  after_commit :check_and_invoke_lambda, on: :create
 
   private
+  def check_and_invoke_lambda
+    if files.attached? && !files_attached
+      # Check if this is the first file being attached
+      if files.count == 1
+        file_key = files.first.key # Get the key of the first attached file
+        LambdaInvoker.new.invoke_function(file_key)
+        update(files_attached: true)
+      end
+    end
+  end
 
   def set_default_user
     self.user = User.find(1)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_26_225109) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_27_233627) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_26_225109) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "files_attached"
     t.index ["user_id"], name: "index_uploads_on_user_id"
   end
 
