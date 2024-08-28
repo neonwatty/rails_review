@@ -29,3 +29,4 @@ rails g model Status upload:belongs_to delivery:string preprocess:string action:
 
 # create Output table
 rails g model Output upload:belongs_to result:string
+

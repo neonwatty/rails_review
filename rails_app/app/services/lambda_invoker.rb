@@ -12,12 +12,15 @@ class LambdaInvoker
       upload_id: upload_id,
       user_id: user_id,
       file_key: file_key,
-      bucket_name: ENV["AWS_RAILS_INBOUND_BUCKET"],
-      stage: Rails.env 
+      bucket_name: "#{ENV['APP_NAME']}-#{Rails.env}",
+      stage: "#{Rails.env}"
     }.to_json
 
+    print payload
+    print "#{ENV['APP_NAME']}-receiver_start-#{Rails.env}"
+
     response = @client.invoke({
-      function_name: ENV['RECEIVER_START_LAMBDA'],
+      function_name: "#{ENV['APP_NAME']}-receiver_start-#{Rails.env}",
       invocation_type: 'Event',
       payload: payload
     })

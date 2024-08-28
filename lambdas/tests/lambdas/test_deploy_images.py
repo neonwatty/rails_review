@@ -6,9 +6,8 @@ current_directory = os.getcwd()
 
 STAGE = os.environ.get("STAGE", "development")
 
-entrypoints = ["entrypoint_input", "entrypoint_output", "entrypoint_status", "entrypoint_delete"]
-receivers = ["receiver_preprocess"]
-docker_images = entrypoints + receivers
+receivers = ["receiver_start"]
+docker_images = receivers
 
 
 @pytest.mark.parametrize("IMAGE_NAME", docker_images)

@@ -14,6 +14,7 @@ amazon:
   region: <%= ENV["AWS_REGION"] %>
   bucket: <%= ENV["APP_NAME"] %>-<%= Rails.env %>
 
+
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS
