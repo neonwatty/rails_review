@@ -7,9 +7,8 @@ if [ "$#" -lt 2 ]; then
 fi
 
 # take in command line argument
-APP_NAME=$1
-STAGE=$2
-SERVICE_NAME=$3
+STAGE=$1
+SERVICE_NAME=$2
 
 # Define the local and source .env file paths
 RELATIVE_PATH="../../"
@@ -38,6 +37,12 @@ fi
 # Check if ACCOUNT_ID is set
 if [ -z "$ACCOUNT_ID" ]; then
   echo "ACCOUNT_ID is not set in .env"
+  exit 1
+fi
+
+# check if APP_NAME is set 
+if [ -z "$APP_NAME" ]; then
+  echo "APP_NAME is not set in .env"
   exit 1
 fi
 

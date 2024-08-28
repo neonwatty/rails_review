@@ -4,7 +4,7 @@ useDotenv: true
 
 provider:
   name: aws
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'development'}
   region: ${env:AWS_REGION}
   profile: ${env:AWS_PROFILE}
   runtime: python3.10
@@ -22,42 +22,31 @@ provider:
             - s3:GetObject
             - s3:PutObject
           Resource:
-            - arn:aws:s3:::${env:BUCKET_MAIN}
-            - arn:aws:s3:::${env:BUCKET_MAIN}/*
-            - arn:aws:s3:::${env:BUCKET_TEST}
-            - arn:aws:s3:::${env:BUCKET_TEST}/*
-        - Effect: Allow
-          Action:
-            - dynamodb:ListTables
-            - dynamodb:UpdateTable
-            - dynamodb:DescribeTable
-            - dynamodb:Query
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:GetItem
-          Resource: "*"
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'development'}
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'development'}/*
+            - arn:aws:s3:::${env:APP_NAME}-trigger
+            - arn:aws:s3:::${env:APP_NAME}-trigger/*
         - Effect: Allow
           Action:
             - sqs:*
           Resource: "*"
-        - Effect: Allow
-          Action:
-            - s3:*
-          Resource: "*"
 
   deploymentBucket:
-    name: promo-serverless-artifacts
-  deploymentPrefix: ${self:service}
+    name: ${env:APP_NAME}-serverless-artifacts
+  # deploymentPrefix: ${self:service}
 
+functions:
   receiver_start:
+    name: ${env:APP_NAME}-receiver_start-${opt:stage, 'development'}
     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'development'}
     description: 'test rails receiver lambda function'
     environment:
       STAGE: ${opt:stage, 'development'}
-      BUCKET_MAIN: ${env:BUCKET_MAIN}
-      BUCKET_TEST: ${env:BUCKET_TEST}
-      BUCKET_TRIGGER: ${env:BUCKET_TRIGGER}
-      RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
+      APP_NAME: ${env:APP_NAME}
+
+
+
+      # RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
 
 # functions:
 #   receiver_preprocess:

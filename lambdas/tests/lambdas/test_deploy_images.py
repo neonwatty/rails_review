@@ -4,7 +4,6 @@ from tests.utilities.execute_subprocess import execute_subprocess_command
 
 current_directory = os.getcwd()
 
-APP_NAME=os.environ["APP_NAME"]
 STAGE = os.environ.get("STAGE", "development")
 
 entrypoints = ["entrypoint_input", "entrypoint_output", "entrypoint_status", "entrypoint_delete"]
@@ -15,5 +14,5 @@ docker_images = entrypoints + receivers
 @pytest.mark.parametrize("IMAGE_NAME", docker_images)
 def test_deploy_image(IMAGE_NAME):
     # deploy image
-    command = ["bash", "deploy_image.sh", APP_NAME, STAGE, IMAGE_NAME]
+    command = ["bash", "deploy_image.sh", STAGE, IMAGE_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")

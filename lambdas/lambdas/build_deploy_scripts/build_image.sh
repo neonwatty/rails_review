@@ -53,6 +53,7 @@ if [ -z "$ACCOUNT_ID" ]; then
   exit 1
 fi
 
+
 # build docker image
 echo 'INFO: building docker image'
 docker buildx build --platform linux/arm64/v8 . --build-context app_root=$RELATIVE_PATH -f ../Dockerfiles/$SERVICE_NAME -t $SERVICE_NAME

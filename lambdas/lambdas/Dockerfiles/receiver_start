@@ -10,19 +10,18 @@ RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 # copy and install requirements
-COPY --from=app_root lambdas/requirements/receiver_rails.txt .
-RUN pip install -r receiver_rails.txt
+COPY --from=app_root lambdas/requirements/receiver_start.txt .
+RUN pip install -r receiver_start.txt
 
 # copy files
 COPY --from=app_root receivers/__init__.py ./receivers/__init__.py
 COPY --from=app_root receivers/utilities ./receivers/utilities
-COPY --from=app_root receivers/receiver_rails ./receivers/receiver_rails
+COPY --from=app_root receivers/receiver_start ./receivers/receiver_start
 COPY --from=app_root decorators ./decorators
 COPY --from=app_root sqs/messages ./sqs/messages
 COPY --from=app_root s3 ./s3
-COPY --from=app_root tables/public ./tables/public
 COPY --from=app_root utilities/tools ./utilities/tools
 
 
 # Set cmd
-CMD [ "receivers/receiver_rails/receiver_rails.handler" ]
+CMD [ "receivers/receiver_start/receiver_start.handler" ]

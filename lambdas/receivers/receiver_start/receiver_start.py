@@ -2,13 +2,10 @@ import os
 import json
 from receivers import s3_client
 from decorators.warmer import warmer
-from tables.public.row_update import update
-from tables.public.row_read import read
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
-BUCKET_TRIGGER = os.environ["BUCKET_TRIGGER"]
 
 
 @warmer
