@@ -2,6 +2,7 @@ import pytest
 import os
 import json
 import time
+import uuid
 import requests
 import boto3
 from tests.utilities.execute_subprocess import execute_subprocess_command
@@ -29,7 +30,8 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-STAGE = os.environ.get("STAGE", "development")
+APP_NAME = os.environ["APP_NAME"]
+STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_start"
 USER_ID = os.getenv("USER_ID_TEST_1")
@@ -85,6 +87,11 @@ def container_controller():
 
 def test_success(container_controller, subtests):
     # construct event from app
+    upload_id = 0
+    user_id = 0
+    file_key = str(uuid.uuid32())
+    s3_key = f"{user_id}/{upload_id}/{file_key}"
+    bucket_name = f"{APP_NAME}-test"
     payload = {
       "message": 'File uploaded successfully',
       "upload_id": upload_id,
