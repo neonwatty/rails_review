@@ -9,12 +9,12 @@ class Status < ApplicationRecord
   private
 
   def set_default_delivery
-    self.delivery = "pending"
+    self.receiver_start = "pending"
   end
   def set_default_preprocess
-    self.preprocess = "pending"
+    self.receiver_preprocess = "pending"
   end
   def set_default_process
-    self.process = "pending"
+    self.receiver_process = "pending"
   end
 end

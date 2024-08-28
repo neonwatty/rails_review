@@ -1,0 +1,2 @@
+module LambdaStatusHelper
+end

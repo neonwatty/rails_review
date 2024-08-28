@@ -10,8 +10,10 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # lambda test route 
+  # lambda routes
   post 'lambda_file/processed_image', to: 'lambda_file#processed_image'
+  post 'lambda_status/update', to: 'lambda_status#update'
+  post 'lambda_outputs/update', to: 'lambda_outputs#update'
 
 
   # Defines the root path route ("/")
