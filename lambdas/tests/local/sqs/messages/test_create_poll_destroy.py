@@ -8,7 +8,7 @@
 
 # load_dotenv("./.env")
 
-# QUEUE_TEST = os.environ["QUEUE_TEST"]
+# QUEUE_TEST = f"{os.environ["APP_NAME"]}-test"
 # QUEUE_RECEIVER_PREPROCESS = os.environ["QUEUE_RECEIVER_PREPROCESS"]
 # QUEUE_RECEIVER_STEP_1 = os.environ["QUEUE_RECEIVER_STEP_1"]
 # QUEUE_RECEIVER_END = os.environ["QUEUE_RECEIVER_END"]
