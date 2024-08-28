@@ -13,7 +13,7 @@ class LambdaInvoker
     }.to_json
 
     response = @client.invoke({
-      function_name: 'rails_invoke_test',
+      function_name: ENV['RECEIVER_START_LAMBDA'],
       invocation_type: 'Event',
       payload: payload
     })

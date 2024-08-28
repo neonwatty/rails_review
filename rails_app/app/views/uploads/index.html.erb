@@ -26,9 +26,16 @@
           <td class="py-3 px-6">
             <% if upload.files.attached? %>
               <% upload.files.each do |file| %>
-                <div class="mb-1">
-                  <%= link_to 'Download', rails_blob_path(file, disposition: "attachment"), class: 'text-blue-500 hover:text-blue-600' %>
-                </div>
+                <% if file.content_type.start_with?('image/') %>
+                  <%= image_tag rails_blob_path(file, disposition: "inline"), alt: 'File thumbnail', class: 'w-32 h-32 object-cover border rounded mr-2' %>
+                <% elsif file.content_type.start_with?('video/') %>
+                  <i class="fas fa-video text-gray-600 mr-2"></i>
+                <% elsif file.content_type.start_with?('audio/') %>
+                  <i class="fas fa-headphones text-gray-600 mr-2"></i>
+                <% else %>
+                  <i class="fas fa-file-alt text-gray-600 mr-2"></i> <!-- For other file types -->
+                <% end %>
+                <%= link_to 'Download', rails_blob_path(file, disposition: "attachment"), class: 'text-blue-500 hover:text-blue-600' %>
               <% end %>
             <% else %>
               <span class="text-gray-500">No files attached</span>
