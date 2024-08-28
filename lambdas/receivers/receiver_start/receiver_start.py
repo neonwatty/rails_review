@@ -49,9 +49,10 @@ def lambda_handler(event, context):
         }
         response = message_create(STATUS_QUEUE, status)
         if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
+            success_message = "SUCCESS: receiver_start executed successfully"
             return {
                 'statusCode': 200,
-                'body': json.dumps({'status': 'success', 'message': message, "s3_key_save":s3_key_save, "bucket_name_save": BUCKET_NAME_SAVE})
+                'body': json.dumps({'status': 'success', 'message': success_message, "s3_key_save":s3_key_save, "bucket_name_save": BUCKET_NAME_SAVE})
             }
         else:
             failure_message = f"sqs status queue did not accept status message --> {STATUS_QUEUE}"

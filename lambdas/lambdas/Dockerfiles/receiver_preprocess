@@ -2,11 +2,7 @@
 FROM public.ecr.aws/lambda/python:3.12-arm64
 
 # Set up environment variables and paths
-ENV PATH="/usr/local/bin/ffmpeg:$PATH" PYTHONPATH=.
-
-# Copy and configure ffmpeg
-COPY --from=app_root lambdas/utilities/ffmpeg-7.0.1-arm64-static /usr/local/bin/ffmpeg
-RUN chmod -R 777 /usr/local/bin/ffmpeg && ffmpeg -version
+ENV PYTHONPATH=.
 
 # make new directory for app home
 ENV APP_HOME=${LAMBDA_TASK_ROOT}/app
@@ -29,4 +25,4 @@ COPY --from=app_root utilities/tools ./utilities/tools
 
 
 # Set cmd
-CMD [ "receivers/receiver_preprocess/receiver_preprocess.handler" ]
+CMD [ "receivers/receiver_preprocess/receiver_preprocess.lambda_handler" ]
