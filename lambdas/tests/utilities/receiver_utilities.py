@@ -23,8 +23,8 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # import variables
-STAGE = os.environ.get("STAGE", "development")
-BUCKET_TEST = os.environ["BUCKET_TEST"]
+STAGE = "test"
+BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
 QUEUE_TEST = os.environ["QUEUE_TEST"]
@@ -136,7 +136,7 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     return file_id, request_id, s3_key, s3_key_save, receipt_handle
 
 
-def check_success(subtests, response, local: bool = True):
+def check_success(subtests, response, local: bool = True) -> tuple[str]:
     s3_key_save = None
     bucket_name_save = None
     if local:
@@ -148,6 +148,8 @@ def check_success(subtests, response, local: bool = True):
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             s3_key_save = body["s3_key_save"]
             bucket_name_save = body["bucket_name_save"]
+        content = json.loads(response.content.decode('utf-8'))
+        assert content["statusCode"] == 200
     else:
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
@@ -173,23 +175,22 @@ def check_success(subtests, response, local: bool = True):
             else:
                 # If no exception is raised, the object still exists
                 assert True, f"FAILURE: Test object does not exist {bucket_name}/{s3_key_save}"
+    return bucket_name_save, s3_key_save
 
-
-# STOPPED HERE
 
 # after work clean up
-def clean_up(subtests, s3_key, s3_key_save, file_id, bucket_name: str = BUCKET_TEST, file_ledger_name: str = FILE_LEDGER_TEMP):
+def clean_up(subtests, s3_key, s3_key_save):
     ### check / delete upload and table assets ###
     # delete test file
     if s3_key is not None:
         with subtests.test(msg="delete test file"):
-            response = s3_client.delete_object(Bucket=bucket_name, Key=s3_key)
+            response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
             assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {bucket_name}/{s3_key}"
 
         # check that test file is deleted
         with subtests.test(msg="check that test file is deleted"):
             try:
-                s3_client.head_object(Bucket=bucket_name, Key=s3_key)
+                s3_client.head_object(Bucket=BUCKET_TEST, Key=s3_key)
             except ClientError as e:
                 # If a ClientError is raised, the object does not exist, which is expected
                 if e.response["Error"]["Code"] == "404":
@@ -205,13 +206,13 @@ def clean_up(subtests, s3_key, s3_key_save, file_id, bucket_name: str = BUCKET_T
     # delete output test file from bucket
     if s3_key_save is not None:
         with subtests.test(msg="delete test output file"):
-            response = s3_client.delete_object(Bucket=bucket_name, Key=s3_key_save)
+            response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key_save)
             assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {bucket_name}/{s3_key}"
 
         # check that output test file from bucket has been deleted
         with subtests.test(msg="check that mp3 test file is deleted"):
             try:
-                s3_client.head_object(Bucket=bucket_name, Key=s3_key_save)
+                s3_client.head_object(Bucket=BUCKET_TEST, Key=s3_key_save)
             except ClientError as e:
                 # If a ClientError is raised, the object does not exist, which is expected
                 if e.response["Error"]["Code"] == "404":
@@ -224,28 +225,3 @@ def clean_up(subtests, s3_key, s3_key_save, file_id, bucket_name: str = BUCKET_T
                 # If no exception is raised, the object still exists
                 assert False, f"FAILURE: Test object still exists after attempted deletion at {BUCKET_TEST}/{s3_key_save}"
 
-    # delete row from file-ledger table associated with file_id
-    with subtests.test(msg="delete row in table for file_id "):
-        response = destroy(file_ledger_name, "file_id", file_id)
-        assert response is True, f"FAILURE: failed to delete row in file-ledger table with file_id {file_id}"
-
-    # check that row associated with file_id has been deleted
-    with subtests.test(msg="check that row in table for file_id does not exists"):
-        try:
-            response = read(file_ledger_name, "file_id", file_id)
-            assert len(response) == 0, f"FAILURE: cannot find row in temp file-ledger table with file_id {file_id}"
-        except:
-            assert True
-
-    # delete row from history-ledger table associated with file_id
-    with subtests.test(msg="delete row in table for file_id "):
-        response = destroy(HISTORY_LEDGER_MAIN, "file_id", file_id)
-        assert response is True, f"FAILURE: failed to delete row in history ledger table with file_id {file_id}"
-
-    # check that row associated with file_id has been deleted
-    with subtests.test(msg="check that row in table for file_id does not exists"):
-        try:
-            response = read(HISTORY_LEDGER_MAIN, "file_id", file_id)
-            assert len(response) == 0, f"FAILURE: cannot find row in temp history-ledger table with file_id {file_id}"
-        except:
-            assert True

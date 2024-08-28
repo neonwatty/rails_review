@@ -59,7 +59,8 @@ def container_controller():
         "docker",
         "run",
         "--env-file",
-        ".env",
+        "../.env",
+        "-e", "STAGE=test",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",
@@ -89,18 +90,18 @@ def test_success(container_controller, subtests):
     # construct event payload for app
     upload_id = 0
     user_id = 0
-    file_key = str(uuid.uuid32())
+    s3_key = str(uuid.uuid4())
     payload = {
       "message": 'File uploaded successfully',
       "upload_id": upload_id,
       "user_id": user_id,
-      "file_key": file_key,
+      "file_key": s3_key,
       "bucket_name": BUCKET_TEST,
       "stage": "test"
     }
   
     # upload test file - first create s3_key
-    s3_key = f"{user_id}/{upload_id}/{file_key}"
+    s3_key_save =  f"{user_id}-{upload_id}-receiver_start"
 
     with subtests.test(msg="create a test file"):
         with open(test_file_path, "rb") as file_data:
@@ -118,7 +119,7 @@ def test_success(container_controller, subtests):
         check_success(subtests, response)
 
     ### clean up files and tables ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
+    clean_up(subtests, s3_key, s3_key_save)
 
 
 def test_fail_file_already_preprocess_successfully(container_controller, subtests):

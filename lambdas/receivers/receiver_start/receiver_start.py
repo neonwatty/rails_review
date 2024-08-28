@@ -36,8 +36,8 @@ def lambda_handler(event, context):
         print(f"SUCCESS: File downloaded to {local_input_file_path}")
         
         # save file back to s3
-        s3_key_save = f"{stage}-{user_id}-{upload_id}-entrypoint_input"
-        s3_client.upload_file(local_output_file_path, bucket_name_save, s3_key_save)
+        s3_key_save = f"{user_id}-{upload_id}-receiver_start"
+        s3_client.upload_file(local_input_file_path, bucket_name_save, s3_key_save)
         print("SUCCESS: File uploaded to s3")
 
         return {
