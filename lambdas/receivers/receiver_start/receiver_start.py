@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         # save file back to s3
         s3_key_save = f"{stage}-{user_id}-{upload_id}-entrypoint_input"
         s3_client.upload_file(local_output_file_path, bucket_name_save, s3_key_save)
-        print("SUCCESS: Audio uploaded to s3")
+        print("SUCCESS: File uploaded to s3")
 
         return {
             'statusCode': 200,
@@ -46,12 +46,18 @@ def lambda_handler(event, context):
         }
         
     except json.JSONDecodeError:
+        failure_message = "Invalid JSON payload"
+        print(f"FAILURE: status code --> {400}")
+        print(failure_message)
         return {
             'statusCode': 400,
-            'body': json.dumps({'status': 'error', 'message': 'Invalid JSON payload'})
+            'body': json.dumps({'status': 'error', 'message': failure_message})
         }
     except Exception as e:
+        failure_message = str(e)
+        print(f"FAILURE: status code --> {500}")
+        print(failure_message)
         return {
             'statusCode': 500,
-            'body': json.dumps({'status': 'error', 'message': str(e)})
+            'body': json.dumps({'status': 'error', 'message': failure_message})
         }

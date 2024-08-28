@@ -146,7 +146,7 @@
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
-                "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_start@sha256:1dd33f0be6272fb5828f9ea28bb569347222fb3ac5cc896fac891b949a9fe22b"
+                "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_start@sha256:c8418bf34e10d2d6d9df054f884af1299f615937ce5c57b55c2a5cc037b13865"
               },
               "PackageType": "Image",
               "FunctionName": "app-1-receiver_start-development",
@@ -173,14 +173,14 @@
               "ReceiverUnderscorestartLogGroup"
             ]
           },
-          "ReceiverUnderscorestartLambdaVersionPi1of0a3m6tLqD44ZxVD0QhMbDT7zt9EMyxc1Edn5g": {
+          "ReceiverUnderscorestartLambdaVersionWluAxNwlIUjIWfpvhfdLXQPloZ3EBfgv3MKlvyRab8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ReceiverUnderscorestartLambdaFunction"
               },
-              "CodeSha256": "1dd33f0be6272fb5828f9ea28bb569347222fb3ac5cc896fac891b949a9fe22b",
+              "CodeSha256": "c8418bf34e10d2d6d9df054f884af1299f615937ce5c57b55c2a5cc037b13865",
               "Description": "test rails receiver lambda function"
             }
           }
@@ -195,7 +195,7 @@
           "ReceiverUnderscorestartLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReceiverUnderscorestartLambdaVersionPi1of0a3m6tLqD44ZxVD0QhMbDT7zt9EMyxc1Edn5g"
+              "Ref": "ReceiverUnderscorestartLambdaVersionWluAxNwlIUjIWfpvhfdLXQPloZ3EBfgv3MKlvyRab8"
             },
             "Export": {
               "Name": "sls-receivers-development-ReceiverUnderscorestartLambdaFunctionQualifiedArn"
@@ -220,7 +220,7 @@
         "memory": 1024,
         "timeout": 240,
         "vpc": {},
-        "versionLogicalId": "ReceiverUnderscorestartLambdaVersionPi1of0a3m6tLqD44ZxVD0QhMbDT7zt9EMyxc1Edn5g"
+        "versionLogicalId": "ReceiverUnderscorestartLambdaVersionWluAxNwlIUjIWfpvhfdLXQPloZ3EBfgv3MKlvyRab8"
       }
     },
     "configValidationMode": "warn",
@@ -240,7 +240,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/receivers/development/1724863968352-2024-08-28T16:52:48.352Z",
+    "artifactDirectoryName": "serverless/receivers/development/1724865929801-2024-08-28T17:25:29.801Z",
     "artifact": ""
   }
 }
