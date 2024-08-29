@@ -2,7 +2,10 @@ import pytest
 import os
 import json
 import time
+import boto3
 import requests
+from sqs.messages.message_poll import message_poll_no_id
+from sqs.messages.message_delete import message_delete
 from tables.public.row_update import update
 from tables.public.row_read import read
 from tables.public.row_destroy import destroy
@@ -38,10 +41,18 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
-IMAGE_NAME = "receiver_start"
+IMAGE_NAME = "receiver_preprocess"
 USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
+
+# define session
+aws_profile = os.getenv("AWS_PROFILE")
+session = boto3.Session(profile_name=aws_profile, region_name="us-west-2")
+
+# define clients
+s3_client = session.client("s3")
+lambda_client = session.client("lambda")
 
 # test file data
 test_file_name = "receiver_start"
@@ -88,8 +99,8 @@ def container_controller():
 
 def test_success(container_controller, subtests):
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="in_progress")  
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receipt_handle)
+    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="in_progress")  
+    event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
@@ -100,149 +111,52 @@ def test_success(container_controller, subtests):
         print_container_logs(IMAGE_NAME)
         
         # check response successful, and tables / files look as they should given success
-        check_success(subtests, response, file_id, s3_key_save)
-
-    ### clean up files and tables ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
-
-
-def test_fail_file_already_preprocess_successfully(container_controller, subtests):
-    ### first upload - succeeds ###
-    # setup step
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="not started")
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
-
-    # execute lambda in local docker container
-    with subtests.test(msg="execute docker lambda locally"):
-        # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
-
-        # print docker logs
-        print_container_logs(IMAGE_NAME)
-        
-        # check response successful, and tables / files look as they should given success
-        check_success(subtests, response, file_id, s3_key_save)
-
-    ### upload second time - rejection due to prior completion ###
-    # execute lambda in local docker container
-    with subtests.test(msg="execute docker lambda locally"):
-        # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
-
-        # print docker logs
-        print_container_logs(IMAGE_NAME)
-        
-        # Check the response
         assert response.status_code == 200
-        response_json = response.json()
-        assert response_json["statusCode"] == 400
-        body = json.loads(response_json["body"])
-        message = body["message"]
-        assert "file with file_id already exist" in message
-
-    ### clean up files and tables ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
-
-
-def test_file_preprocess_in_progress(container_controller, subtests):
-    # setup step
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="in progress")
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
-
-    # replace status "complete" with "in progress"
-    read_response = read(FILE_LEDGER_TEMP, "file_id", file_id)
-    read_status = read_response[0].get("status", None)
-    read_status["receiver_preprocess"] = "in progress"
-    update_document = {"status": read_status}
-    update(FILE_LEDGER_TEMP, "file_id", file_id, update_document)
-
-    # execute lambda in local docker container
-    with subtests.test(msg="execute docker lambda locally"):
-        # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
-
-        # print docker logs
-        print_container_logs(IMAGE_NAME)
+        if s3_key_save is not None:
+            body = json.loads(response.json()["body"])        
+            assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
+            assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
+            s3_key_save = body["s3_key_save"]
+            bucket_name_save = body["bucket_name_save"]
+        content = json.loads(response.content.decode('utf-8'))
+        assert content["statusCode"] == 200
         
-        # Check the response
-        assert response.status_code == 200
-        response_json = response.json()
-        assert response_json["statusCode"] == 400
-        body = json.loads(response_json["body"])
-        message = body["message"]
-        assert "file with file_id already exist" in message
-
-    ### clean up files and tables ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
-
-
-def test_failure_previous_fail(container_controller, subtests):
-    ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="fail")
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
-
-    # execute lambda locally
-    with subtests.test(msg="execute handler"):
-        # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
-
-        # print docker logs
-        print_container_logs(IMAGE_NAME)
+    # check for message in test queue
+    status_receipt_handle = None
+    with subtests.test(msg="check message queue"):
+        # poll queue
+        queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
         
-        # Check the response
-        assert response.status_code == 200
-        response_json = response.json()
-        assert response_json["statusCode"] == 400
-        body = json.loads(response_json["body"])
-        message = body["message"]
-        assert "file with file_id failed recently" in message
-
-    # check that row in history-ledger table does not exist
-    with subtests.test(msg="check that row for file_id not in history ledger"):
-        response = read(HISTORY_LEDGER_MAIN, "file_id", file_id)
-        assert len(response) > 0
-
-    ### clean up ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
-
-
-def test_failure_hash_mismash(container_controller, subtests):
-    ### setup step ###
-    file_id_mismatch = "this is not the same hash as above"
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="not started", file_id_override=file_id_mismatch)
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
-
-    # execute lambda locally
-    with subtests.test(msg="execute handler"):
-        # Send a POST request to the Lambda function
-        response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(event), headers={"Content-Type": "application/json"})
-
-        # print docker logs
-        print_container_logs(IMAGE_NAME)
+        # unpack queue data
+        message_id = queue_data["message_id"]
+        message = queue_data["message"]
+        status_receipt_handle = queue_data["receipt_handle"]
         
-        # Check the response
-        assert response.status_code == 200
-        response_json = response.json()
-        print(f"response_json --> {response_json}")
-        assert response_json["statusCode"] == 400
-        body = json.loads(response_json["body"])
-        message = body["message"]
-        assert "failed due to no row in temp file ledger" in message
+        # unpack message
+        assert message["url"] == "status_update"
+        assert message["lambda"] == "receiver_preprocess"
+        assert message["status"] == "complete"
+        
+    # delete receiver message
+    with subtests.test(msg="delete receiver message"):
+        delete_response = message_delete(TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
+        assert delete_response is True
+        
+    # delete status message
+    with subtests.test(msg="delete status message"):
+        delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
+        assert delete_response is True
+    
+    # check output file exists
+    with subtests.test(msg="check that output file now exists"):
+        s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
+        
+    # delete input test file
+    with subtests.test(msg="delete test file"):
+        response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
+        assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"
 
-    # check that row in history-ledger table does not exist
-    with subtests.test(msg="check that row for file_id not in history ledger"):
-        response = read(HISTORY_LEDGER_MAIN, "file_id", file_id_mismatch)
-        assert len(response) == 0
-
-    # check that row in history-ledger table does exist
-    with subtests.test(msg="check that row for file_id not in history ledger"):
-        response = read(HISTORY_LEDGER_MAIN, "file_id", file_id)
-        assert len(response) > 0
-
-    # delete row from file-ledger table associated with file_id
-    with subtests.test(msg="delete row in table for file_id "):
-        response = destroy(FILE_LEDGER_TEMP, "file_id", file_id_mismatch)
-        assert response is True, f"FAILURE: failed to delete row in file-ledger table with file_id {file_id}"
-
-    ### clean up ###
-    clean_up(subtests, s3_key, s3_key_save, file_id)
+    # delete output test file
+    with subtests.test(msg="delete test output file"):
+        response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key_save)
+        assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"

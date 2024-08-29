@@ -23,15 +23,15 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # import variables
+APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
-QUEUE_TEST = f"{os.environ["APP_NAME"]}-test"
 USER_ID = os.getenv("USER_ID_TEST_1")
-FILE_LEDGER_TEMP = os.environ["FILE_LEDGER_TEMP"]
-HISTORY_LEDGER_MAIN = os.environ["HISTORY_LEDGER_MAIN"]
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
+TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
 # create event - nested like triggered event from s3 --> sqs
 def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_handle: str) -> dict:
@@ -67,48 +67,23 @@ def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_ha
         return event
 
 
-def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progress: str = "not started", file_id_override: str | None = None):
+def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
     # upload file file data for testing
     local_file_path = test_file_path
     file_id = hash_file(test_file_path)
     request_id = str(uuid.uuid4())
     filename = test_file_name
-    s3_key = f"{STAGE}/{USER_ID}/{file_id}/{filename}"
+    s3_key = f"{USER_ID}/{file_id}/{filename}"
     
     # define s3_key_save based on filename
     s3_key_save = None
-    if filename == "entrypoint_input.mp4":
-        s3_key_save = f"{STAGE}/{USER_ID}/{file_id}/receiver_preprocess.mp3"
-    if filename == "receiver_preprocess.mp3":
-        s3_key_save = f"{STAGE}/{USER_ID}/{file_id}/receiver_step_1.json"
+    if filename == "receiver_start":
+        s3_key_save = f"{USER_ID}/{file_id}/receiver_preprocess"
+    if filename == "receiver_preprocess":
+        s3_key_save = f"{USER_ID}/{file_id}/receiver_process"
     
     # set status
-    assert step in ["receiver_preprocess", "receiver_step_1", "receiver_end"]
-    status = {}
-    status["entrypoint_input"] = "complete"
-    status["receiver_preprocess"] = "complete"
-    status["receiver_step_1"] = "complete"
-    status["receiver_end"] = "complete"
-
-    if step == "receiver_preprocess":
-        status["receiver_preprocess"] = step_progress
-        status["receiver_step_1"] = "not started"
-    if step == "receiver_step_1":
-        status["receiver_step_1"] = step_progress
-    if step == "receiver_end":
-        status["receiver_end"] = step_progress
-
-    # simulate successful execution of previous step - entrypoint input
-    with subtests.test(msg="create row in temp file ledger to update"):
-        # create row in temp file ledger for file
-        document = {
-            "user_id": USER_ID,
-            "request_id": request_id,
-            "status": status,
-            "file_metadata": {"action": "upload_test", "presigned_data": "testing", "s3_data": {"files": {}}},
-        }
-        file_id_input = file_id if file_id_override is None else file_id_override
-        create(FILE_LEDGER_TEMP, "file_id", file_id_input, document)
+    assert step in ["receiver_preprocess", "receiver_process", "receiver_end"]
 
     # upload test file
     with subtests.test(msg="create a test file"):
@@ -122,13 +97,13 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     ### upload first time --> for successful completion ###
     # create message
     with subtests.test(msg="create test message"):
-        response = message_create(QUEUE_TEST, {})
+        response = message_create(TEST_RECEIVERS_QUEUE, {})
         assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
         message_id = response["MessageId"]
 
     # poll for message to get receipt
     with subtests.test(msg="poll for test message receipt"):
-        receipt_handle = message_poll(QUEUE_TEST, message_id)
+        receipt_handle = message_poll(TEST_RECEIVERS_QUEUE, message_id)
         assert receipt_handle is not None
 
     # sleep to let setup complete
