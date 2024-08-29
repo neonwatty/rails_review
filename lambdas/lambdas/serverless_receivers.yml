@@ -55,6 +55,16 @@ functions:
     environment:
       RECEIVER_NAME: receiver_preprocess
 
+  receiver_process:
+    name: ${env:APP_NAME}-receiver_process-${opt:stage, 'test'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_process:${opt:stage, 'test'}
+    description: 'receiver process lambda function'
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_process
+          batchSize: 1
+    environment:
+      RECEIVER_NAME: receiver_process
 
 #   receiver_step_1:
 #     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_step_1:${opt:stage, 'development'}

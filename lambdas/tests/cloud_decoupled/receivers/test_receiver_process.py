@@ -15,7 +15,7 @@ home_dir = os.path.expanduser("~")
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
-RECEIVER_NAME = "receiver_preprocess"
+RECEIVER_NAME = "receiver_process"
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 SERVERLESS_NAME = "serverless_receivers.yml"
@@ -30,7 +30,7 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # test file data
-test_file_name = "receiver_start"
+test_file_name = "receiver_preprocess"
 test_file_path = "tests/test_files/blank.jpg"
 
 @pytest.fixture(scope="module")
@@ -88,7 +88,7 @@ def test_success(build_deploy, subtests):
             message_id = queue_data["message_id"]
             message = queue_data["message"]
             receipt_handle = queue_data["receipt_handle"]
-            
+
             # unpack message
             assert message["url"] == "status_update"
             assert message["lambda"] == RECEIVER_NAME
