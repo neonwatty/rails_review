@@ -18,7 +18,6 @@ This set of tests for the receiver_preprocess tests the following
     - excitation by lambda invoke
     - checks for transferred file in new location (test bucket as well)
     - cleanup of files in test bucket
-    - various failures (based on json packaging failure, or other)
 """
 
 # get current directory paths
@@ -33,7 +32,7 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
-IMAGE_NAME = "receiver_start"
+RECEIVER_NAME = "receiver_start"
 USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
@@ -54,7 +53,7 @@ test_file_path = "tests/test_files/blank.jpg"
 @pytest.fixture(scope="module")
 def container_controller():
     # build image
-    command = ["bash", "build_image.sh", STAGE, IMAGE_NAME]
+    command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
 
     # startup container
@@ -68,10 +67,10 @@ def container_controller():
         "-v",
         f"{home_dir}/.aws:/root/.aws",
         "--name",
-        IMAGE_NAME,
+        RECEIVER_NAME,
         "-p",
         f"{DOCKER_PORT}:8080",
-        IMAGE_NAME,
+        RECEIVER_NAME,
     ]
 
     stdout = execute_subprocess_command(command)
@@ -82,10 +81,10 @@ def container_controller():
     yield
 
     # stop and remove container
-    command = ["docker", "stop", IMAGE_NAME]
+    command = ["docker", "stop", RECEIVER_NAME]
     stdout = execute_subprocess_command(command)
 
-    command = ["docker", "rm", IMAGE_NAME]
+    command = ["docker", "rm", RECEIVER_NAME]
     stdout = execute_subprocess_command(command)
 
 
@@ -116,7 +115,7 @@ def test_success(container_controller, subtests):
         response = requests.post(LAMBDA_ENDPOINT, data=json.dumps(payload), headers={"Content-Type": "application/json"})
 
         # print docker logs
-        print_container_logs(IMAGE_NAME)
+        print_container_logs(RECEIVER_NAME)
         
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200

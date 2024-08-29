@@ -7,9 +7,11 @@ from receivers.utilities.setup_teardown import receiver_setup, receiver_teardown
 
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
+RECEIVER_NAME = os.environ["RECEIVER_NAME"]
 STATUS_QUEUE = f"{APP_NAME}-test-status"
 if STAGE in ["development", "production"]:
     STATUS_QUEUE = f"{APP_NAME}-status"
+
 
 
 def receiver_decorator(local_input_ext, local_output_ext):
@@ -63,9 +65,7 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 else: # load up receiver_response with location metadata
                     receiver_response["body"]["s3_key_save"] = s3_key_save
                     receiver_response["body"]["bucket_name_save"] = setup_payload["s3_bucket"]
-                    
-                print(f"receiver_response --> {receiver_response}")
-                    
+                                        
                 # send message to queue
                 status_response = message_create(STATUS_QUEUE, status)
                     

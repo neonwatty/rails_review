@@ -43,20 +43,16 @@ functions:
       STAGE: ${opt:stage, 'development'}
       APP_NAME: ${env:APP_NAME}
 
-
-
-      # RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
-
-# functions:
-#   receiver_preprocess:
-#     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'development'}
-#     description: 'receiver preprocess lambda function'
-#     events:
-#       - sqs:
-#           arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
-#           batchSize: 1
-#     environment:
-#       STAGE: ${opt:stage, 'dev'}
+  receiver_preprocess:
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'development'}
+    description: 'receiver preprocess lambda function'
+    events:
+      - sqs:
+          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
+          batchSize: 1
+    environment:
+      STAGE: ${opt:stage, 'dev'}
+      RECEIVER_NAME: receiver_preprocess
 
 
 #   receiver_step_1:

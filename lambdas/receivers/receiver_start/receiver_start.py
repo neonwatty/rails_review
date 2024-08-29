@@ -18,9 +18,6 @@ if STAGE in ["development", "production"]:
 @warmer
 def lambda_handler(event, context):
     try:
-        # print event for testing
-        print(f"event -> {event}")
-        
         # Parse the JSON payload
         message = event["message"]
         file_key = event["file_key"]

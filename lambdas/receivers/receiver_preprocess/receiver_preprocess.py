@@ -21,9 +21,9 @@ def lambda_handler(event, context):
         message = f"SUCCESS: receiver for {event["receiver_name"]} ran successfully"
         print(message)
         return {
-            "statusCode": 200,  "body": {"message": message}
+            "statusCode": 200,  "body": {"receiver_name": event["receiver_name"], "message": message}
         }
     except Exception as e:
         message = f"FAILURE: receiver for {event["receiver_name"]} failed with exception {str(e)}"
         print(message)
-        return {"statusCode": 500, "body": {"message": message}}
+        return {"statusCode": 500, "body": {"receiver_name": event["receiver_name"], "message": message}}
