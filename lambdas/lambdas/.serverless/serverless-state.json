@@ -44,6 +44,10 @@
         }
       },
       "deploymentBucket": "app-1-serverless-artifacts",
+      "environment": {
+        "APP_NAME": "app-1",
+        "STAGE": "test"
+      },
       "versionFunctions": true,
       "deploymentBucketObject": {
         "name": "app-1-serverless-artifacts"
@@ -61,7 +65,7 @@
           "ReceiverUnderscorepreprocessLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/receivers-test-receiver_preprocess"
+              "LogGroupName": "/aws/lambda/app-1-receiver_preprocess-test"
             }
           },
           "IamRoleLambdaExecution": {
@@ -110,7 +114,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-test:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/receivers-test*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-test:*"
                           }
                         ]
                       },
@@ -124,7 +128,7 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-test:*:*"
                           },
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/receivers-test*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-test:*:*"
                           }
                         ]
                       },
@@ -181,8 +185,8 @@
               "Description": "test rails receiver lambda function",
               "Environment": {
                 "Variables": {
-                  "STAGE": "test",
                   "APP_NAME": "app-1",
+                  "STAGE": "test",
                   "RECEIVER_NAME": "receiver_start"
                 }
               },
@@ -215,7 +219,7 @@
                 "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess@sha256:f8b70f7b4e6765708762163cb55883e7500adff4cf45111b27de6b1bc22828ca"
               },
               "PackageType": "Image",
-              "FunctionName": "receivers-test-receiver_preprocess",
+              "FunctionName": "app-1-receiver_preprocess-test",
               "MemorySize": 1024,
               "Timeout": 240,
               "Architectures": [
@@ -224,6 +228,7 @@
               "Description": "receiver preprocess lambda function",
               "Environment": {
                 "Variables": {
+                  "APP_NAME": "app-1",
                   "STAGE": "test",
                   "RECEIVER_NAME": "receiver_preprocess"
                 }
@@ -239,7 +244,7 @@
               "ReceiverUnderscorepreprocessLogGroup"
             ]
           },
-          "ReceiverUnderscorepreprocessLambdaVersioncgpywfNPkShlYS92EMIuQ4jam6DtXpIyJbxeXXc64": {
+          "ReceiverUnderscorepreprocessLambdaVersionkdCUbyS2NnUaW0vbFIleUCwMxeg8QkglnGKJanUDto": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
@@ -287,7 +292,7 @@
           "ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReceiverUnderscorepreprocessLambdaVersioncgpywfNPkShlYS92EMIuQ4jam6DtXpIyJbxeXXc64"
+              "Ref": "ReceiverUnderscorepreprocessLambdaVersionkdCUbyS2NnUaW0vbFIleUCwMxeg8QkglnGKJanUDto"
             },
             "Export": {
               "Name": "sls-receivers-test-ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn"
@@ -304,8 +309,6 @@
         "image": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_start:test",
         "description": "test rails receiver lambda function",
         "environment": {
-          "STAGE": "test",
-          "APP_NAME": "app-1",
           "RECEIVER_NAME": "receiver_start"
         },
         "events": [],
@@ -316,6 +319,7 @@
         "versionLogicalId": "ReceiverUnderscorestartLambdaVersionrTzdBifHoprTztOvkmXHAB6iOVMGVDXDVlBd73DQKY"
       },
       "receiver_preprocess": {
+        "name": "app-1-receiver_preprocess-test",
         "image": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess:test",
         "description": "receiver preprocess lambda function",
         "events": [
@@ -327,15 +331,13 @@
           }
         ],
         "environment": {
-          "STAGE": "test",
           "RECEIVER_NAME": "receiver_preprocess"
         },
-        "name": "receivers-test-receiver_preprocess",
         "package": {},
         "memory": 1024,
         "timeout": 240,
         "vpc": {},
-        "versionLogicalId": "ReceiverUnderscorepreprocessLambdaVersioncgpywfNPkShlYS92EMIuQ4jam6DtXpIyJbxeXXc64"
+        "versionLogicalId": "ReceiverUnderscorepreprocessLambdaVersionkdCUbyS2NnUaW0vbFIleUCwMxeg8QkglnGKJanUDto"
       }
     },
     "configValidationMode": "warn",
@@ -355,7 +357,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/receivers/test/1724967545350-2024-08-29T21:39:05.350Z",
+    "artifactDirectoryName": "serverless/receivers/test/1724969203646-2024-08-29T22:06:43.646Z",
     "artifact": ""
   }
 }

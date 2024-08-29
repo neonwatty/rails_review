@@ -30,9 +30,11 @@ provider:
           Action:
             - sqs:*
           Resource: "*"
-
   deploymentBucket:
     name: ${env:APP_NAME}-serverless-artifacts
+  environment:
+    APP_NAME: ${env:APP_NAME}
+    STAGE: ${opt:stage, 'test'}
 
 functions:
   receiver_start:
@@ -40,8 +42,6 @@ functions:
     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'test'}
     description: 'test rails receiver lambda function'
     environment:
-      STAGE: ${opt:stage, 'test'}
-      APP_NAME: ${env:APP_NAME}
       RECEIVER_NAME: receiver_start
 
   receiver_preprocess:
@@ -53,7 +53,6 @@ functions:
           arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess
           batchSize: 1
     environment:
-      STAGE: ${opt:stage, 'test'}
       RECEIVER_NAME: receiver_preprocess
 
 

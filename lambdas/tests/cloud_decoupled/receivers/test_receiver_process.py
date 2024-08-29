@@ -88,7 +88,7 @@ def test_success(build_deploy, subtests):
             message_id = queue_data["message_id"]
             message = queue_data["message"]
             receipt_handle = queue_data["receipt_handle"]
-
+            
             # unpack message
             assert message["url"] == "status_update"
             assert message["lambda"] == RECEIVER_NAME
