@@ -49,7 +49,7 @@ functions:
     description: 'receiver preprocess lambda function'
     events:
       - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:QUEUE_RECEIVER_PREPROCESS}
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess
           batchSize: 1
     environment:
       STAGE: ${opt:stage, 'dev'}
