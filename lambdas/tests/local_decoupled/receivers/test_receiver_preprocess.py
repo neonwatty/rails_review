@@ -117,8 +117,6 @@ def test_success(container_controller, subtests):
             assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             assert "receiver_name" in list(body.keys())
-            print(f"body['receiver_name] --> {body["receiver_name"]}")
-            print(f"RECEIVER_NAME --> {RECEIVER_NAME}")
             assert body["receiver_name"] == RECEIVER_NAME
             s3_key_save = body["s3_key_save"]
             bucket_name_save = body["bucket_name_save"]
@@ -138,7 +136,7 @@ def test_success(container_controller, subtests):
         
         # unpack message
         assert message["url"] == "status_update"
-        assert message["lambda"] == "receiver_preprocess"
+        assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
         
     # delete receiver message

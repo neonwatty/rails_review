@@ -10,6 +10,17 @@ from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
 
+
+"""
+This set of tests for the receiver_preprocess tests the following
+
+- a successful test, including
+    - excitation by sqs receiver message
+    - checks against s3 bucket upload location for original upload,
+    - check against s3 bucket for preprocess output
+    - checks for status receiver reception
+"""
+
 # get current directory paths
 current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
@@ -22,7 +33,7 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
-RECEIVER_NAME = "receiver_end"
+RECEIVER_NAME = "receiver_process"
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
@@ -35,7 +46,7 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # test file data
-test_file_name = "receiver_process"
+test_file_name = "receiver_preprocess"
 test_file_path = "tests/test_files/blank.jpg"
 
 
@@ -90,7 +101,7 @@ def test_success(container_controller, subtests):
     ### setup step ###
     file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, RECEIVER_NAME, step_progress="in_progress")  
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
-    print(f"sqs event maker complete")
+    print(f"INFO: sqs event maker complete")
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
         # Send a POST request to the Lambda function
@@ -137,11 +148,6 @@ def test_success(container_controller, subtests):
     with subtests.test(msg="delete status message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
         assert delete_response is True
-    
-    
-    
-    
-    
     
     # check output file exists
     with subtests.test(msg="check that output file now exists"):
