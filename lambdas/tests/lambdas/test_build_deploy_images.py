@@ -5,7 +5,7 @@ from tests.utilities.execute_subprocess import execute_subprocess_command
 current_directory = os.getcwd()
 
 STAGE = "test"
-receivers = ["receiver_start", "receiver_preprocess", "receiver_process", "receiver_end"]
+receivers = ["receiver_start", "receiver_preprocess", "receiver_process", "receiver_end", "receiver_status"]
 
 
 @pytest.mark.parametrize("RECEIVER_NAME", receivers)

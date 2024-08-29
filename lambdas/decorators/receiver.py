@@ -10,7 +10,7 @@ APP_NAME = os.environ["APP_NAME"]
 RECEIVER_NAME = os.environ["RECEIVER_NAME"]
 STATUS_QUEUE = f"{APP_NAME}-test-status"
 if STAGE in ["development", "production"]:
-    STATUS_QUEUE = f"{APP_NAME}-status"
+    STATUS_QUEUE = f"{APP_NAME}-receiver_status"
 
 
 
