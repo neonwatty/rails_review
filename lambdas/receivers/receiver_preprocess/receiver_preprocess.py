@@ -1,15 +1,11 @@
 import json
 from PIL import Image
-from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
-from decorators.message import sqs_receiver_wrapper, sqs_status_wrapper
-from decorators.receiver import receiver_setup_teardown
+from decorators.receiver import receiver_decorator
 
 
 @warmer
-@sqs_status_wrapper
-@receiver_setup_teardown(local_input_ext=".jpg", local_output_ext=".jpg")
-@sqs_receiver_wrapper
+@receiver_decorator(local_input_ext=".jpg", local_output_ext=".jpg")
 def lambda_handler(event, context):    
     try:        
         # Open the image using Pillow

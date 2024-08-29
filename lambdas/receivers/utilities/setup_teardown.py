@@ -3,7 +3,7 @@ from receivers import s3_client
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
 
-def setup(event: dict, local_input_ext: str | None = None, local_output_ext: str | None = None) -> dict | None:
+def receiver_setup(event: dict, local_input_ext: str | None = None, local_output_ext: str | None = None) -> dict | None:
     try:
         # unpack required objects from event
         s3_bucket = event["s3"]["bucket"]["name"]
@@ -38,7 +38,7 @@ def setup(event: dict, local_input_ext: str | None = None, local_output_ext: str
         return None
   
     
-def teardown(setup_payload: dict) -> bool:
+def receiver_teardown(setup_payload: dict) -> bool:
   try:
       # upload file
       s3_key_save = f"{setup_payload["user_id"]}/{setup_payload["upload_id"]}/{setup_payload["receiver_name"]}"
