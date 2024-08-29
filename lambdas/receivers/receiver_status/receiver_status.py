@@ -14,8 +14,6 @@ def lambda_handler(event, context):
     try:        
         # setup payload        
         message = event["message"]
-        url = message["url"]
-        del message["url"]
 
         # create headers
         headers = {
@@ -24,7 +22,7 @@ def lambda_handler(event, context):
         }
 
         # create url
-        rails_url = f"{RAILS_DEVELOPMENT_HOST}/lambda_status/{url}"
+        rails_url = f"{RAILS_DEVELOPMENT_HOST}/lambda_status/update"
         
         # fire off request
         response = requests.post(rails_url, data=json.dumps(message), headers=headers)

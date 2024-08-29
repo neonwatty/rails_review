@@ -54,7 +54,6 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 
                 ### route status update message ###
                 status = {
-                    "url": "status_update",
                     "lambda": RECEIVER_NAME,
                     "user_id": setup_payload["user_id"],
                     "upload_id": setup_payload["upload_id"],
