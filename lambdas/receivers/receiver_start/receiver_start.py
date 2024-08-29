@@ -1,5 +1,4 @@
 import os
-import json
 from receivers import s3_client
 from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
@@ -8,7 +7,7 @@ from receivers.utilities.create_io_dir import local_input_file_path, local_outpu
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
 
-STATUS_QUEUE = f"{APP_NAME}-test"
+STATUS_QUEUE = f"{APP_NAME}-test-status"
 BUCKET_NAME_SAVE = f"{APP_NAME}-test"
 if STAGE in ["development", "production"]:
     STATUS_QUEUE = f"{APP_NAME}-status"

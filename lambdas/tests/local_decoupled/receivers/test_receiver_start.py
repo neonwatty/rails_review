@@ -1,12 +1,13 @@
 import pytest
 import os
 import json
+import time
 import requests
 import boto3
 from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
+from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.docker_utilities import print_container_logs
-from tests.utilities.docker_utilities import local_controller
 
 
 """
@@ -19,6 +20,14 @@ This set of tests for the receiver_preprocess tests the following
     - cleanup of files in test bucket
 """
 
+# get current directory paths
+current_directory = os.getcwd()
+home_dir = os.path.expanduser("~")
+
+# define docker variables
+DOCKER_PORT = 9000
+LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
+
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
@@ -28,9 +37,6 @@ USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
-# define docker variables
-DOCKER_PORT = 9000
-LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
@@ -46,8 +52,48 @@ test_file_path = "tests/test_files/blank.jpg"
 
 @pytest.fixture(scope="module")
 def container_controller():
-    with local_controller(STAGE, RECEIVER_NAME, DOCKER_PORT) as controller:
-        yield controller
+    # build image
+    print("INFO: starting image building process...")
+    command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
+    stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
+    print("INFO: ...complete!")
+    
+    # startup container
+    command = [
+        "docker",
+        "run",
+        "--env-file",
+        "../.env",
+        "-e", "STAGE=test",
+        "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
+        "-d",
+        "-v",
+        f"{home_dir}/.aws:/root/.aws",
+        "--name",
+        RECEIVER_NAME,
+        "-p",
+        f"{DOCKER_PORT}:8080",
+        RECEIVER_NAME,
+    ]
+    print("INFO: starting container running process...")
+    stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
+
+    # let container startup before sending post tests
+    time.sleep(5)
+
+    yield
+
+    # stop and remove container
+    command = ["docker", "stop", RECEIVER_NAME]
+    print("INFO: starting container stopping process...")
+    stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
+
+    command = ["docker", "rm", RECEIVER_NAME]
+    print("INFO: starting container removal process...")
+    stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
 
 
 def test_success(container_controller, subtests):
@@ -82,7 +128,7 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         if s3_key_save is not None:
-            body = json.loads(response.json()["body"])        
+            body = response.json()["body"]
             assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             s3_key_save = body["s3_key_save"]
