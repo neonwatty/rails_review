@@ -28,7 +28,6 @@ STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
-USER_ID = os.getenv("USER_ID_TEST_1")
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"

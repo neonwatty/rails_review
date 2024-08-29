@@ -37,7 +37,6 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # Define your test parameters
-USER_ID = os.getenv("USER_ID_TEST_1")
 STAGE = os.environ.get("STAGE", "development")
 BUCKET_TEST = os.environ["BUCKET_TEST"]
 IMAGE_NAME = "receiver_step_1"

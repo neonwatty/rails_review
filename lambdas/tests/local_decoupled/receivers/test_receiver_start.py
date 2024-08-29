@@ -33,7 +33,6 @@ APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 RECEIVER_NAME = "receiver_start"
-USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
@@ -127,12 +126,11 @@ def test_success(container_controller, subtests):
         
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
-        if s3_key_save is not None:
-            body = response.json()["body"]
-            assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
-            assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
-            s3_key_save = body["s3_key_save"]
-            bucket_name_save = body["bucket_name_save"]
+        body = response.json()["body"]
+        assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
+        assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
+        s3_key_save = body["s3_key_save"]
+        bucket_name_save = body["bucket_name_save"]
         content = json.loads(response.content.decode('utf-8'))
         assert content["statusCode"] == 200
         
@@ -149,7 +147,7 @@ def test_success(container_controller, subtests):
             
             # unpack message
             assert message["url"] == "status_update"
-            assert message["lambda"] == "receiver_start"
+            assert message["lambda"] == RECEIVER_NAME
             assert message["status"] == "complete"
             
         # delete message

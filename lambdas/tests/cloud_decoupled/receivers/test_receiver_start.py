@@ -1,39 +1,20 @@
 import pytest
 import os
 import json
-import time
-import requests
 import boto3
 from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
-from tests.utilities.docker_utilities import print_container_logs
-
-
-"""
-This set of tests for the receiver_preprocess tests the following
-
-- a successful test, including
-    - upload a test file to s3 test bucket
-    - excitation by lambda invoke
-    - checks for transferred file in new location (test bucket as well)
-    - cleanup of files in test bucket
-"""
 
 # get current directory paths
 current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
-
-# define docker variables
-DOCKER_PORT = 9000
-LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 RECEIVER_NAME = "receiver_start"
-USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 SERVERLESS_NAME = "serverless_receivers.yml"
@@ -100,15 +81,16 @@ def test_success(build_deploy, subtests):
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(payload))
         
         # check response successful, and tables / files look as they should given success
-        assert response.status_code == 200
-        if s3_key_save is not None:
-            body = response.json()["body"]
-            assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
-            assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
-            s3_key_save = body["s3_key_save"]
-            bucket_name_save = body["bucket_name_save"]
-        content = json.loads(response.content.decode('utf-8'))
+        print(f"response --> {response}")
+        assert response["StatusCode"] == 200
+        streaming_body = response["Payload"]
+        content = json.loads(streaming_body.read().decode("utf-8"))
         assert content["statusCode"] == 200
+        body = content["body"]
+        assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
+        assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
+        s3_key_save = body["s3_key_save"]
+        bucket_name_save = body["bucket_name_save"]
         
         # check for message in test queue
         receipt_handle = None
