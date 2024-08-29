@@ -34,23 +34,27 @@ def lambda_handler(event, context):
     file_name = s3_key_split[2]
 
     # try function
-    try:            
+    try:        
+        # adjust local_input_file_path for function to work properly
+        local_input_path = local_input_file_path + ".jpg"
+        local_output_path = local_output_file_path + ".jpg"
+            
         # Download the image from S3
-        s3_client.download_file(s3_bucket, s3_key, local_input_file_path)
+        s3_client.download_file(s3_bucket, s3_key, local_input_path)
         
         # Open the image using Pillow
-        image = Image.open(local_input_file_path)
+        image = Image.open(local_input_path)
         
         # Resize the image
         new_size = (800, 600)  # Desired size
         resized_image = image.resize(new_size)
 
         # Save the processed image to the specified output file path
-        resized_image.save(local_output_file_path)
+        resized_image.save(local_output_path)
         
         # upload file
         s3_key_save = f"{user_id}/{upload_id}/receiver_preprocess"
-        s3_client.upload_file(local_output_file_path, s3_bucket, s3_key_save)
+        s3_client.upload_file(local_output_path, s3_bucket, s3_key_save)
         
         # send status update to queue
         status = {

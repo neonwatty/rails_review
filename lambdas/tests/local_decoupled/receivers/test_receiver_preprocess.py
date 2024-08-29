@@ -113,7 +113,8 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         if s3_key_save is not None:
-            body = json.loads(response.json()["body"])        
+            body = json.loads(response.json()["body"])      
+            print(f"body --> {body}")  
             assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             s3_key_save = body["s3_key_save"]
