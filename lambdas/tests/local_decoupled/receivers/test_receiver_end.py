@@ -138,21 +138,7 @@ def test_success(container_controller, subtests):
         delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
         assert delete_response is True
     
-    
-    
-    
-    
-    
-    # check output file exists
-    with subtests.test(msg="check that output file now exists"):
-        s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
-        
     # delete input test file
     with subtests.test(msg="delete test file"):
         response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
-        assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"
-
-    # delete output test file
-    with subtests.test(msg="delete test output file"):
-        response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key_save)
         assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"

@@ -41,8 +41,7 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 
                 ### setup data, download object from s3 ###
                 # setup - download input from s3
-                setup_payload = receiver_setup(s3_record, local_input_ext, local_output_ext)       
-                setup_payload["receiver_name"] = RECEIVER_NAME
+                setup_payload = receiver_setup(RECEIVER_NAME, s3_record, local_input_ext, local_output_ext)       
 
                 # run function
                 receiver_response = receiver(setup_payload, {})

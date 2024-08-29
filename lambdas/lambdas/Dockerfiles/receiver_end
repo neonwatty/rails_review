@@ -25,4 +25,4 @@ COPY --from=app_root utilities/tools ./utilities/tools
 
 
 # Set cmd
-CMD [ "receivers/receiver_end/receiver_end.handler" ]
+CMD [ "receivers/receiver_end/receiver_end.lambda_handler" ]
