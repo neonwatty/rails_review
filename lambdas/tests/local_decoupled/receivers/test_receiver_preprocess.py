@@ -11,16 +11,6 @@ from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
 
 
-"""
-This set of tests for the receiver_preprocess tests the following
-
-- a successful test, including
-    - excitation by sqs receiver message
-    - checks against s3 bucket upload location for original upload,
-    - check against s3 bucket for preprocess output
-    - checks for status receiver reception
-"""
-
 # get current directory paths
 current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
@@ -132,7 +122,7 @@ def test_success(container_controller, subtests):
         message_id = queue_data["message_id"]
         message = queue_data["message"]
         status_receipt_handle = queue_data["receipt_handle"]
-        
+
         # unpack message
         assert message["url"] == "status_update"
         assert message["lambda"] == RECEIVER_NAME
