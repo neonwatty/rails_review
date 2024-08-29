@@ -1,6 +1,76 @@
+import os
 import json
 import functools
+from sqs.messages.message_create import message_create
 from sqs.messages.message_delete import message_delete
+
+STAGE = os.environ["STAGE"]
+APP_NAME = os.environ["APP_NAME"]
+STATUS_QUEUE = f"{APP_NAME}-test-status"
+if STAGE in ["development", "production"]:
+    STATUS_QUEUE = f"{APP_NAME}-status"
+    BUCKET_NAME_SAVE = f"{APP_NAME}-trigger"
+    
+
+def sqs_status_wrapper(func):
+    @functools.wraps(func)
+    def wrapper(event, context):
+        # unpack setup_payload from event
+        setup_payload = event["setup_payload"]
+        
+        # run func
+        result = func(event, context)
+        
+        # check result code
+        if result["statusCode"] == 200:
+            # send complete status signal to queue
+            status = {
+                "url": "status_update",
+                "lambda": "receiver_preprocess",
+                "user_id": setup_payload["user_id"],
+                "upload_id": setup_payload["upload_id"],
+                "status": "complete"
+            }
+            
+            # send message to queue
+            response = message_create(STATUS_QUEUE, status)
+            
+            # check status response
+            if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
+                success_message = "SUCCESS: receiver_start executed successfully"
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({'status': 'success', 'message': success_message, "s3_key_save":result["s3_key_save"], "bucket_name_save": result["bucket_name_save"]})
+                }
+            else:
+                failure_message = f"FAILURE: status message for {setup_payload["RECEIVER_NAME"]} failed to send"
+                return {
+                    'statusCode': 500,
+                    'body': json.dumps({'status': 'success', 'message': failure_message, "s3_key_save":None, "bucket_name_save": None})
+                }
+        else:
+            # send status update to queue   
+            status = {
+                "url": "status_update",
+                "lambda": "receiver_preprocess",
+                "user_id": setup_payload["user_id"],
+                "upload_id": setup_payload["upload_id"],
+                "status": "fail"
+            }
+            response = message_create(STATUS_QUEUE, status)
+            
+            if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
+                success_message = "SUCCESS: receiver_start executed successfully"
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({'status': 'success', 'message': success_message, "s3_key_save":result["s3_key_save"], "bucket_name_save": result["bucket_name_save"]})
+                }
+            else:
+                failure_message = f"FAILURE: status message for {setup_payload["RECEIVER_NAME"]} failed to send"
+                return {
+                    'statusCode': 500,
+                    'body': json.dumps({'status': 'success', 'message': failure_message, "s3_key_save":None, "bucket_name_save": None})
+                }
 
 
 def sqs_receiver_wrapper(func):

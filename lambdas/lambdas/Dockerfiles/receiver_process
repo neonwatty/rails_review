@@ -10,13 +10,13 @@ RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 
 # copy and install requirements
-COPY --from=app_root lambdas/requirements/receiver_step_1.txt .
-RUN pip install -r receiver_step_1.txt
+COPY --from=app_root lambdas/requirements/receiver_process.txt .
+RUN pip install -r receiver_process.txt
 
 # copy files
 COPY --from=app_root receivers/__init__.py ./receivers/__init__.py
 COPY --from=app_root receivers/utilities ./receivers/utilities
-COPY --from=app_root receivers/receiver_step_1 ./receivers/receiver_step_1
+COPY --from=app_root receivers/receiver_process ./receivers/receiver_process
 COPY --from=app_root decorators ./decorators
 COPY --from=app_root sqs/messages ./sqs/messages
 COPY --from=app_root s3 ./s3
@@ -25,4 +25,4 @@ COPY --from=app_root utilities/tools ./utilities/tools
 
 
 # Set cmd
-CMD [ "receivers/receiver_step_1/receiver_step_1.handler" ]
+CMD [ "receivers/receiver_process/receiver_process.lambda_handler" ]
