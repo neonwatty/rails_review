@@ -49,7 +49,7 @@ def lambda_handler(event, context):
             success_message = "SUCCESS: receiver_start executed successfully"
             return {
                 'statusCode': 200,
-                'body': json.dumps({'status': 'success', 'message': success_message, "s3_key_save":s3_key_save, "bucket_name_save": BUCKET_NAME_SAVE})
+                'body': {'status': 'success', 'message': success_message, "s3_key_save":s3_key_save, "bucket_name_save": BUCKET_NAME_SAVE}
             }
         else:
             failure_message = f"sqs status queue did not accept status message --> {STATUS_QUEUE}"
@@ -57,7 +57,7 @@ def lambda_handler(event, context):
             print(failure_message)
             return {
                 'statusCode': 500,
-                'body': json.dumps({'status': 'error', 'message': failure_message})
+                'body': {'status': 'error', 'message': failure_message}
             }
     except Exception as e:
         try:
@@ -78,5 +78,5 @@ def lambda_handler(event, context):
         print(failure_message)
         return {
             'statusCode': 500,
-            'body': json.dumps({'status': 'error', 'message': failure_message})
+            'body': {'status': 'error', 'message': failure_message}
         }

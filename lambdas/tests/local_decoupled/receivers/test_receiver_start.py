@@ -1,13 +1,12 @@
 import pytest
 import os
 import json
-import time
 import requests
 import boto3
 from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
-from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.docker_utilities import print_container_logs
+from tests.utilities.docker_utilities import local_controller
 
 
 """
@@ -20,14 +19,6 @@ This set of tests for the receiver_preprocess tests the following
     - cleanup of files in test bucket
 """
 
-# get current directory paths
-current_directory = os.getcwd()
-home_dir = os.path.expanduser("~")
-
-# define docker variables
-DOCKER_PORT = 9000
-LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
-
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
 STAGE = "test"
@@ -37,6 +28,9 @@ USER_ID = os.getenv("USER_ID_TEST_1")
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
+# define docker variables
+DOCKER_PORT = 9000
+LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
@@ -52,40 +46,8 @@ test_file_path = "tests/test_files/blank.jpg"
 
 @pytest.fixture(scope="module")
 def container_controller():
-    # build image
-    command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
-    stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-
-    # startup container
-    command = [
-        "docker",
-        "run",
-        "--env-file",
-        "../.env",
-        "-e", "STAGE=test",
-        "-d",
-        "-v",
-        f"{home_dir}/.aws:/root/.aws",
-        "--name",
-        RECEIVER_NAME,
-        "-p",
-        f"{DOCKER_PORT}:8080",
-        RECEIVER_NAME,
-    ]
-
-    stdout = execute_subprocess_command(command)
-
-    # let container startup before sending post tests
-    time.sleep(5)
-
-    yield
-
-    # stop and remove container
-    command = ["docker", "stop", RECEIVER_NAME]
-    stdout = execute_subprocess_command(command)
-
-    command = ["docker", "rm", RECEIVER_NAME]
-    stdout = execute_subprocess_command(command)
+    with local_controller(STAGE, RECEIVER_NAME, DOCKER_PORT) as controller:
+        yield controller
 
 
 def test_success(container_controller, subtests):
