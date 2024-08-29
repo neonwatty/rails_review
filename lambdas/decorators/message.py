@@ -91,10 +91,11 @@ def sqs_receiver_wrapper(func):
                 raise KeyError("No 'receiptHandle' found in general_record")
             receipt_handle = general_record["receiptHandle"]
 
+            # unpack queue_name and s3 record data
             queue_name = queue_arn.split(":")[-1]
             s3_record = json.loads(general_record["body"])["Records"][0]            
 
-            # Process message
+            # run function
             process_response = func(s3_record, {})
 
             # check status of response

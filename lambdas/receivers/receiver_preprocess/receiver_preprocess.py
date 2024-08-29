@@ -3,7 +3,8 @@ import json
 from PIL import Image
 from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
-from decorators.message import sqs_receiver_wrapper
+from decorators.message import sqs_receiver_wrapper, sqs_status_wrapper
+from decorators.receiver_setup_teardown import 
 
 
 BUCKET_NAME_SAVE = f"{APP_NAME}-test"

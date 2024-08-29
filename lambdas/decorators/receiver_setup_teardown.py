@@ -14,6 +14,8 @@ def receiver_setup_teardown(local_input_ext, local_output_ext):
             
             # teardown and wrapup
             teardown_val = teardown(setup_payload)
-            if teardown_val is True:
-        
+
+            return result
+        return wrapper
+    return decorator        
   
