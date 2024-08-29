@@ -45,7 +45,7 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 receiver_response = receiver(setup_payload, {})
                 
                 # teardown - upload output to s3
-                teardown_val = receiver_teardown(setup_payload)
+                s3_key_save = receiver_teardown(setup_payload)
                 
                 # delete receiver input message
                 del_message_val = message_delete(queue_name, receipt_handle)
@@ -60,9 +60,14 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 }
                 if receiver_response["statusCode"] != 200:
                     status["status"] = "failed"
+                else: # load up receiver_response with location metadata
+                    receiver_response["body"]["s3_key_save"] = s3_key_save
+                    receiver_response["body"]["bucket_name_save"] = setup_payload["s3_bucket"]
+                    
+                print(f"receiver_response --> {receiver_response}")
                     
                 # send message to queue
-                response = message_create(STATUS_QUEUE, status)
+                status_response = message_create(STATUS_QUEUE, status)
                     
                 # return receiver response
                 return receiver_response

@@ -1,4 +1,3 @@
-import os
 from receivers import s3_client
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
@@ -38,13 +37,13 @@ def receiver_setup(event: dict, local_input_ext: str | None = None, local_output
         return None
   
     
-def receiver_teardown(setup_payload: dict) -> bool:
+def receiver_teardown(setup_payload: dict) -> str | None:
   try:
       # upload file
       s3_key_save = f"{setup_payload["user_id"]}/{setup_payload["upload_id"]}/{setup_payload["receiver_name"]}"
       s3_client.upload_file(setup_payload["local_output_path"], setup_payload["s3_bucket"], s3_key_save)
-      return True
+      return s3_key_save
   except Exception as e:
       failure_message = f"FAILURE: teardown for receiver {setup_payload["receiver_name"]} failed with exception {str(e)}"
       print(failure_message)
-      return False
+      return None

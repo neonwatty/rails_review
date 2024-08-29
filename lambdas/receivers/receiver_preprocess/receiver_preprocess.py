@@ -1,4 +1,3 @@
-import json
 from PIL import Image
 from decorators.warmer import warmer
 from decorators.receiver import receiver_decorator
@@ -22,9 +21,9 @@ def lambda_handler(event, context):
         message = f"SUCCESS: receiver for {event["receiver_name"]} ran successfully"
         print(message)
         return {
-            "statusCode": 200,  "body": json.dumps({"message": message})
+            "statusCode": 200,  "body": {"message": message}
         }
     except Exception as e:
         message = f"FAILURE: receiver for {event["receiver_name"]} failed with exception {str(e)}"
         print(message)
-        return {"statusCode": 500, "body": json.dumps({"message": message})}
+        return {"statusCode": 500, "body": {"message": message}}

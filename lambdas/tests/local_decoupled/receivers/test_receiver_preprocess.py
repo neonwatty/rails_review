@@ -6,11 +6,8 @@ import boto3
 import requests
 from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
-from tables.public.row_update import update
-from tables.public.row_read import read
-from tables.public.row_destroy import destroy
 from tests.utilities.execute_subprocess import execute_subprocess_command
-from tests.utilities.receiver_utilities import step_setup, check_success, clean_up, s3sqs_event_maker
+from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
 
 
@@ -18,15 +15,10 @@ from tests.utilities.docker_utilities import print_container_logs
 This set of tests for the receiver_preprocess tests the following
 
 - a successful test, including
-    - excitation by sqs message
-    - checks against s3 bucket upload location for original upload, file ledger, and history ledger
-    - check against s3 bucket for preprocess output (here an mp3)
-- these excitaions and checks are also performed in the following failure tests
-    - a failure test, wherein the same file is (attempted) processed twice after successfully completing the first time
-    - a failure test, wherein the same file is (attempted) processed twice after first in progress
-
-    - a failure test, wherein the same file is (attempted) processed twice, after failing the first time 
-    - a failure test, wherein a file's has from uploaded file does not match what the client provided
+    - excitation by sqs receiver message
+    - checks against s3 bucket upload location for original upload,
+    - check against s3 bucket for preprocess output
+    - checks for status receiver reception
 """
 
 # get current directory paths
@@ -113,8 +105,7 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         if s3_key_save is not None:
-            body = json.loads(response.json()["body"])      
-            print(f"body --> {body}")  
+            body = response.json()["body"]
             assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             s3_key_save = body["s3_key_save"]
