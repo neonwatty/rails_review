@@ -12,7 +12,7 @@ def receiver_setup(event: dict, local_input_ext: str | None = None, local_output
         s3_key_split = s3_key.split("/")
         user_id = s3_key_split[0]
         upload_id = s3_key_split[1]
-        receiver_name = s3_key_split[2]
+        file_name = s3_key_split[2]
         
         # adjust local_input_file_path for function to work properly
         local_input_path = local_input_file_path + local_input_ext if local_input_ext is not None else local_input_file_path
@@ -29,7 +29,6 @@ def receiver_setup(event: dict, local_input_ext: str | None = None, local_output
         setup_payload["local_output_path"] = local_output_path
         setup_payload["s3_bucket"] = s3_bucket
         setup_payload["s3_key"] = s3_key
-        setup_payload["receiver_name"] = receiver_name
         return setup_payload
     except Exception as e:
         failure_message = f"FAILURE: setup for receiver {receiver_name} failed with exception {str(e)}"

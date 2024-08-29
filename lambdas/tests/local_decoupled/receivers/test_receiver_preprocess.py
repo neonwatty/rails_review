@@ -53,9 +53,11 @@ test_file_path = "tests/test_files/blank.jpg"
 @pytest.fixture(scope="module")
 def container_controller():
     # build image
+    print("INFO: starting image building process...")
     command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-
+    print("INFO: ...complete!")
+    
     # startup container
     command = [
         "docker",
@@ -63,7 +65,7 @@ def container_controller():
         "--env-file",
         "../.env",
         "-e", "STAGE=test",
-        "-e", f"RECEIVER_NAME={RECEIVER_NAME}"
+        "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",
@@ -73,8 +75,9 @@ def container_controller():
         f"{DOCKER_PORT}:8080",
         RECEIVER_NAME,
     ]
-
+    print("INFO: starting container running process...")
     stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
 
     # let container startup before sending post tests
     time.sleep(5)
@@ -83,17 +86,22 @@ def container_controller():
 
     # stop and remove container
     command = ["docker", "stop", RECEIVER_NAME]
+    print("INFO: starting container stopping process...")
     stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
 
     command = ["docker", "rm", RECEIVER_NAME]
+    print("INFO: starting container removal process...")
     stdout = execute_subprocess_command(command)
+    print("INFO: ...complete!")
 
 
 def test_success(container_controller, subtests):
+    print("INFO: starting test_success")
     ### setup step ###
     file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, RECEIVER_NAME, step_progress="in_progress")  
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
-    
+    print(f"sqs event maker complete")
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
         # Send a POST request to the Lambda function
@@ -109,6 +117,8 @@ def test_success(container_controller, subtests):
             assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
             assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
             assert "receiver_name" in list(body.keys())
+            print(f"body['receiver_name] --> {body["receiver_name"]}")
+            print(f"RECEIVER_NAME --> {RECEIVER_NAME}")
             assert body["receiver_name"] == RECEIVER_NAME
             s3_key_save = body["s3_key_save"]
             bucket_name_save = body["bucket_name_save"]
