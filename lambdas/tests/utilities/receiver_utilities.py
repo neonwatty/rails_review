@@ -109,3 +109,43 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     # sleep to let setup complete
     time.sleep(2)
     return upload_id, request_id, s3_key, s3_key_save, receipt_handle
+
+
+def status_setup(subtests):
+    ### upload first time --> for successful completion ###
+    # create message
+    with subtests.test(msg="create test message"):
+        response = message_create(TEST_RECEIVERS_QUEUE, {})
+        assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
+        message_id = response["MessageId"]
+
+    # poll for message to get receipt
+    with subtests.test(msg="poll for test message receipt"):
+        receipt_handle = message_poll(TEST_RECEIVERS_QUEUE, message_id)
+        assert receipt_handle is not None
+    
+    # build status
+    test_status = {
+        "lambda": "receiver_start",
+        "user_id": 0,
+        "upload_id": 0,
+        "status": "complete"
+        }
+    
+    # build queue record
+    queue_arn = f"{SQS_ARN_ROOT}{TEST_STATUS_QUEUE}"
+    
+    # construct general record
+    general_record = {
+        "eventSourceARN": queue_arn,
+        "receiptHandle": receipt_handle,
+        "body": json.dumps({
+            "Records": [{"message": test_status}]
+        })
+    }
+        
+    # construct general records holder
+    event = {
+        "Records": [general_record]
+    }
+    return event, receipt_handle
