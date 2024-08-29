@@ -70,17 +70,18 @@ def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_ha
 def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
     # upload file file data for testing
     local_file_path = test_file_path
-    file_id = hash_file(test_file_path)
+    upload_id = 0 # hash_file(test_file_path)
     request_id = str(uuid.uuid4())
     filename = test_file_name
-    s3_key = f"{USER_ID}/{file_id}/{filename}"
+    user_id = 0
+    s3_key = f"{user_id}/{upload_id}/{filename}"
     
     # define s3_key_save based on filename
     s3_key_save = None
     if filename == "receiver_start":
-        s3_key_save = f"{USER_ID}/{file_id}/receiver_preprocess"
+        s3_key_save = f"{user_id}/{upload_id}/receiver_preprocess"
     if filename == "receiver_preprocess":
-        s3_key_save = f"{USER_ID}/{file_id}/receiver_process"
+        s3_key_save = f"{user_id}/{upload_id}/receiver_process"
     
     # set status
     assert step in ["receiver_preprocess", "receiver_process", "receiver_end"]
@@ -107,8 +108,8 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
         assert receipt_handle is not None
 
     # sleep to let setup complete
-    time.sleep(5)
-    return file_id, request_id, s3_key, s3_key_save, receipt_handle
+    time.sleep(2)
+    return upload_id, request_id, s3_key, s3_key_save, receipt_handle
 
 
 def check_success(subtests, response, local: bool = True) -> tuple[str]:

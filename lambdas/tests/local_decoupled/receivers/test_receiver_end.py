@@ -25,6 +25,8 @@ BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 RECEIVER_NAME = "receiver_end"
 TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
+RAILS_DEVELOPMENT_HOST = os.environ["RAILS_DEVELOPMENT_HOST"]
+LAMBDA_API_KEY = os.environ["LAMBDA_API_KEY"]
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
@@ -55,6 +57,8 @@ def container_controller():
         "../.env",
         "-e", "STAGE=test",
         "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
+        "-e", f"RAILS_DEVELOPMENT_HOST={RAILS_DEVELOPMENT_HOST}",
+        "-e", f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",

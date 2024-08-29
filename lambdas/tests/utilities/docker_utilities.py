@@ -21,5 +21,5 @@ def print_container_logs(container_name: str) -> None:
     filtered_logs = '\n'.join(
         line for line in logs.splitlines()
         if not (timestamp_pattern.match(line) or exclude_patterns.search(line))
-)
+    )
     print(filtered_logs)
