@@ -62,9 +62,9 @@ def test_success(build_deploy, subtests):
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     print(f"sqs event maker complete")
     
-    # execute lambda in local docker container
-    with subtests.test(msg="execute docker lambda locally"):
-        # Send a POST request to the Lambda function
+    # execute function
+    with subtests.test(msg="execute function"):
+        # invoke lambda
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(event))
         
         # check response successful, and tables / files look as they should given success
@@ -75,8 +75,6 @@ def test_success(build_deploy, subtests):
         body = content["body"]
         assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
         assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
-        s3_key_save = body["s3_key_save"]
-        bucket_name_save = body["bucket_name_save"]
         
         # check for message in test queue
         receipt_handle = None
@@ -94,12 +92,12 @@ def test_success(build_deploy, subtests):
             assert message["lambda"] == RECEIVER_NAME
             assert message["status"] == "complete"
             
-        # delete message
-        with subtests.test(msg="delete message"):
-            delete_response = message_delete(TEST_STATUS_QUEUE, receipt_handle)
-            assert delete_response is True
-            
-        # delete input test file
-        with subtests.test(msg="delete test file"):
-            response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
-            assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"
+    # delete message
+    with subtests.test(msg="delete message"):
+        delete_response = message_delete(TEST_STATUS_QUEUE, receipt_handle)
+        assert delete_response is True
+        
+    # delete input test file
+    with subtests.test(msg="delete test file"):
+        response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
+        assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"

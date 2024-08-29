@@ -9,19 +9,19 @@ pytest_commands=(
     "python3.12 -m pytest tests/local/ -x"
 
     ### run local decoupled tests ###
-    "python3.12 -m pytest tests/local_decoupled/entrypoints/test_entrypoint_input.py -x"
+    "python3.12 -m pytest tests/local_decoupled/receivers/test_receiver_start.py -x"
     "python3.12 -m pytest tests/local_decoupled/receivers/test_receiver_preprocess.py -x"
-    "python3.12 -m pytest tests/local_decoupled/receivers/test_receiver_step_1.py -x"
+    "python3.12 -m pytest tests/local_decoupled/receivers/test_receiver_process.py -x"
     "python3.12 -m pytest tests/local_decoupled/receivers/test_receiver_end.py -x"
 
     ### run cloud decoupled tests ###
-    "python3.12 -m pytest tests/cloud_decoupled/entrypoints/test_entrypoint_input.py -x"
+    "python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_start.py -x"
     "python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_preprocess.py -x"
-    "python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_step_1.py -x"
+    "python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_process.py -x"
     "python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_end.py -x"
 
     ### run cloud e2e tests ###
-    "python3.12 -m pytest tests/cloud_e2e/test_entrypoint_input.py -x"
+    "python3.12 -m pytest tests/cloud_e2e/test_receiver_circuit.py -x"
 
 )
 
