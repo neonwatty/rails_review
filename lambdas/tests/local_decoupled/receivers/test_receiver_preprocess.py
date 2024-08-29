@@ -35,19 +35,17 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-STAGE = os.environ.get("STAGE", "development")
-BUCKET_TEST = os.environ["BUCKET_TEST"]
-IMAGE_NAME = "receiver_preprocess"
-LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
-QUEUE_TEST = f"{os.environ["APP_NAME"]}-test"
+APP_NAME = os.environ["APP_NAME"]
+STAGE = "test"
+BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
+IMAGE_NAME = "receiver_start"
 USER_ID = os.getenv("USER_ID_TEST_1")
-FILE_LEDGER_TEMP = os.environ["FILE_LEDGER_TEMP"]
-HISTORY_LEDGER_MAIN = os.environ["HISTORY_LEDGER_MAIN"]
-SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
+TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
 # test file data
-test_file_name = "entrypoint_input.mp4"
-test_file_path = "tests/test_files/test_file.mp4"
+test_file_name = "receiver_start"
+test_file_path = "tests/test_files/blank.jpg"
 
 
 @pytest.fixture(scope="module")
@@ -61,7 +59,8 @@ def container_controller():
         "docker",
         "run",
         "--env-file",
-        ".env",
+        "../.env",
+        "-e", "STAGE=test",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",
@@ -89,8 +88,8 @@ def container_controller():
 
 def test_success(container_controller, subtests):
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="not started")  
-    event = s3sqs_event_maker(BUCKET_TEST, s3_key, QUEUE_TEST, receipt_handle)
+    file_id, request_id, s3_key, s3_key_save, receipt_handle = step_setup(subtests, test_file_name, test_file_path, IMAGE_NAME, step_progress="in_progress")  
+    event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receipt_handle)
     
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
