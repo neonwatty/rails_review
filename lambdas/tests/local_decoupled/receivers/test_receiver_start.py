@@ -37,7 +37,9 @@ STAGE = "test"
 BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_start"
 USER_ID = os.getenv("USER_ID_TEST_1")
-TEST_QUEUE = f"{APP_NAME}-test"
+TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
+
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
@@ -133,7 +135,7 @@ def test_success(container_controller, subtests):
         receipt_handle = None
         with subtests.test(msg="check message queue"):
             # poll queue
-            queue_data = message_poll_no_id(TEST_QUEUE)
+            queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
             
             # unpack queue data
             message_id = queue_data["message_id"]
@@ -147,7 +149,7 @@ def test_success(container_controller, subtests):
             
         # delete message
         with subtests.test(msg="delete message"):
-            delete_response = message_delete(TEST_QUEUE, receipt_handle)
+            delete_response = message_delete(TEST_STATUS_QUEUE, receipt_handle)
             assert delete_response is True
        
         # check output file exists
