@@ -4,7 +4,7 @@ useDotenv: true
 
 provider:
   name: aws
-  stage: ${opt:stage, 'development'}
+  stage: ${opt:stage, 'test'}
   region: ${env:AWS_REGION}
   profile: ${env:AWS_PROFILE}
   runtime: python3.10
@@ -22,8 +22,8 @@ provider:
             - s3:GetObject
             - s3:PutObject
           Resource:
-            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'development'}
-            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'development'}/*
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}/*
             - arn:aws:s3:::${env:APP_NAME}-trigger
             - arn:aws:s3:::${env:APP_NAME}-trigger/*
         - Effect: Allow
@@ -36,23 +36,24 @@ provider:
 
 functions:
   receiver_start:
-    name: ${env:APP_NAME}-receiver_start-${opt:stage, 'development'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'development'}
+    name: ${env:APP_NAME}-receiver_start-${opt:stage, 'test'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'test'}
     description: 'test rails receiver lambda function'
     environment:
-      STAGE: ${opt:stage, 'development'}
+      STAGE: ${opt:stage, 'test'}
       APP_NAME: ${env:APP_NAME}
       RECEIVER_NAME: receiver_start
 
   receiver_preprocess:
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'development'}
+    name: ${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'test'}
     description: 'receiver preprocess lambda function'
     events:
       - sqs:
           arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess
           batchSize: 1
     environment:
-      STAGE: ${opt:stage, 'dev'}
+      STAGE: ${opt:stage, 'test'}
       RECEIVER_NAME: receiver_preprocess
 
 
