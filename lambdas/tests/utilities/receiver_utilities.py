@@ -17,11 +17,6 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # import variables
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
-IMAGE_NAME = "receiver_preprocess"
-LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
 
 # create event - nested like triggered event from s3 --> sqs
@@ -58,7 +53,7 @@ def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_ha
         return event
 
 
-def step_setup(subtests, test_file_name, test_file_path, bucket_name: str, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
+def step_setup(subtests, test_file_name, test_file_path, bucket_name: str, receiver_queue: str, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
     # upload file file data for testing
     local_file_path = test_file_path
     upload_id = 0 # hash_file(test_file_path)
@@ -89,13 +84,13 @@ def step_setup(subtests, test_file_name, test_file_path, bucket_name: str, step:
     ### upload first time --> for successful completion ###
     # create message
     with subtests.test(msg="create test message"):
-        response = message_create(TEST_RECEIVERS_QUEUE, {})
+        response = message_create(receiver_queue, {})
         assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
         message_id = response["MessageId"]
 
     # poll for message to get receipt
     with subtests.test(msg="poll for test message receipt"):
-        receipt_handle = message_poll(TEST_RECEIVERS_QUEUE, message_id)
+        receipt_handle = message_poll(receiver_queue, message_id)
         assert receipt_handle is not None
 
     # sleep to let setup complete
@@ -103,17 +98,17 @@ def step_setup(subtests, test_file_name, test_file_path, bucket_name: str, step:
     return upload_id, request_id, s3_key, s3_key_save, receipt_handle
 
 
-def status_setup(subtests, TEST_STATUS_QUEUE):
+def status_setup(subtests, status_queue: str):
     ### upload first time --> for successful completion ###
     # create message
     with subtests.test(msg="create test message"):
-        response = message_create(TEST_STATUS_QUEUE, {})
+        response = message_create(status_queue, {})
         assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
         message_id = response["MessageId"]
 
     # poll for message to get receipt
     with subtests.test(msg="poll for test message receipt"):
-        receipt_handle = message_poll(TEST_STATUS_QUEUE, message_id)
+        receipt_handle = message_poll(status_queue, message_id)
         assert receipt_handle is not None
     
     # build status
@@ -125,7 +120,7 @@ def status_setup(subtests, TEST_STATUS_QUEUE):
         }
     
     # build queue record
-    queue_arn = f"{SQS_ARN_ROOT}{TEST_STATUS_QUEUE}"
+    queue_arn = f"{SQS_ARN_ROOT}{status_queue}"
     
     # construct general record
     general_record = {

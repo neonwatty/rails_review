@@ -50,7 +50,7 @@ def container_controller():
         "run",
         "--env-file",
         "../.env",
-        "-e", "STAGE=test",
+        "-e", f"STAGE={STAGE}",
         "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
         "-e", f"RAILS_HOST_{STAGE}={RAILS_HOST}",
         "-e", f"LAMBDA_API_KEY_{STAGE}={LAMBDA_API_KEY}",

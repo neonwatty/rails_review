@@ -54,7 +54,7 @@ def container_controller():
         "run",
         "--env-file",
         "../.env",
-        "-e", "STAGE=test",
+        "-e", f"STAGE={STAGE}",
         "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
         "-d",
         "-v",
@@ -89,7 +89,7 @@ def container_controller():
 def test_success(container_controller, subtests):
     print("INFO: starting test_success")
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, RECEIVER_NAME, step_progress="in_progress")  
+    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress")  
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     print(f"INFO: sqs event maker complete")
     # execute lambda in local docker container
