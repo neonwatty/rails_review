@@ -19,12 +19,12 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_status"
-RAILS_DEVELOPMENT_HOST = os.environ["RAILS_DEVELOPMENT_HOST"]
-LAMBDA_API_KEY = os.environ["LAMBDA_API_KEY"]
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
+RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
 
 # define session
@@ -52,8 +52,8 @@ def container_controller():
         "../.env",
         "-e", "STAGE=test",
         "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
-        "-e", f"RAILS_DEVELOPMENT_HOST={RAILS_DEVELOPMENT_HOST}",
-        "-e", f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
+        "-e", f"RAILS_HOST_{STAGE}={RAILS_HOST}",
+        "-e", f"LAMBDA_API_KEY_{STAGE}={LAMBDA_API_KEY}",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",

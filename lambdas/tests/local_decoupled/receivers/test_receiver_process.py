@@ -22,10 +22,10 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_process"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
