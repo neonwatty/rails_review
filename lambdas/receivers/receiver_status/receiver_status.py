@@ -27,6 +27,7 @@ def process_message(message: str) -> bool:
             return True
         else:
             print(f"FAILURE: process_message failed and returned status code - {response.status_code}")
+            print(f"FAILURE: response json --> {response.json()}")
             return False
     except Exception as e:
         failure_message = f"FAILURE: process_message failed with exception {e}"

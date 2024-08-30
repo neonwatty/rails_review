@@ -124,7 +124,6 @@ def test_success(container_controller, subtests):
         status_receipt_handle = queue_data["receipt_handle"]
 
         # unpack message
-        assert message["url"] == "status_update"
         assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
         

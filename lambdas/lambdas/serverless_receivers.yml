@@ -18,10 +18,7 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - s3:ListBucket
-            - s3:GetObject
-            - s3:PutObject
-            - s3:DeleteObject
+            - s3:*
           Resource:
             - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}
             - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}/*

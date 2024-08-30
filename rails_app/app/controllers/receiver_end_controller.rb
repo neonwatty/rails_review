@@ -3,7 +3,7 @@ class ReceiverEndController < ApplicationController
   before_action :authenticate_request
 
   def update
-    payload = params.require(:receiver_end).permit(:lambda, :user_id, :upload_id, :status)
+    payload = params.require(:receiver_end).permit(:bucket_name, :processed_image_key, :upload_id)
     upload = Upload.find_by(id: payload[:upload_id])
 
     if upload
