@@ -58,7 +58,7 @@ def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_ha
         return event
 
 
-def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
+def step_setup(subtests, test_file_name, test_file_path, bucket_name: str, step: str,  step_progress: str = "in_progress", file_id_override: str | None = None):
     # upload file file data for testing
     local_file_path = test_file_path
     upload_id = 0 # hash_file(test_file_path)
@@ -80,7 +80,7 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     # upload test file
     with subtests.test(msg="create a test file"):
         with open(local_file_path, "rb") as file_data:
-            s3_client.put_object(Bucket=BUCKET_TEST, Key=s3_key, Body=file_data)
+            s3_client.put_object(Bucket=bucket_name, Key=s3_key, Body=file_data)
 
     # create message in queue, poll for receipt to pass
     message_id = None

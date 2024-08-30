@@ -54,7 +54,7 @@ def container_controller():
         "run",
         "--env-file",
         "../.env",
-        "-e", "STAGE=test",
+        "-e", f"STAGE={STAGE}",
         "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
         "-d",
         "-v",

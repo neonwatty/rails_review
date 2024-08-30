@@ -8,10 +8,7 @@ from receivers.utilities.setup_teardown import receiver_setup, receiver_teardown
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
 RECEIVER_NAME = os.environ["RECEIVER_NAME"]
-STATUS_QUEUE = f"{APP_NAME}-status-test-decoupled"
-if STAGE in ["development", "production"]:
-    STATUS_QUEUE = f"{APP_NAME}-receiver_status"
-
+STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 
 
 def receiver_decorator(local_input_ext, local_output_ext):
