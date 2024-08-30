@@ -5,6 +5,7 @@ import uuid
 import time
 from sqs.messages.message_create import message_create
 from sqs.messages.message_poll import message_poll
+from config import APP_NAME, STAGE
 
 
 # define session
@@ -16,13 +17,12 @@ s3_client = session.client("s3")
 lambda_client = session.client("lambda")
 
 # import variables
-APP_NAME = os.environ["APP_NAME"]
-STAGE = "test"
-BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
 # create event - nested like triggered event from s3 --> sqs
 def s3sqs_event_maker(bucket_name: str, s3_key: str, queue_name: str, receipt_handle: str) -> dict:
