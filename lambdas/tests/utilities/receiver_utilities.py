@@ -3,15 +3,8 @@ import boto3
 import json
 import uuid
 import time
-from botocore.exceptions import ClientError
 from sqs.messages.message_create import message_create
 from sqs.messages.message_poll import message_poll
-from tables.public.row_create import create
-from tables.public.row_update import update
-from tables.public.row_read import read
-from tables.public.row_destroy import destroy
-from s3.subdir_delete import delete_subdir
-from utilities.tools.hash import hash_file
 
 
 # define session
@@ -29,7 +22,6 @@ BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
 IMAGE_NAME = "receiver_preprocess"
 LAMBDA_FUNCTION_NAME = f"receivers-{STAGE}-{IMAGE_NAME}"
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
-TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
 # create event - nested like triggered event from s3 --> sqs
@@ -111,17 +103,17 @@ def step_setup(subtests, test_file_name, test_file_path, step: str,  step_progre
     return upload_id, request_id, s3_key, s3_key_save, receipt_handle
 
 
-def status_setup(subtests):
+def status_setup(subtests, TEST_STATUS_QUEUE):
     ### upload first time --> for successful completion ###
     # create message
     with subtests.test(msg="create test message"):
-        response = message_create(TEST_RECEIVERS_QUEUE, {})
+        response = message_create(TEST_STATUS_QUEUE, {})
         assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
         message_id = response["MessageId"]
 
     # poll for message to get receipt
     with subtests.test(msg="poll for test message receipt"):
-        receipt_handle = message_poll(TEST_RECEIVERS_QUEUE, message_id)
+        receipt_handle = message_poll(TEST_STATUS_QUEUE, message_id)
         assert receipt_handle is not None
     
     # build status
@@ -139,9 +131,7 @@ def status_setup(subtests):
     general_record = {
         "eventSourceARN": queue_arn,
         "receiptHandle": receipt_handle,
-        "body": json.dumps({
-            "Records": [{"message": test_status}]
-        })
+        "body": json.dumps(test_status)
     }
         
     # construct general records holder

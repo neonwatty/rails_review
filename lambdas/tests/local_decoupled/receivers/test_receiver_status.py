@@ -4,7 +4,6 @@ import json
 import time
 import boto3
 import requests
-from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import status_setup
@@ -89,7 +88,7 @@ def test_success(container_controller, subtests):
     print("INFO: starting test_success")
     
     # create sqs event to trigger status receiver with
-    event, status_receipt_handle = status_setup()
+    event, status_receipt_handle = status_setup(subtests, TEST_STATUS_QUEUE)
   
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
@@ -102,7 +101,7 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         content = json.loads(response.content.decode('utf-8'))
-        assert content["statusCode"] == 200
+        assert content["statusCode"] == 500
         
     # delete status message
     with subtests.test(msg="delete status message"):

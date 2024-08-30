@@ -10,7 +10,7 @@ LAMBDA_API_KEY = os.getenv('LAMBDA_API_KEY')
 
 
 def process_message(message: str) -> bool:    
-    try:
+    try:                
         # create headers
         headers = {
         'Content-Type': 'application/json',
@@ -39,6 +39,7 @@ def lambda_handler(event, context):
         # unpack first Record from event
         record = event["Records"][0]
         message = json.loads(record["body"])
+
         receipt_handle = record["receiptHandle"]
         queue_arn = record["eventSourceARN"]
         queue_name = queue_arn.split(":")[-1]
