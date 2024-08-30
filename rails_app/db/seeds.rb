@@ -13,3 +13,7 @@ User.find_or_create_by(id: 1) do |user|
   user.password = "password" # Ensure proper password setup
   user.password_confirmation = "password"
 end
+
+Upload.find_or_create_by(id: 1, user_id: 1) do |upload|
+  upload.files.attach(io: File.open(Rails.root.join("test/fixtures/files/cover_image.jpeg")), filename: "cover_image.jpeg")
+end

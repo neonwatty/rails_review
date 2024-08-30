@@ -1,7 +1,7 @@
 # app/services/lambda_invoker.rb
 require 'aws-sdk-lambda'
 
-class LambdaInvoker
+class LambdaStarter
   def initialize
     @client = Aws::Lambda::Client.new(region: ENV['AWS_REGION'])
   end
@@ -15,9 +15,6 @@ class LambdaInvoker
       bucket_name: "#{ENV['APP_NAME']}-#{Rails.env}",
       stage: "#{Rails.env}"
     }.to_json
-
-    print payload
-    print "#{ENV['APP_NAME']}-receiver_start-#{Rails.env}"
 
     response = @client.invoke({
       function_name: "#{ENV['APP_NAME']}-receiver_start-#{Rails.env}",

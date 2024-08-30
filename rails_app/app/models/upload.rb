@@ -17,7 +17,7 @@ class Upload < ApplicationRecord
       if files.count == 1
         file_key = files.first.key # Get the key of the first attached file
         # Pass upload_id and user_id to the LambdaInvoker
-        LambdaInvoker.new.invoke_function(file_key, id, user_id)
+        LambdaStarter.new.invoke_function(file_key, id, user_id)
         update(files_attached: true)
       end
     end
