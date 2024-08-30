@@ -19,10 +19,11 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
-STAGE = "test"
+STAGE = "test-decoupled"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_status"
-TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 RAILS_DEVELOPMENT_HOST = os.environ["RAILS_DEVELOPMENT_HOST"]
 LAMBDA_API_KEY = os.environ["LAMBDA_API_KEY"]
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]

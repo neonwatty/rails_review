@@ -13,11 +13,11 @@ home_dir = os.path.expanduser("~")
 
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
-STAGE = "test"
-BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
+STAGE = "test-decoupled"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_process"
-TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 SERVERLESS_NAME = "serverless_receivers.yml"
 LAMBDA_FUNCTION_NAME = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 

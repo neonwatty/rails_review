@@ -21,11 +21,11 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 
 # Define your test parameters
 APP_NAME = os.environ["APP_NAME"]
-STAGE = "test"
-BUCKET_TEST = f"{os.environ["APP_NAME"]}-test"
+STAGE = "test-decoupled"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_preprocess"
-TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
