@@ -39,6 +39,7 @@ class ReceiverEndController < ApplicationController
     upload.save
 
     s3.delete_object(bucket: bucket_name, key: processed_image_key)
-rescue Aws::S3::Errors::ServiceError => e
-    Rails.logger.error "S3 Error: #{e.message}"
+  rescue Aws::S3::Errors::ServiceError => e
+      Rails.logger.error "S3 Error: #{e.message}"
+  end
 end
