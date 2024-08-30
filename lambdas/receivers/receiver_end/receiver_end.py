@@ -27,7 +27,7 @@ def lambda_handler(event, context):
         }
 
         # create url
-        rails_url = f"{RAILS_DEVELOPMENT_HOST}/lambda_file/processed_image"
+        rails_url = f"{RAILS_DEVELOPMENT_HOST}/receiver_end/update"
         
         # fire off request
         response = requests.post(rails_url, data=json.dumps(payload), headers=headers)

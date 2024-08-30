@@ -2,13 +2,14 @@ class ReceiverEndController < ApplicationController
   skip_before_action :verify_authenticity_token # For API requests
   before_action :authenticate_request
 
-  def processed_image
-    upload = Upload.find_by(id: params[:upload_id])
+  def update
+    payload = params.require(:receiver_end).permit(:lambda, :user_id, :upload_id, :status)
+    upload = Upload.find_by(id: payload[:upload_id])
 
     if upload
-      process_and_attach_image(
-        processed_image_key: params[:processed_image_key],
-        bucket_name: params[:bucket_name],
+      process_and_attach(
+        processed_image_key: payload[:processed_image_key],
+        bucket_name: payload[:bucket_name],
         upload: upload
       )
       render json: { status: 'processed image updated' }
@@ -30,7 +31,7 @@ class ReceiverEndController < ApplicationController
     end
   end
 
-  def process_and_attach_image(processed_image_key:, bucket_name:, upload:)
+  def process_and_attach(processed_image_key:, bucket_name:, upload:)
     s3 = Aws::S3::Client.new
     processed_image_data = s3.get_object(bucket: bucket_name, key: processed_image_key).body.read
     

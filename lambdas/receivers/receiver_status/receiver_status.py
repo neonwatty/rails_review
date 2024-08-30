@@ -18,7 +18,7 @@ def process_message(message: str) -> bool:
         }
 
         # create url
-        rails_url = f"{RAILS_DEVELOPMENT_HOST}/lambda_status/update"
+        rails_url = f"{RAILS_DEVELOPMENT_HOST}/receiver_status/update"
         
         # fire off request
         response = requests.post(rails_url, data=json.dumps(message), headers=headers)

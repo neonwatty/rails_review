@@ -5,7 +5,7 @@ class ReceiverStatusController < ApplicationController
 
   def update
     # Parse the JSON payload
-    payload = params.require(:lambda_status).permit(:lambda, :user_id, :upload_id, :status)
+    payload = params.require(:receiver_status).permit(:lambda, :user_id, :upload_id, :status)
     
     # Extract values from the payload
     lambda_function = payload[:lambda]

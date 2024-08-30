@@ -10,7 +10,7 @@ APP_NAME = os.environ["APP_NAME"]
 STATUS_QUEUE = f"{APP_NAME}-test-status"
 BUCKET_NAME_SAVE = f"{APP_NAME}-test"
 if STAGE in ["development", "production"]:
-    STATUS_QUEUE = f"{APP_NAME}-status"
+    STATUS_QUEUE = f"{APP_NAME}-receiver_status"
     BUCKET_NAME_SAVE = f"{APP_NAME}-trigger"
 
 

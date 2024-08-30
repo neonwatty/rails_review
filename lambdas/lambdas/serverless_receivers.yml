@@ -21,6 +21,7 @@ provider:
             - s3:ListBucket
             - s3:GetObject
             - s3:PutObject
+            - s3:DeleteObject
           Resource:
             - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}
             - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}/*

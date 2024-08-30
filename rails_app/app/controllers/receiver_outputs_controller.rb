@@ -25,7 +25,7 @@ class ReceiverOutputsController < ApplicationController
   private
 
   def extract_and_permit_payload
-    params.require(:output).permit(:upload_id, :result)
+    params.require(:receiver_outputs).permit(:upload_id, :result)
   end
 
   def find_output_record(upload_id)
