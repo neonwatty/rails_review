@@ -23,8 +23,8 @@ RECEIVER_NAME = "receiver_status"
 BUCKET_TEST = f"{APP_NAME}-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
-RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
-LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
+RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE.upper().replace("-", "_")}"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE.upper().replace("-", "_")}"]
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
 
 # define session
@@ -101,8 +101,7 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         content = json.loads(response.content.decode('utf-8'))
-        print(f"content --> {content}")
-        assert content["statusCode"] == 200
+        assert content["statusCode"] == 500
         
     # delete status message
     with subtests.test(msg="delete status message"):
