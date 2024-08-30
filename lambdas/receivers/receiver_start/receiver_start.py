@@ -7,12 +7,8 @@ from receivers.utilities.create_io_dir import local_input_file_path, local_outpu
 STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
 
-STATUS_QUEUE = f"{APP_NAME}-status-test-decoupled"
-BUCKET_NAME_SAVE = f"{APP_NAME}-test-decoupled"
-if STAGE in ["development", "production"]:
-    STATUS_QUEUE = f"{APP_NAME}-receiver_status"
-    BUCKET_NAME_SAVE = f"{APP_NAME}-trigger"
-
+STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+BUCKET_NAME_SAVE = f"{APP_NAME}-trigger-{STAGE}"
 
 @warmer
 def lambda_handler(event, context):
