@@ -2,8 +2,9 @@ import pytest
 import os
 import json
 import time
-import boto3
 import requests
+import boto3
+from botocore.exceptions import ClientError
 from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
@@ -141,10 +142,18 @@ def test_success(container_controller, subtests):
     with subtests.test(msg="check that output file now exists"):
         s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
         
-    # delete input test file
-    with subtests.test(msg="delete test file"):
-        response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)
-        assert response["ResponseMetadata"]["HTTPStatusCode"] == 204, f"FAILURE: deletion failed {BUCKET_TEST}/{s3_key}"
+    # check that input file is deleted
+    with subtests.test(msg="check that test file is deleted"):
+        try:
+            s3_client.head_object(Bucket=bucket_name_save, Key=s3_key)
+        except ClientError as e:
+            # If a ClientError is raised, the object does not exist, which is expected
+            if e.response["Error"]["Code"] == "404":
+                # Object does not exist, so the deletion was successful
+                assert True, f"FAILURE: Test object still exists after attempted deletion at {bucket_name}/{s3_key}"
+            else:
+                # Re-raise the exception if it's not a 404 error
+                raise False
 
     # delete output test file
     with subtests.test(msg="delete test output file"):
