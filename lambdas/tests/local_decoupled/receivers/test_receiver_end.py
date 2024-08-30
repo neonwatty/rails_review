@@ -24,8 +24,8 @@ RECEIVER_NAME = "receiver_end"
 BUCKET_TEST = f"{APP_NAME}-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
-RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
-LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
+RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE.upper().replace("-", "_")}"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE.upper().replace("-", "_")}"]
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")
