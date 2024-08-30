@@ -13,15 +13,13 @@ current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
 
 # Define your test parameters
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_status"
-RAILS_DEVELOPMENT_HOST = os.environ["RAILS_DEVELOPMENT_HOST"]
-LAMBDA_API_KEY = os.environ["LAMBDA_API_KEY"]
-SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 SERVERLESS_NAME = "serverless_receivers.yml"
 LAMBDA_FUNCTION_NAME = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
+SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
+SERVERLESS_NAME = "serverless_receivers.yml"
 
 # define session
 aws_profile = os.getenv("AWS_PROFILE")

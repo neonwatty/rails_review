@@ -4,10 +4,9 @@ from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
-STAGE = os.environ["STAGE"]
 APP_NAME = os.environ["APP_NAME"]
-
-STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
+STAGE = os.environ["STAGE"]
+STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 BUCKET_NAME_SAVE = f"{APP_NAME}-trigger-{STAGE}"
 
 @warmer

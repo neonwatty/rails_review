@@ -14,10 +14,10 @@ current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
 
 # Define your test parametersfrom config import APP_NAME, STAGE
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
 RECEIVER_NAME = "receiver_process"
+BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 SERVERLESS_NAME = "serverless_receivers.yml"
 LAMBDA_FUNCTION_NAME = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 

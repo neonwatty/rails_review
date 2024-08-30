@@ -5,8 +5,9 @@ from decorators.warmer import warmer
 from sqs.messages.message_delete import message_delete
 
 
-RAILS_DEVELOPMENT_HOST = os.environ["RAILS_DEVELOPMENT_HOST"]
-LAMBDA_API_KEY = os.getenv('LAMBDA_API_KEY')
+STAGE=os.environ["STAGE"]
+RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
 
 
 def process_message(message: str) -> bool:    
@@ -18,7 +19,7 @@ def process_message(message: str) -> bool:
         }
 
         # create url
-        rails_url = f"{RAILS_DEVELOPMENT_HOST}/receiver_status/update"
+        rails_url = f"{RAILS_HOST}/receiver_status/update"
         
         # fire off request
         response = requests.post(rails_url, data=json.dumps(message), headers=headers)
