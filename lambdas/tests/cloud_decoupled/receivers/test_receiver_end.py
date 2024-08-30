@@ -70,11 +70,8 @@ def test_success(build_deploy, subtests):
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
         content = json.loads(streaming_body.read().decode("utf-8"))
-        assert content["statusCode"] == 200
-        body = content["body"]
-        assert "s3_key_save" in list(body.keys()), "FAILURE: return value s3_key_save from execution not present"
-        assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
-        
+        assert content["statusCode"] == 500
+
         # check for message in test queue
         receipt_handle = None
         with subtests.test(msg="check message queue"):

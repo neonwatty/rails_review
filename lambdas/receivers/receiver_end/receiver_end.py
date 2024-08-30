@@ -4,9 +4,9 @@ import requests
 from decorators.warmer import warmer
 from decorators.receiver import receiver_decorator
 
-STAGE=os.environ["STAGE"].upper().replace("-", "_")
-RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
-LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
+STAGE=os.environ["STAGE"]
+RAILS_HOST = os.environ[f"RAILS_HOST"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY"]
 
 @warmer
 @receiver_decorator(local_input_ext=".jpg", local_output_ext="")

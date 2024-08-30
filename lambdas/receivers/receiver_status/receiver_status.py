@@ -5,9 +5,9 @@ from decorators.warmer import warmer
 from sqs.messages.message_delete import message_delete
 
 
-STAGE=os.environ["STAGE"].upper().replace("-", "_")
-RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE}"]
-LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE}"]
+STAGE=os.environ["STAGE"]
+RAILS_HOST = os.environ[f"RAILS_HOST"]
+LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY"]
 
 
 def process_message(message: str) -> bool:    

@@ -38,6 +38,19 @@ provider:
     APP_NAME: ${env:APP_NAME}
     STAGE: ${opt:stage, 'test-decoupled'}
 
+custom:
+  railsHosts:
+    test-decoupled: RAILS_HOST_TEST_DECOUPLED
+    production: RAILS_HOST_PRODUCTION
+    development: RAILS_HOST_DEVELOPMENT
+    test: RAILS_HOST_TEST
+  lambdaApiKeys:
+    test-decoupled: LAMBDA_API_KEY_TEST_DECOUPLED
+    production: LAMBDA_API_KEY_PRODUCTION
+    development: LAMBDA_API_KEY_DEVELOPMENT
+    test: LAMBDA_API_KEY_TEST
+
+
 functions:
   receiver_start:
     name: ${env:APP_NAME}-receiver_start-${opt:stage, 'test-decoupled'}
@@ -78,8 +91,8 @@ functions:
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_end
-      RAILS_HOST_${env:STAGE}: RAILS_HOST_${env:STAGE}
-      LAMBDA_API_KEY_${env:STAGE}: LAMBDA_API_KEY_${env:STAGE}
+      RAILS_HOST: ${self:custom.railsHosts.${opt:stage, 'test-decoupled'}}
+      LAMBDA_API_KEY: ${self:custom.lambdaApiKeys.${opt:stage, 'test-decoupled'}}
 
   receiver_status:
     name: ${env:APP_NAME}-receiver_status-${opt:stage, 'test-decoupled'}
@@ -91,5 +104,5 @@ functions:
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_status
-      RAILS_HOST_${env:STAGE}: RAILS_HOST_${env:STAGE}
-      LAMBDA_API_KEY_${env:STAGE}: LAMBDA_API_KEY_${env:STAGE}
+      RAILS_HOST: ${self:custom.railsHosts.${opt:stage, 'test-decoupled'}}
+      LAMBDA_API_KEY: ${self:custom.lambdaApiKeys.${opt:stage, 'test-decoupled'}}
