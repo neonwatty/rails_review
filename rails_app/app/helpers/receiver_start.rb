@@ -1,7 +1,7 @@
 # app/services/lambda_invoker.rb
 require 'aws-sdk-lambda'
 
-class LambdaStarter
+class ReceiverStart
   def initialize
     @client = Aws::Lambda::Client.new(region: ENV['AWS_REGION'])
   end

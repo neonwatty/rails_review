@@ -1,4 +1,4 @@
-class LambdaStatusController < ApplicationController
+class ReceiverStatusController < ApplicationController
   # Ensuring this action can handle JSON requests
   protect_from_forgery except: :update
   skip_before_action :verify_authenticity_token, only: :update
@@ -19,7 +19,7 @@ class LambdaStatusController < ApplicationController
     end
 
    # Read lambda names from environment variables
-   lambda_names = ENV['LAMBDA_NAMES'].to_s.split(',')
+   lambda_names = ENV['RECEIVER_NAMES'].to_s.split(',')
 
     # Find the status record by upload_id
     status_record = Status.find_by(upload_id: upload_id)

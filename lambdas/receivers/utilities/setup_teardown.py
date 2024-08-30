@@ -45,8 +45,12 @@ def receiver_setup(receiver_name: str, event: dict, local_input_ext: str | None 
     
 def receiver_teardown(setup_payload: dict) -> str | None:
   try:
-      # upload file if not at receiver end
+    # delete old file
+    s3_client.delete_object(Bucket=setup_payload["s3_bucket"], Key=setup_payload["s3_key"])
+
+    # upload file if not at receiver end
     if setup_payload["receiver_name"] != "receiver_end":
+        # save new file
         s3_key_save = f"{setup_payload["user_id"]}/{setup_payload["upload_id"]}/{setup_payload["receiver_name"]}"
         s3_client.upload_file(setup_payload["local_output_path"], setup_payload["s3_bucket"], s3_key_save)
         return s3_key_save
