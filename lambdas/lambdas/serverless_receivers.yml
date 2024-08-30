@@ -4,7 +4,7 @@ useDotenv: true
 
 provider:
   name: aws
-  stage: ${opt:stage, 'test'}
+  stage: ${opt:stage, 'test-decoupled'}
   region: ${env:AWS_REGION}
   profile: ${env:AWS_PROFILE}
   runtime: python3.10
@@ -20,72 +20,76 @@ provider:
           Action:
             - s3:*
           Resource:
-            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}
-            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test'}/*
-            - arn:aws:s3:::${env:APP_NAME}-trigger
-            - arn:aws:s3:::${env:APP_NAME}-trigger/*
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test-decoupled'}
+            - arn:aws:s3:::${env:APP_NAME}-${opt:stage, 'test-decoupled'}/*
+            - arn:aws:s3:::${env:APP_NAME}-trigger-${opt:stage, 'test-decoupled'}
+            - arn:aws:s3:::${env:APP_NAME}-trigger-${opt:stage, 'test-decoupled'}/*
         - Effect: Allow
           Action:
             - sqs:*
-          Resource: "*"
+          Resource:
+            - arn:aws:sqs:${env:AWS_REGION}:${env:ACCOUNT_ID}:${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test-decoupled'}
+            - arn:aws:sqs:${env:AWS_REGION}:${env:ACCOUNT_ID}:${env:APP_NAME}-receiver_process-${opt:stage, 'test-decoupled'}
+            - arn:aws:sqs:${env:AWS_REGION}:${env:ACCOUNT_ID}:${env:APP_NAME}-receiver_end-${opt:stage, 'test-decoupled'}
+            - arn:aws:sqs:${env:AWS_REGION}:${env:ACCOUNT_ID}:${env:APP_NAME}-receiver_status-${opt:stage, 'test-decoupled'}
   deploymentBucket:
     name: ${env:APP_NAME}-serverless-artifacts
   environment:
     APP_NAME: ${env:APP_NAME}
-    STAGE: ${opt:stage, 'test'}
+    STAGE: ${opt:stage, 'test-decoupled'}
 
 functions:
   receiver_start:
-    name: ${env:APP_NAME}-receiver_start-${opt:stage, 'test'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'test'}
+    name: ${env:APP_NAME}-receiver_start-${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'test-decoupled'}
     description: 'test rails receiver lambda function'
     environment:
       RECEIVER_NAME: receiver_start
 
   receiver_preprocess:
-    name: ${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'test'}
+    name: ${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_preprocess:${opt:stage, 'test-decoupled'}
     description: 'receiver preprocess lambda function'
     events:
       - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_preprocess
 
   receiver_process:
-    name: ${env:APP_NAME}-receiver_process-${opt:stage, 'test'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_process:${opt:stage, 'test'}
+    name: ${env:APP_NAME}-receiver_process-${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_process:${opt:stage, 'test-decoupled'}
     description: 'receiver process lambda function'
     events:
       - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_process
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_process-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_process
 
   receiver_end:
-    name: ${env:APP_NAME}-receiver_end-${opt:stage, 'test'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_end:${opt:stage, 'test'}
+    name: ${env:APP_NAME}-receiver_end-${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_end:${opt:stage, 'test-decoupled'}
     description: 'receiver end lambda function'
     events:
       - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_end
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_end-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_end
-      RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
-      LAMBDA_API_KEY: ${env:LAMBDA_API_KEY}
+      RAILS_HOST_${env:STAGE}: RAILS_HOST_${env:STAGE}
+      LAMBDA_API_KEY_${env:STAGE}: LAMBDA_API_KEY_${env:STAGE}
 
   receiver_status:
-    name: ${env:APP_NAME}-receiver_status-${opt:stage, 'test'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_status:${opt:stage, 'test'}
+    name: ${env:APP_NAME}-receiver_status-${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_status:${opt:stage, 'test-decoupled'}
     description: 'receiver status lambda function'
     events:
       - sqs:
-          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_status
+          arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_status-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
       RECEIVER_NAME: receiver_status
-      RAILS_DEVELOPMENT_HOST: ${env:RAILS_DEVELOPMENT_HOST}
-      LAMBDA_API_KEY: ${env:LAMBDA_API_KEY}
+      RAILS_HOST_${env:STAGE}: RAILS_HOST_${env:STAGE}
+      LAMBDA_API_KEY_${env:STAGE}: LAMBDA_API_KEY_${env:STAGE}
