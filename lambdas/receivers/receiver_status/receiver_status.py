@@ -33,7 +33,7 @@ def process_message(message: str) -> bool:
         print(failure_message)
         return False
 
-
+@warmer
 def lambda_handler(event, context):
     try:
         # unpack first Record from event

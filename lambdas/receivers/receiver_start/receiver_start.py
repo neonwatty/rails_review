@@ -37,7 +37,6 @@ def lambda_handler(event, context):
         
         # send status update to queue
         status = {
-            "url": "status_update",
             "lambda": "receiver_start",
             "user_id": user_id,
             "upload_id": upload_id,
@@ -62,7 +61,6 @@ def lambda_handler(event, context):
         try:
             # send status update to queue   
             status = {
-                "url": "status_update",
                 "lambda": "receiver_start",
                 "user_id": user_id,
                 "upload_id": upload_id,
