@@ -8,6 +8,7 @@ from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import status_setup
 from tests.utilities.docker_utilities import print_container_logs
+from config import APP_NAME, STAGE
 
 # get current directory paths
 current_directory = os.getcwd()
@@ -18,8 +19,6 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-APP_NAME = os.environ["APP_NAME"]
-STAGE = "test-decoupled"
 BUCKET_TEST = f"{APP_NAME}-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"

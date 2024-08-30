@@ -9,17 +9,8 @@ from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
+from config import APP_NAME, STAGE
 
-
-"""
-This set of tests for the receiver_preprocess tests the following
-
-- a successful test, including
-    - excitation by sqs receiver message
-    - checks against s3 bucket upload location for original upload,
-    - check against s3 bucket for preprocess output
-    - checks for status receiver reception
-"""
 
 # get current directory paths
 current_directory = os.getcwd()
@@ -30,8 +21,6 @@ DOCKER_PORT = 9000
 LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function/invocations"
 
 # Define your test parameters
-APP_NAME = os.environ["APP_NAME"]
-STAGE = "test-decoupled"
 BUCKET_TEST = f"{APP_NAME}-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"

@@ -6,14 +6,13 @@ from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
+from config import APP_NAME, STAGE
 
 # get current directory paths
 current_directory = os.getcwd()
 home_dir = os.path.expanduser("~")
 
-# Define your test parameters
-APP_NAME = os.environ["APP_NAME"]
-STAGE = "test-decoupled"
+# Define your test parametersfrom config import APP_NAME, STAGE
 BUCKET_TEST = f"{APP_NAME}-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-receivers-{STAGE}"
