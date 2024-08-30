@@ -119,8 +119,8 @@ def status_setup(subtests, TEST_STATUS_QUEUE):
     # build status
     test_status = {
         "lambda": "receiver_start",
-        "user_id": 0,
-        "upload_id": 0,
+        "user_id": 1,
+        "upload_id": 1,
         "status": "complete"
         }
     

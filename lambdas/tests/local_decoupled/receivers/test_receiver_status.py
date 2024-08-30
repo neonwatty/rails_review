@@ -101,7 +101,8 @@ def test_success(container_controller, subtests):
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         content = json.loads(response.content.decode('utf-8'))
-        assert content["statusCode"] == 500
+        print(f"content --> {content}")
+        assert content["statusCode"] == 200
         
     # delete status message
     with subtests.test(msg="delete status message"):
