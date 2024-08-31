@@ -6,7 +6,7 @@ class UploadTest < ActiveSupport::TestCase
   # end
 
   test "should not save upload without file" do
-    upload = Upload.new
+    upload = Upload.create(id: 2, user_id: 1)
     assert_not upload.save
   end
 end
