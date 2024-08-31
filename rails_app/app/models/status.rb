@@ -2,6 +2,7 @@ class Status < ApplicationRecord
   before_create :set_default_delivery
   before_create :set_default_preprocess
   before_create :set_default_process
+  before_create :set_default_end
 
   belongs_to :upload
 
@@ -17,4 +18,8 @@ class Status < ApplicationRecord
   def set_default_process
     self.receiver_process = "pending"
   end
+  def set_default_end
+    self.receiver_end = "pending"
+  end
+
 end

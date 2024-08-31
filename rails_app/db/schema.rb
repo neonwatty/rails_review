@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_27_233627) do
     t.string "receiver_start"
     t.string "receiver_preprocess"
     t.string "receiver_process"
+    t.string "receiver_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["upload_id"], name: "index_statuses_on_upload_id"

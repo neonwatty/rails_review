@@ -5,6 +5,7 @@ class CreateStatuses < ActiveRecord::Migration[7.2]
       t.string :receiver_start
       t.string :receiver_preprocess
       t.string :receiver_process
+      t.string :receiver_end
 
       t.timestamps
     end
