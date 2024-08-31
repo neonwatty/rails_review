@@ -40,15 +40,15 @@ provider:
 
 custom:
   railsHosts:
-    test-decoupled: RAILS_HOST_TEST_DECOUPLED
-    production: RAILS_HOST_PRODUCTION
-    development: RAILS_HOST_DEVELOPMENT
-    test: RAILS_HOST_TEST
+    test-decoupled: ${env:RAILS_HOST_TEST_DECOUPLED}
+    production: ${env:RAILS_HOST_PRODUCTION}
+    development: ${env:RAILS_HOST_DEVELOPMENT}
+    test: ${env:RAILS_HOST_TEST}
   lambdaApiKeys:
-    test-decoupled: LAMBDA_API_KEY_TEST_DECOUPLED
-    production: LAMBDA_API_KEY_PRODUCTION
-    development: LAMBDA_API_KEY_DEVELOPMENT
-    test: LAMBDA_API_KEY_TEST
+    test-decoupled: ${env:LAMBDA_API_KEY_TEST_DECOUPLED}
+    production: ${env:LAMBDA_API_KEY_PRODUCTION}
+    development: ${env:LAMBDA_API_KEY_DEVELOPMENT}
+    test: ${env:LAMBDA_API_KEY_TEST}
   shouldBindStatusQueue:
     test-decoupled: false
     production: true

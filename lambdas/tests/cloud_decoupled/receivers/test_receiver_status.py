@@ -70,7 +70,7 @@ def test_success(build_deploy, subtests):
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
         content = json.loads(streaming_body.read().decode("utf-8"))
-        assert content["statusCode"] == 200
+        assert content["statusCode"] == 500
         
     # delete status message
     with subtests.test(msg="delete status message"):

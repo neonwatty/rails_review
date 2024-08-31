@@ -57,7 +57,7 @@ def build_deploy():
 def test_success(build_deploy, subtests):
     print("INFO: starting test_success")
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, RECEIVER_NAME, step_progress="in_progress")  
+    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress")  
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     print(f"sqs event maker complete")
     
@@ -70,22 +70,22 @@ def test_success(build_deploy, subtests):
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
         content = json.loads(streaming_body.read().decode("utf-8"))
-        assert content["statusCode"] == 500
+        assert content["statusCode"] == 200
 
-        # check for message in test queue
-        receipt_handle = None
-        with subtests.test(msg="check message queue"):
-            # poll queue
-            queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
-            
-            # unpack queue data
-            message_id = queue_data["message_id"]
-            message = queue_data["message"]
-            receipt_handle = queue_data["receipt_handle"]
+    # check for message in test queue
+    receipt_handle = None
+    with subtests.test(msg="check message queue"):
+        # poll queue
+        queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
+        
+        # unpack queue data
+        message_id = queue_data["message_id"]
+        message = queue_data["message"]
+        receipt_handle = queue_data["receipt_handle"]
 
-            # unpack message
-            assert message["lambda"] == RECEIVER_NAME
-            assert message["status"] == "complete"
+        # unpack message
+        assert message["lambda"] == RECEIVER_NAME
+        assert message["status"] == "complete"
             
     # delete message
     with subtests.test(msg="delete message"):

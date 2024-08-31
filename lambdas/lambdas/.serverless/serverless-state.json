@@ -340,51 +340,6 @@
               "Description": "receiver process lambda function"
             }
           },
-          "ReceiverUnderscorestatusLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef"
-              },
-              "PackageType": "Image",
-              "FunctionName": "app-1-receiver_status-test-decoupled",
-              "MemorySize": 1024,
-              "Timeout": 240,
-              "Architectures": [
-                "arm64"
-              ],
-              "Description": "receiver status lambda function",
-              "Environment": {
-                "Variables": {
-                  "APP_NAME": "app-1",
-                  "STAGE": "test-decoupled",
-                  "RECEIVER_NAME": "receiver_status",
-                  "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
-                  "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
-                }
-              },
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "ReceiverUnderscorestatusLogGroup"
-            ]
-          },
-          "ReceiverUnderscorestatusLambdaVersion1Ipk4FJYB0Tx7TEiEtcKldnLlCzWnR7CLgMMewup0": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "ReceiverUnderscorestatusLambdaFunction"
-              },
-              "CodeSha256": "2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef",
-              "Description": "receiver status lambda function"
-            }
-          },
           "ReceiverUnderscoreendLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -404,8 +359,8 @@
                   "APP_NAME": "app-1",
                   "STAGE": "test-decoupled",
                   "RECEIVER_NAME": "receiver_end",
-                  "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
-                  "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
+                  "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
+                  "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
                 }
               },
               "Role": {
@@ -419,7 +374,7 @@
               "ReceiverUnderscoreendLogGroup"
             ]
           },
-          "ReceiverUnderscoreendLambdaVersiondyiPcJ6ZxmgKrz9N3X4NPvLNpJaissfs2rDi4dntPo": {
+          "ReceiverUnderscoreendLambdaVersionxJQna4LtBDGO0BdSpkVejGsCLjGKFQa5zjvdQy4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
@@ -428,6 +383,51 @@
               },
               "CodeSha256": "4d8a6af001c24ddb476b154e78a869b72bfbf7117f2d8e468ddc414141443b3c",
               "Description": "receiver end lambda function"
+            }
+          },
+          "ReceiverUnderscorestatusLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef"
+              },
+              "PackageType": "Image",
+              "FunctionName": "app-1-receiver_status-test-decoupled",
+              "MemorySize": 1024,
+              "Timeout": 240,
+              "Architectures": [
+                "arm64"
+              ],
+              "Description": "receiver status lambda function",
+              "Environment": {
+                "Variables": {
+                  "APP_NAME": "app-1",
+                  "STAGE": "test-decoupled",
+                  "RECEIVER_NAME": "receiver_status",
+                  "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
+                  "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "ReceiverUnderscorestatusLogGroup"
+            ]
+          },
+          "ReceiverUnderscorestatusLambdaVersiongiEOA9JIfdAhK2YpUR6KrwoxCdySb754dfIrH4Zp0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ReceiverUnderscorestatusLambdaFunction"
+              },
+              "CodeSha256": "2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef",
+              "Description": "receiver status lambda function"
             }
           },
           "ReceiverUnderscorepreprocessEventSourceMappingSQSApp1receiverpreprocesstestdecoupled": {
@@ -533,22 +533,22 @@
               "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreprocessLambdaFunctionQualifiedArn"
             }
           },
-          "ReceiverUnderscorestatusLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "ReceiverUnderscorestatusLambdaVersion1Ipk4FJYB0Tx7TEiEtcKldnLlCzWnR7CLgMMewup0"
-            },
-            "Export": {
-              "Name": "sls-receivers-test-decoupled-ReceiverUnderscorestatusLambdaFunctionQualifiedArn"
-            }
-          },
           "ReceiverUnderscoreendLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReceiverUnderscoreendLambdaVersiondyiPcJ6ZxmgKrz9N3X4NPvLNpJaissfs2rDi4dntPo"
+              "Ref": "ReceiverUnderscoreendLambdaVersionxJQna4LtBDGO0BdSpkVejGsCLjGKFQa5zjvdQy4"
             },
             "Export": {
               "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
+            }
+          },
+          "ReceiverUnderscorestatusLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ReceiverUnderscorestatusLambdaVersiongiEOA9JIfdAhK2YpUR6KrwoxCdySb754dfIrH4Zp0"
+            },
+            "Export": {
+              "Name": "sls-receivers-test-decoupled-ReceiverUnderscorestatusLambdaFunctionQualifiedArn"
             }
           }
         }
@@ -557,16 +557,16 @@
     },
     "custom": {
       "railsHosts": {
-        "test-decoupled": "RAILS_HOST_TEST_DECOUPLED",
-        "production": "RAILS_HOST_PRODUCTION",
-        "development": "RAILS_HOST_DEVELOPMENT",
-        "test": "RAILS_HOST_TEST"
+        "test-decoupled": "https://907c-198-145-70-25.ngrok-free.app",
+        "production": "https://907c-198-145-70-25.ngrok-free.app",
+        "development": "https://907c-198-145-70-25.ngrok-free.app",
+        "test": "https://907c-198-145-70-25.ngrok-free.app"
       },
       "lambdaApiKeys": {
-        "test-decoupled": "LAMBDA_API_KEY_TEST_DECOUPLED",
-        "production": "LAMBDA_API_KEY_PRODUCTION",
-        "development": "LAMBDA_API_KEY_DEVELOPMENT",
-        "test": "LAMBDA_API_KEY_TEST"
+        "test-decoupled": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628",
+        "production": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628",
+        "development": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628",
+        "test": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
       },
       "shouldBindStatusQueue": {
         "test-decoupled": false,
@@ -650,14 +650,14 @@
         ],
         "environment": {
           "RECEIVER_NAME": "receiver_end",
-          "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
-          "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
+          "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
+          "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
         },
         "package": {},
         "memory": 1024,
         "timeout": 240,
         "vpc": {},
-        "versionLogicalId": "ReceiverUnderscoreendLambdaVersiondyiPcJ6ZxmgKrz9N3X4NPvLNpJaissfs2rDi4dntPo"
+        "versionLogicalId": "ReceiverUnderscoreendLambdaVersionxJQna4LtBDGO0BdSpkVejGsCLjGKFQa5zjvdQy4"
       },
       "receiver_status": {
         "name": "app-1-receiver_status-test-decoupled",
@@ -674,14 +674,14 @@
         ],
         "environment": {
           "RECEIVER_NAME": "receiver_status",
-          "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
-          "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
+          "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
+          "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
         },
         "package": {},
         "memory": 1024,
         "timeout": 240,
         "vpc": {},
-        "versionLogicalId": "ReceiverUnderscorestatusLambdaVersion1Ipk4FJYB0Tx7TEiEtcKldnLlCzWnR7CLgMMewup0"
+        "versionLogicalId": "ReceiverUnderscorestatusLambdaVersiongiEOA9JIfdAhK2YpUR6KrwoxCdySb754dfIrH4Zp0"
       }
     },
     "configValidationMode": "warn",
@@ -704,7 +704,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/receivers/test-decoupled/1725065826004-2024-08-31T00:57:06.004Z",
+    "artifactDirectoryName": "serverless/receivers/test-decoupled/1725066510532-2024-08-31T01:08:30.532Z",
     "artifact": ""
   }
 }
