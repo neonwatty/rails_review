@@ -25,6 +25,7 @@ class ReceiverEndController < ApplicationController
     if auth_header.start_with?('Bearer ')
       token = auth_header.split(' ').last
       expected_token = Rails.application.config.lambda_api_key
+
       head :unauthorized unless ActiveSupport::SecurityUtils.secure_compare(token, expected_token)
     else
       head :unauthorized

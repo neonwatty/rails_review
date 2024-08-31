@@ -29,8 +29,6 @@ module App1
       File.join(root, ".env")
     )
 
-
-    config.lambda_api_key = ENV["LAMBDA_API_KEY"]
-
+    config.lambda_api_key = ENV["LAMBDA_API_KEY_#{Rails.env.upcase}"]
   end
 end
