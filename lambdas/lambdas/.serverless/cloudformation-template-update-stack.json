@@ -405,7 +405,7 @@
             "Arn"
           ]
         },
-        "Enabled": true
+        "Enabled": false
       }
     },
     "ReceiverUnderscoreprocessEventSourceMappingSQSApp1receiverprocesstestdecoupled": {
@@ -422,7 +422,7 @@
             "Arn"
           ]
         },
-        "Enabled": true
+        "Enabled": false
       }
     },
     "ReceiverUnderscoreendEventSourceMappingSQSApp1receiverendtestdecoupled": {
@@ -439,7 +439,7 @@
             "Arn"
           ]
         },
-        "Enabled": true
+        "Enabled": false
       }
     },
     "ReceiverUnderscorestatusEventSourceMappingSQSApp1receiverstatustestdecoupled": {

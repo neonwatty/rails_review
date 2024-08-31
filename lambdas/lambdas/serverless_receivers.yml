@@ -70,6 +70,7 @@ functions:
     description: 'receiver preprocess lambda function'
     events:
       - sqs:
+          enabled: ${self:custom.shouldBindStatusQueue.${opt:stage, 'test-decoupled'}}
           arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_preprocess-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
@@ -81,6 +82,7 @@ functions:
     description: 'receiver process lambda function'
     events:
       - sqs:
+          enabled: ${self:custom.shouldBindStatusQueue.${opt:stage, 'test-decoupled'}}
           arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_process-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
@@ -92,6 +94,7 @@ functions:
     description: 'receiver end lambda function'
     events:
       - sqs:
+          enabled: ${self:custom.shouldBindStatusQueue.${opt:stage, 'test-decoupled'}}
           arn: ${env:SQS_ARN_ROOT}${env:APP_NAME}-receiver_end-${opt:stage, 'test-decoupled'}
           batchSize: 1
     environment:
