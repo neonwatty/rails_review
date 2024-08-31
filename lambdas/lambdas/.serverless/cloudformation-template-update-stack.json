@@ -215,54 +215,11 @@
         "Description": "start rails receiver lambda function"
       }
     },
-    "ReceiverUnderscoreprocessLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_process@sha256:d26243dadb3cc986f72970ef653a267b434b18687bfb5a8713485da983428439"
-        },
-        "PackageType": "Image",
-        "FunctionName": "app-1-receiver_process-test-decoupled",
-        "MemorySize": 1024,
-        "Timeout": 240,
-        "Architectures": [
-          "arm64"
-        ],
-        "Description": "receiver process lambda function",
-        "Environment": {
-          "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test-decoupled",
-            "RECEIVER_NAME": "receiver_process"
-          }
-        },
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
-        }
-      },
-      "DependsOn": [
-        "ReceiverUnderscoreprocessLogGroup"
-      ]
-    },
-    "ReceiverUnderscoreprocessLambdaVersionMPDK9R8BYY55VqyRl4SNCzVt3eruXDD09fhAkda4Og": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "ReceiverUnderscoreprocessLambdaFunction"
-        },
-        "CodeSha256": "d26243dadb3cc986f72970ef653a267b434b18687bfb5a8713485da983428439",
-        "Description": "receiver process lambda function"
-      }
-    },
     "ReceiverUnderscorepreprocessLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess@sha256:aadc73ed0d7dbed2cbbe67cda37c9de946d203b460999d3a72b3ec028413817e"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess@sha256:9bcf5b98513b7d02eb60dbd099f9a025101d0e6406f1577a093c61691db2adf7"
         },
         "PackageType": "Image",
         "FunctionName": "app-1-receiver_preprocess-test-decoupled",
@@ -290,38 +247,36 @@
         "ReceiverUnderscorepreprocessLogGroup"
       ]
     },
-    "ReceiverUnderscorepreprocessLambdaVersion3U89Db21YIc91EFviU3LuUyQHrODnZ7BB9Bc1rs7Ni4": {
+    "ReceiverUnderscorepreprocessLambdaVersioneSiXXUKRqTzKVs1MGt9v7yasEFRQtjgIKBnU7wHweUc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscorepreprocessLambdaFunction"
         },
-        "CodeSha256": "aadc73ed0d7dbed2cbbe67cda37c9de946d203b460999d3a72b3ec028413817e",
+        "CodeSha256": "9bcf5b98513b7d02eb60dbd099f9a025101d0e6406f1577a093c61691db2adf7",
         "Description": "receiver preprocess lambda function"
       }
     },
-    "ReceiverUnderscoreendLambdaFunction": {
+    "ReceiverUnderscoreprocessLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_end@sha256:03345b6cf43b2ba72f75144276ee3f4b076d522f3a6417e677fab090a084a5be"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_process@sha256:1ceea591f02148713a35637652593a050d9c82a7211b80ff16d924ce4d898973"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_end-test-decoupled",
+        "FunctionName": "app-1-receiver_process-test-decoupled",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
           "arm64"
         ],
-        "Description": "receiver end lambda function",
+        "Description": "receiver process lambda function",
         "Environment": {
           "Variables": {
             "APP_NAME": "app-1",
             "STAGE": "test-decoupled",
-            "RECEIVER_NAME": "receiver_end",
-            "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
-            "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
+            "RECEIVER_NAME": "receiver_process"
           }
         },
         "Role": {
@@ -332,25 +287,25 @@
         }
       },
       "DependsOn": [
-        "ReceiverUnderscoreendLogGroup"
+        "ReceiverUnderscoreprocessLogGroup"
       ]
     },
-    "ReceiverUnderscoreendLambdaVersionirfaW4WiixFLmzAHBIhyfxNbzOdsSXfLQsEx5rBM": {
+    "ReceiverUnderscoreprocessLambdaVersion0gmpWWVmlYikDVSnfP77kPncj1cTn7PxUl5AO0F2M": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "ReceiverUnderscoreendLambdaFunction"
+          "Ref": "ReceiverUnderscoreprocessLambdaFunction"
         },
-        "CodeSha256": "03345b6cf43b2ba72f75144276ee3f4b076d522f3a6417e677fab090a084a5be",
-        "Description": "receiver end lambda function"
+        "CodeSha256": "1ceea591f02148713a35637652593a050d9c82a7211b80ff16d924ce4d898973",
+        "Description": "receiver process lambda function"
       }
     },
     "ReceiverUnderscorestatusLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:edca221c5b5b570cbd578e66af84f2fcb7b4cb7c1a69b22e44f09f7a44096e73"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef"
         },
         "PackageType": "Image",
         "FunctionName": "app-1-receiver_status-test-decoupled",
@@ -380,15 +335,60 @@
         "ReceiverUnderscorestatusLogGroup"
       ]
     },
-    "ReceiverUnderscorestatusLambdaVersionOlyH4rC18Qmdp0pGqLKZ7HFF1LZGRHqL0iO3Xe0bY": {
+    "ReceiverUnderscorestatusLambdaVersion1Ipk4FJYB0Tx7TEiEtcKldnLlCzWnR7CLgMMewup0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscorestatusLambdaFunction"
         },
-        "CodeSha256": "edca221c5b5b570cbd578e66af84f2fcb7b4cb7c1a69b22e44f09f7a44096e73",
+        "CodeSha256": "2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef",
         "Description": "receiver status lambda function"
+      }
+    },
+    "ReceiverUnderscoreendLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_end@sha256:4d8a6af001c24ddb476b154e78a869b72bfbf7117f2d8e468ddc414141443b3c"
+        },
+        "PackageType": "Image",
+        "FunctionName": "app-1-receiver_end-test-decoupled",
+        "MemorySize": 1024,
+        "Timeout": 240,
+        "Architectures": [
+          "arm64"
+        ],
+        "Description": "receiver end lambda function",
+        "Environment": {
+          "Variables": {
+            "APP_NAME": "app-1",
+            "STAGE": "test-decoupled",
+            "RECEIVER_NAME": "receiver_end",
+            "RAILS_HOST": "RAILS_HOST_TEST_DECOUPLED",
+            "LAMBDA_API_KEY": "LAMBDA_API_KEY_TEST_DECOUPLED"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ReceiverUnderscoreendLogGroup"
+      ]
+    },
+    "ReceiverUnderscoreendLambdaVersiondyiPcJ6ZxmgKrz9N3X4NPvLNpJaissfs2rDi4dntPo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ReceiverUnderscoreendLambdaFunction"
+        },
+        "CodeSha256": "4d8a6af001c24ddb476b154e78a869b72bfbf7117f2d8e468ddc414141443b3c",
+        "Description": "receiver end lambda function"
       }
     },
     "ReceiverUnderscorepreprocessEventSourceMappingSQSApp1receiverpreprocesstestdecoupled": {
@@ -456,7 +456,7 @@
             "Arn"
           ]
         },
-        "Enabled": true
+        "Enabled": false
       }
     }
   },
@@ -476,40 +476,40 @@
         "Name": "sls-receivers-test-decoupled-ReceiverUnderscorestartLambdaFunctionQualifiedArn"
       }
     },
-    "ReceiverUnderscoreprocessLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "ReceiverUnderscoreprocessLambdaVersionMPDK9R8BYY55VqyRl4SNCzVt3eruXDD09fhAkda4Og"
-      },
-      "Export": {
-        "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreprocessLambdaFunctionQualifiedArn"
-      }
-    },
     "ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscorepreprocessLambdaVersion3U89Db21YIc91EFviU3LuUyQHrODnZ7BB9Bc1rs7Ni4"
+        "Ref": "ReceiverUnderscorepreprocessLambdaVersioneSiXXUKRqTzKVs1MGt9v7yasEFRQtjgIKBnU7wHweUc"
       },
       "Export": {
         "Name": "sls-receivers-test-decoupled-ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn"
       }
     },
-    "ReceiverUnderscoreendLambdaFunctionQualifiedArn": {
+    "ReceiverUnderscoreprocessLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscoreendLambdaVersionirfaW4WiixFLmzAHBIhyfxNbzOdsSXfLQsEx5rBM"
+        "Ref": "ReceiverUnderscoreprocessLambdaVersion0gmpWWVmlYikDVSnfP77kPncj1cTn7PxUl5AO0F2M"
       },
       "Export": {
-        "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreprocessLambdaFunctionQualifiedArn"
       }
     },
     "ReceiverUnderscorestatusLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscorestatusLambdaVersionOlyH4rC18Qmdp0pGqLKZ7HFF1LZGRHqL0iO3Xe0bY"
+        "Ref": "ReceiverUnderscorestatusLambdaVersion1Ipk4FJYB0Tx7TEiEtcKldnLlCzWnR7CLgMMewup0"
       },
       "Export": {
         "Name": "sls-receivers-test-decoupled-ReceiverUnderscorestatusLambdaFunctionQualifiedArn"
+      }
+    },
+    "ReceiverUnderscoreendLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ReceiverUnderscoreendLambdaVersiondyiPcJ6ZxmgKrz9N3X4NPvLNpJaissfs2rDi4dntPo"
+      },
+      "Export": {
+        "Name": "sls-receivers-test-decoupled-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
       }
     }
   }
