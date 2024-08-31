@@ -1,9 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  file: "test/fixtures/files/r_l_burnside.png"
   user_id: 1
 
 two:
-  file: "test/fixtures/files/mississippi_john_hurt.png"
   user_id: 1
