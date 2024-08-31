@@ -1,7 +1,6 @@
 class Status < ApplicationRecord
   before_create :set_default_receiver_values
 
-
   belongs_to :upload
 
   
