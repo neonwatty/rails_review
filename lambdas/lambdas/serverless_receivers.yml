@@ -55,7 +55,7 @@ functions:
   receiver_start:
     name: ${env:APP_NAME}-receiver_start-${opt:stage, 'test-decoupled'}
     image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME}-receiver_start:${opt:stage, 'test-decoupled'}
-    description: 'test rails receiver lambda function'
+    description: 'start rails receiver lambda function'
     environment:
       RECEIVER_NAME: receiver_start
 

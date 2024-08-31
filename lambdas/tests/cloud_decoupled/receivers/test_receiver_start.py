@@ -13,7 +13,7 @@ home_dir = os.path.expanduser("~")
 
 # Define your test parameters
 RECEIVER_NAME = "receiver_start"
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+BUCKET_TEST = f"{APP_NAME}-trigger-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 SERVERLESS_NAME = "serverless_receivers.yml"
@@ -102,7 +102,7 @@ def test_success(build_deploy, subtests):
         receipt_handle = queue_data["receipt_handle"]
         
         # unpack message
-        print()
+        print(f"message --> {message}")
         assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
         

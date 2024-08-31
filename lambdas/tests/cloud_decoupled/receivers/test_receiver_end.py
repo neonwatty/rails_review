@@ -14,7 +14,7 @@ home_dir = os.path.expanduser("~")
 
 # Define your test parameters
 RECEIVER_NAME = "receiver_end"
-BUCKET_TEST = f"{APP_NAME}-{STAGE}"
+BUCKET_TEST = f"{APP_NAME}-trigger-{STAGE}"
 TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
 TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
 SERVERLESS_NAME = "serverless_receivers.yml"
