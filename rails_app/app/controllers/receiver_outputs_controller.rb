@@ -1,6 +1,8 @@
 class ReceiverOutputsController < ApplicationController
   protect_from_forgery except: :update
   skip_before_action :verify_authenticity_token, only: :update
+  before_action :authenticate_request
+
 
   def update
     payload = extract_and_permit_payload
@@ -24,6 +26,18 @@ class ReceiverOutputsController < ApplicationController
 
   private
 
+  def authenticate_request
+    auth_header = request.headers['Authorization'] || ''
+    if auth_header.start_with?('Bearer ')
+      token = auth_header.split(' ').last
+      expected_token = Rails.application.config.lambda_api_key
+
+      head :unauthorized unless ActiveSupport::SecurityUtils.secure_compare(token, expected_token)
+    else
+      head :unauthorized
+    end
+  end
+  
   def extract_and_permit_payload
     params.require(:receiver_outputs).permit(:upload_id, :result)
   end
