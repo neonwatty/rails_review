@@ -70,7 +70,7 @@ class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
     assert_equal JSON.parse(response.body)['error'], 'Invalid lambda function'
   end
 
-  test 'should return error when status record not found' do
+  test 'should return error when upload_id not found' do
     payload = {
       receiver_status: {
         lambda: 'receiver_start',
