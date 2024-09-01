@@ -2,6 +2,7 @@ class ReceiverStatusController < ApplicationController
   # Ensuring this action can handle JSON requests
   protect_from_forgery except: :update
   skip_before_action :verify_authenticity_token, only: :update
+  before_action :authenticate_request
 
   def update
     # Parse the JSON payload
@@ -42,4 +43,19 @@ class ReceiverStatusController < ApplicationController
       render json: { error: 'Invalid lambda function' }, status: :unprocessable_entity
     end
   end
+
+  private
+
+  def authenticate_request
+    auth_header = request.headers['Authorization'] || ''
+    if auth_header.start_with?('Bearer ')
+      token = auth_header.split(' ').last
+      expected_token = Rails.application.config.lambda_api_key
+
+      head :unauthorized unless ActiveSupport::SecurityUtils.secure_compare(token, expected_token)
+    else
+      head :unauthorized
+    end
+  end
+
 end
