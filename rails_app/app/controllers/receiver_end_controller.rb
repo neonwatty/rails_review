@@ -14,7 +14,7 @@ class ReceiverEndController < ApplicationController
       )
       render json: { status: 'processed image updated' }
     else
-      render json: { error: 'User not found' }, status: :not_found
+      render json: { error: 'Upload not found' }, status: :not_found
     end
   end
 
