@@ -1,2 +1,0 @@
-module LambdaOutputsHelper
-end
