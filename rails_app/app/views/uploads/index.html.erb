@@ -1,4 +1,8 @@
-<h1 class="text-2xl font-bold mb-4">Uploads</h1>
+<div class="welcome-section">
+  <h1 class="text-3xl font-semibold mb-2">Welcome to <%= ENV["APP_NAME_PUBLIC"] %></h1>
+  <hr class="border-t border-gray-300 my-4">
+</div>
+<h2 class="text-2xl font-bold mb-4">Uploads</h2>
 <%= link_to 'New Upload', new_upload_path, class: 'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600' %>
 <div class="overflow-x-auto">
   <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
