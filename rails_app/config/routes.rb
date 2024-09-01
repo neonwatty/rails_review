@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # lambda routes
   post 'receiver_end/update', to: 'receiver_end#update'
   post 'receiver_status/update', to: 'receiver_status#update'
+  patch 'receiver_status/update', to: 'receiver_status#update'
   post 'receiver_outputs/update', to: 'receiver_outputs#update'
 
 
