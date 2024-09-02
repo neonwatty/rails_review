@@ -1,2 +1,2 @@
-first_file_blob: <%= ActiveStorage::FixtureSet.blob filename: "cover_image.jpeg" %>
-second_file_blob: <%= ActiveStorage::FixtureSet.blob filename: "mississippi_john_hurt.png" %>
+# first_file_blob: <%= ActiveStorage::FixtureSet.blob filename: "cover_image.jpeg" %>
+# second_file_blob: <%= ActiveStorage::FixtureSet.blob filename: "mississippi_john_hurt.png" %>
