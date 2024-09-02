@@ -7,6 +7,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   setup do
     # Log in the user from the fixture
     @user = users(:one)
+    @upload = uploads(:one)
     sign_in @user
   end
 
@@ -18,10 +19,19 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_select 'h1', expected_message
   end
 
+  test "can create an upload" do
+    get "/uploads/new"
+    assert_response :success
+    assert_select 'form'
+  end
 
-  # test "can create an upload" do
-  #   get "/uploads/new"
-  #   assert_response :success
+  test "should create upload" do
+    assert_difference('Upload.count') do
+      post uploads_path, params: { upload: { files: fixture_file_upload('files/test_image.jpg') } }
+    end
+    assert_redirected_to upload_path(Upload.last)
+    assert_not_nil flash[:notice]
+  end
 
   #   post "/uploads",
   #     params: { upload: { user_id: 1, files_attached: false } }
@@ -29,5 +39,6 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   #   follow_redirect!
   #   assert_response :success
   #   assert_select "p", "Upload was successfully created."
-  # end
+
+
 end
