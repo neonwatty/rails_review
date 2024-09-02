@@ -4,13 +4,6 @@ class UploadTest < ActiveSupport::TestCase
   # Load the fixtures
   fixtures :users
 
-  # by default, model saves upload with user_id=1
-  # test "should not save upload without user" do
-  #   upload = Upload.new
-  #   upload.files.attach(io: File.open(Rails.root.join("test/fixtures/files/mississippi_john_hurt.png")), filename: "mississippi_john_hurt.png")
-  #   assert_not upload.save, "Saved the upload without a user"
-  # end
-
   test "should not save upload without files" do
     upload = Upload.new(user: users(:one))
     assert_not upload.save, "Saved the upload without files"
