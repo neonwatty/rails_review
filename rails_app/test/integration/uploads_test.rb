@@ -5,7 +5,6 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   setup do
     # Log in the user from the fixture
     @user = users(:one)
-    @upload = uploads(:one)
     sign_in @user
   end
 
