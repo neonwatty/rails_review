@@ -34,4 +34,12 @@ rails g model Output upload:belongs_to result:string
 rails db:create RAILS_ENV=test 
 rails db:migrate RAILS_ENV=test
 rails db:seed RAILS_ENV=test
-# now run tests...
+
+or just 
+
+rails db:reset RAILS_ENV=test
+
+# when using devise
+make sure to add devise helpers to test/test_helper.rb e.g., for integration
+    include Devise::Test::IntegrationHelpers
+
