@@ -6,7 +6,7 @@ from sqs.messages.message_poll import message_poll_no_id
 from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import status_setup
-from config import APP_NAME, STAGE
+from config import APP_NAME_PRIVATE, STAGE
 
 # get current directory paths
 current_directory = os.getcwd()
@@ -14,10 +14,10 @@ home_dir = os.path.expanduser("~")
 
 # Define your test parameters
 RECEIVER_NAME = "receiver_status"
-BUCKET_TEST = f"{APP_NAME}-trigger-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
+BUCKET_TEST = f"{APP_NAME_PRIVATE}-trigger-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME_PRIVATE}-receiver_status-{STAGE}"
 SERVERLESS_NAME = "serverless_receivers.yml"
-LAMBDA_FUNCTION_NAME = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
+LAMBDA_FUNCTION_NAME = f"{APP_NAME_PRIVATE}-{RECEIVER_NAME}-{STAGE}"
 SQS_ARN_ROOT = os.environ["SQS_ARN_ROOT"]
 SERVERLESS_NAME = "serverless_receivers.yml"
 

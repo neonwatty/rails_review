@@ -12,7 +12,7 @@ amazon:
   access_key_id: <%= ENV["RAILS_AWS_ACCESS_KEY_ID"] %>
   secret_access_key: <%= ENV["RAILS_AWS_SECRET_ACCESS_KEY"] %>
   region: <%= ENV["AWS_REGION"] %>
-  bucket: <%= ENV["APP_NAME"] %>-<%= Rails.env %>
+  bucket: <%= ENV["APP_NAME_PRIVATE"] %>-<%= Rails.env %>
 
 
 # Remember not to checkin your GCS keyfile to a repository

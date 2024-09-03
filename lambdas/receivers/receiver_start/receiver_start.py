@@ -4,10 +4,10 @@ from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
 from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
 
-APP_NAME = os.environ["APP_NAME"]
+APP_NAME_PRIVATE = os.environ["APP_NAME_PRIVATE"]
 STAGE = os.environ["STAGE"]
-STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
-BUCKET_NAME_SAVE = f"{APP_NAME}-trigger-{STAGE}"
+STATUS_QUEUE = f"{APP_NAME_PRIVATE}-receiver_status-{STAGE}"
+BUCKET_NAME_SAVE = f"{APP_NAME_PRIVATE}-trigger-{STAGE}"
 
 @warmer
 def lambda_handler(event, context):

@@ -25,14 +25,14 @@ test_file_name = "receiver_start"
 test_file_path = "tests/test_files/blank.jpg"
 
 # variables
-APP_NAME = os.environ["APP_NAME"]
+APP_NAME_PRIVATE = os.environ["APP_NAME_PRIVATE"]
 STAGE = "development"
-BUCKET_STAGE = f"{APP_NAME}-{STAGE}"
+BUCKET_STAGE = f"{APP_NAME_PRIVATE}-{STAGE}"
 RECEIVER_NAME = "receiver_start"
-TEST_STATUS_QUEUE = f"{APP_NAME}-test-status"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-test-receivers"
+TEST_STATUS_QUEUE = f"{APP_NAME_PRIVATE}-test-status"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME_PRIVATE}-test-receivers"
 SERVERLESS_NAME = "serverless_receivers.yml"
-LAMBDA_FUNCTION_NAME = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
+LAMBDA_FUNCTION_NAME = f"{APP_NAME_PRIVATE}-{RECEIVER_NAME}-{STAGE}"
 
 # list of receivers
 receiver_names = ["receiver_start", "receiver_preprocess", "receiver_process", "receiver_preprocess"]

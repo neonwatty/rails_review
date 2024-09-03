@@ -40,9 +40,9 @@ if [ -z "$ACCOUNT_ID" ]; then
   exit 1
 fi
 
-# check if APP_NAME is set 
-if [ -z "$APP_NAME" ]; then
-  echo "APP_NAME is not set in .env"
+# check if APP_NAME_PRIVATE is set 
+if [ -z "$APP_NAME_PRIVATE" ]; then
+  echo "APP_NAME_PRIVATE is not set in .env"
   exit 1
 fi
 
@@ -54,8 +54,8 @@ aws ecr get-login-password --region us-west-2 | docker login --username AWS --pa
 
 # tag image for push 
 echo 'INFO: tagging image'
-docker tag $SERVICE_NAME $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME-$SERVICE_NAME:$STAGE
+docker tag $SERVICE_NAME $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME_PRIVATE-$SERVICE_NAME:$STAGE
 
 # push image
 echo 'INFO: pushing image'
-docker push $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME-$SERVICE_NAME:$STAGE
+docker push $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME_PRIVATE-$SERVICE_NAME:$STAGE

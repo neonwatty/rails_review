@@ -5,7 +5,7 @@ import uuid
 import time
 from sqs.messages.message_create import message_create
 from sqs.messages.message_poll import message_poll
-from config import APP_NAME, STAGE
+from config import APP_NAME_PRIVATE, STAGE
 
 
 # define session

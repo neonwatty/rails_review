@@ -9,7 +9,7 @@ from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import step_setup, s3sqs_event_maker
 from tests.utilities.docker_utilities import print_container_logs
-from config import APP_NAME, STAGE
+from config import APP_NAME_PRIVATE, STAGE
 
 # get current directory paths
 current_directory = os.getcwd()
@@ -21,9 +21,9 @@ LAMBDA_ENDPOINT = f"http://localhost:{DOCKER_PORT}/2015-03-31/functions/function
 
 # Define your test parameters
 RECEIVER_NAME = "receiver_end"
-BUCKET_TEST = f"{APP_NAME}-trigger-{STAGE}"
-TEST_STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
-TEST_RECEIVERS_QUEUE = f"{APP_NAME}-{RECEIVER_NAME}-{STAGE}"
+BUCKET_TEST = f"{APP_NAME_PRIVATE}-trigger-{STAGE}"
+TEST_STATUS_QUEUE = f"{APP_NAME_PRIVATE}-receiver_status-{STAGE}"
+TEST_RECEIVERS_QUEUE = f"{APP_NAME_PRIVATE}-{RECEIVER_NAME}-{STAGE}"
 RAILS_HOST = os.environ[f"RAILS_HOST_{STAGE.upper().replace("-", "_")}"]
 LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY_{STAGE.upper().replace("-", "_")}"]
 

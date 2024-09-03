@@ -6,9 +6,9 @@ from functools import wraps
 from receivers.utilities.setup_teardown import receiver_setup, receiver_teardown
 
 STAGE = os.environ["STAGE"]
-APP_NAME = os.environ["APP_NAME"]
+APP_NAME_PRIVATE = os.environ["APP_NAME_PRIVATE"]
 RECEIVER_NAME = os.environ["RECEIVER_NAME"]
-STATUS_QUEUE = f"{APP_NAME}-receiver_status-{STAGE}"
+STATUS_QUEUE = f"{APP_NAME_PRIVATE}-receiver_status-{STAGE}"
 
 
 def receiver_decorator(local_input_ext, local_output_ext):

@@ -12,12 +12,12 @@ class ReceiverStart
       upload_id: upload_id,
       user_id: user_id,
       file_key: file_key,
-      bucket_name: "#{ENV['APP_NAME']}-#{Rails.env}",
+      bucket_name: "#{ENV['APP_NAME_PRIVATE']}-#{Rails.env}",
       stage: "#{Rails.env}"
     }.to_json
 
     response = @client.invoke({
-      function_name: "#{ENV['APP_NAME']}-receiver_start-#{Rails.env}",
+      function_name: "#{ENV['APP_NAME_PRIVATE']}-receiver_start-#{Rails.env}",
       invocation_type: 'Event',
       payload: payload
     })

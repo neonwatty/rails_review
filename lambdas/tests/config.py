@@ -1,4 +1,4 @@
 import os
 
-APP_NAME = os.environ["APP_NAME"]
+APP_NAME_PRIVATE = os.environ["APP_NAME_PRIVATE"]
 STAGE = "test-decoupled"
