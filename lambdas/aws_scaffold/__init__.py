@@ -1,6 +1,12 @@
 import os
 import boto3
+from dotenv import load_dotenv
 
+# use env file from base directory - above lambdas
+dotenv_path = os.path.join(os.path.dirname(__file__), "../../", ".env")
+load_dotenv(dotenv_path)
+
+# get values
 AWS_PROFILE = os.getenv("AWS_PROFILE")
 ACCOUNT_ID = os.getenv("ACCOUNT_ID")
 
