@@ -5,31 +5,31 @@
     "ReceiverUnderscorestartLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/app-1-receiver_start-test"
+        "LogGroupName": "/aws/lambda/app-1-receiver_start-production"
       }
     },
     "ReceiverUnderscorepreprocessLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/app-1-receiver_preprocess-test"
+        "LogGroupName": "/aws/lambda/app-1-receiver_preprocess-production"
       }
     },
     "ReceiverUnderscoreprocessLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/app-1-receiver_process-test"
+        "LogGroupName": "/aws/lambda/app-1-receiver_process-production"
       }
     },
     "ReceiverUnderscoreendLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/app-1-receiver_end-test"
+        "LogGroupName": "/aws/lambda/app-1-receiver_end-production"
       }
     },
     "ReceiverUnderscorestatusLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/app-1-receiver_status-test"
+        "LogGroupName": "/aws/lambda/app-1-receiver_status-production"
       }
     },
     "IamRoleLambdaExecution": {
@@ -58,7 +58,7 @@
                 "-",
                 [
                   "receivers",
-                  "test",
+                  "production",
                   "lambda"
                 ]
               ]
@@ -75,19 +75,19 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-test:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-production:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-test:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-production:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_process-test:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_process-production:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_end-test:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_end-production:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_status-test:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_status-production:*"
                     }
                   ]
                 },
@@ -98,19 +98,19 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-test:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_start-production:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-test:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_preprocess-production:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_process-test:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_process-production:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_end-test:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_end-production:*:*"
                     },
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_status-test:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-1-receiver_status-production:*:*"
                     }
                   ]
                 },
@@ -120,10 +120,10 @@
                     "s3:*"
                   ],
                   "Resource": [
-                    "arn:aws:s3:::app-1-test",
-                    "arn:aws:s3:::app-1-test/*",
-                    "arn:aws:s3:::app-1-trigger-test",
-                    "arn:aws:s3:::app-1-trigger-test/*"
+                    "arn:aws:s3:::app-1-production",
+                    "arn:aws:s3:::app-1-production/*",
+                    "arn:aws:s3:::app-1-trigger-production",
+                    "arn:aws:s3:::app-1-trigger-production/*"
                   ]
                 },
                 {
@@ -132,10 +132,10 @@
                     "sqs:*"
                   ],
                   "Resource": [
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-test"
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-production"
                   ]
                 },
                 {
@@ -146,10 +146,10 @@
                     "sqs:GetQueueAttributes"
                   ],
                   "Resource": [
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-test",
-                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-test"
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-production",
+                    "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-production"
                   ]
                 }
               ]
@@ -162,7 +162,7 @@
             "-",
             [
               "receivers",
-              "test",
+              "production",
               {
                 "Ref": "AWS::Region"
               },
@@ -176,10 +176,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_start@sha256:dd5eb6b7cb96b26ecb5a31ed71db709bf58affc030b8dedf77c9e9b28e08930f"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_start@sha256:82c363c3b39911da99c1009d16af6b0b00adf7d8c16df51c329bdfca61ccd593"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_start-test",
+        "FunctionName": "app-1-receiver_start-production",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
@@ -188,8 +188,8 @@
         "Description": "start rails receiver lambda function",
         "Environment": {
           "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test",
+            "APP_NAME_PRIVATE": "app-1",
+            "STAGE": "production",
             "RECEIVER_NAME": "receiver_start"
           }
         },
@@ -204,14 +204,14 @@
         "ReceiverUnderscorestartLogGroup"
       ]
     },
-    "ReceiverUnderscorestartLambdaVersionxXF8umKWBasF44tpKF9lxBk3AfXM1eLS7p1wdQA": {
+    "ReceiverUnderscorestartLambdaVersiont2FfBHkKwN71OruzgcMbbXab7rkFYJsQ1WbJaPwxU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscorestartLambdaFunction"
         },
-        "CodeSha256": "dd5eb6b7cb96b26ecb5a31ed71db709bf58affc030b8dedf77c9e9b28e08930f",
+        "CodeSha256": "82c363c3b39911da99c1009d16af6b0b00adf7d8c16df51c329bdfca61ccd593",
         "Description": "start rails receiver lambda function"
       }
     },
@@ -219,10 +219,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess@sha256:9bcf5b98513b7d02eb60dbd099f9a025101d0e6406f1577a093c61691db2adf7"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_preprocess@sha256:a88bb661229134948e429a2e9baf45f55e7e7b120c97a7acb17b93374f01cf61"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_preprocess-test",
+        "FunctionName": "app-1-receiver_preprocess-production",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
@@ -231,8 +231,8 @@
         "Description": "receiver preprocess lambda function",
         "Environment": {
           "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test",
+            "APP_NAME_PRIVATE": "app-1",
+            "STAGE": "production",
             "RECEIVER_NAME": "receiver_preprocess"
           }
         },
@@ -247,14 +247,14 @@
         "ReceiverUnderscorepreprocessLogGroup"
       ]
     },
-    "ReceiverUnderscorepreprocessLambdaVersionCB47ceea1DMoWVYSghhaYl56WzFuFPD5m08KqCfWs": {
+    "ReceiverUnderscorepreprocessLambdaVersionnNBodjsibe0kMw5cZrZ8rU4qxdR5uzw9x1ssUsm0P8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscorepreprocessLambdaFunction"
         },
-        "CodeSha256": "9bcf5b98513b7d02eb60dbd099f9a025101d0e6406f1577a093c61691db2adf7",
+        "CodeSha256": "a88bb661229134948e429a2e9baf45f55e7e7b120c97a7acb17b93374f01cf61",
         "Description": "receiver preprocess lambda function"
       }
     },
@@ -262,10 +262,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_process@sha256:1ceea591f02148713a35637652593a050d9c82a7211b80ff16d924ce4d898973"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_process@sha256:442c843b2a5906f1c146e3d4783a124105912d42052f97da0639c4b37cf0f91a"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_process-test",
+        "FunctionName": "app-1-receiver_process-production",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
@@ -274,8 +274,8 @@
         "Description": "receiver process lambda function",
         "Environment": {
           "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test",
+            "APP_NAME_PRIVATE": "app-1",
+            "STAGE": "production",
             "RECEIVER_NAME": "receiver_process"
           }
         },
@@ -290,14 +290,14 @@
         "ReceiverUnderscoreprocessLogGroup"
       ]
     },
-    "ReceiverUnderscoreprocessLambdaVersionvBwJD8p9ca77WBmpSvbGKGN01sf6JxKBc5gAyvQTs": {
+    "ReceiverUnderscoreprocessLambdaVersionEDnLtbRqYl3iDLlaRAe7S50QZ4op0GZXZhLMNxnd9lE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscoreprocessLambdaFunction"
         },
-        "CodeSha256": "1ceea591f02148713a35637652593a050d9c82a7211b80ff16d924ce4d898973",
+        "CodeSha256": "442c843b2a5906f1c146e3d4783a124105912d42052f97da0639c4b37cf0f91a",
         "Description": "receiver process lambda function"
       }
     },
@@ -305,10 +305,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_end@sha256:4d8a6af001c24ddb476b154e78a869b72bfbf7117f2d8e468ddc414141443b3c"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_end@sha256:0200d7731dc946a484483ec5a81c9fed3a68cb28b7cd09ef0996ea69bf7504fb"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_end-test",
+        "FunctionName": "app-1-receiver_end-production",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
@@ -317,8 +317,8 @@
         "Description": "receiver end lambda function",
         "Environment": {
           "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test",
+            "APP_NAME_PRIVATE": "app-1",
+            "STAGE": "production",
             "RECEIVER_NAME": "receiver_end",
             "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
             "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
@@ -335,14 +335,14 @@
         "ReceiverUnderscoreendLogGroup"
       ]
     },
-    "ReceiverUnderscoreendLambdaVersionWen5pv3uWSxLweCrqw5IoCUOzVGozDlX6NYEU5UWh4": {
+    "ReceiverUnderscoreendLambdaVersionTwTxpjsFzrTyacH20WlPBaMwckzrzsELbTU40wcY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscoreendLambdaFunction"
         },
-        "CodeSha256": "4d8a6af001c24ddb476b154e78a869b72bfbf7117f2d8e468ddc414141443b3c",
+        "CodeSha256": "0200d7731dc946a484483ec5a81c9fed3a68cb28b7cd09ef0996ea69bf7504fb",
         "Description": "receiver end lambda function"
       }
     },
@@ -350,10 +350,10 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef"
+          "ImageUri": "211125698903.dkr.ecr.us-west-2.amazonaws.com/app-1-receiver_status@sha256:d735d081676f14332986622ef50d2ae1ca00f898775df3a57e9e79b314976419"
         },
         "PackageType": "Image",
-        "FunctionName": "app-1-receiver_status-test",
+        "FunctionName": "app-1-receiver_status-production",
         "MemorySize": 1024,
         "Timeout": 240,
         "Architectures": [
@@ -362,8 +362,8 @@
         "Description": "receiver status lambda function",
         "Environment": {
           "Variables": {
-            "APP_NAME": "app-1",
-            "STAGE": "test",
+            "APP_NAME_PRIVATE": "app-1",
+            "STAGE": "production",
             "RECEIVER_NAME": "receiver_status",
             "RAILS_HOST": "https://907c-198-145-70-25.ngrok-free.app",
             "LAMBDA_API_KEY": "ed61bccc2fd58b5783baa3c6d48f509ab97afaff706724e3c7d460ad6bb80628"
@@ -380,25 +380,25 @@
         "ReceiverUnderscorestatusLogGroup"
       ]
     },
-    "ReceiverUnderscorestatusLambdaVersionJEew1D9ErUGMmSKk0Wj4IpFRoCIYkuNHlAGTLTX2w": {
+    "ReceiverUnderscorestatusLambdaVersionp1OeZSnkYEIvwq76AqTZdqwwtuGCRwlXfJFfiv1SM4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReceiverUnderscorestatusLambdaFunction"
         },
-        "CodeSha256": "2d33929255716917a8615acfbe33d33090fa6204f4d3925af6afd68f068964ef",
+        "CodeSha256": "d735d081676f14332986622ef50d2ae1ca00f898775df3a57e9e79b314976419",
         "Description": "receiver status lambda function"
       }
     },
-    "ReceiverUnderscorepreprocessEventSourceMappingSQSApp1receiverpreprocesstest": {
+    "ReceiverUnderscorepreprocessEventSourceMappingSQSApp1receiverpreprocessproduction": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": [
         "IamRoleLambdaExecution"
       ],
       "Properties": {
         "BatchSize": 1,
-        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-test",
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_preprocess-production",
         "FunctionName": {
           "Fn::GetAtt": [
             "ReceiverUnderscorepreprocessLambdaFunction",
@@ -408,14 +408,14 @@
         "Enabled": true
       }
     },
-    "ReceiverUnderscoreprocessEventSourceMappingSQSApp1receiverprocesstest": {
+    "ReceiverUnderscoreprocessEventSourceMappingSQSApp1receiverprocessproduction": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": [
         "IamRoleLambdaExecution"
       ],
       "Properties": {
         "BatchSize": 1,
-        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-test",
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_process-production",
         "FunctionName": {
           "Fn::GetAtt": [
             "ReceiverUnderscoreprocessLambdaFunction",
@@ -425,14 +425,14 @@
         "Enabled": true
       }
     },
-    "ReceiverUnderscoreendEventSourceMappingSQSApp1receiverendtest": {
+    "ReceiverUnderscoreendEventSourceMappingSQSApp1receiverendproduction": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": [
         "IamRoleLambdaExecution"
       ],
       "Properties": {
         "BatchSize": 1,
-        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-test",
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_end-production",
         "FunctionName": {
           "Fn::GetAtt": [
             "ReceiverUnderscoreendLambdaFunction",
@@ -442,14 +442,14 @@
         "Enabled": true
       }
     },
-    "ReceiverUnderscorestatusEventSourceMappingSQSApp1receiverstatustest": {
+    "ReceiverUnderscorestatusEventSourceMappingSQSApp1receiverstatusproduction": {
       "Type": "AWS::Lambda::EventSourceMapping",
       "DependsOn": [
         "IamRoleLambdaExecution"
       ],
       "Properties": {
         "BatchSize": 1,
-        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-test",
+        "EventSourceArn": "arn:aws:sqs:us-west-2:211125698903:app-1-receiver_status-production",
         "FunctionName": {
           "Fn::GetAtt": [
             "ReceiverUnderscorestatusLambdaFunction",
@@ -464,52 +464,52 @@
     "ServerlessDeploymentBucketName": {
       "Value": "app-1-serverless-artifacts",
       "Export": {
-        "Name": "sls-receivers-test-ServerlessDeploymentBucketName"
+        "Name": "sls-receivers-production-ServerlessDeploymentBucketName"
       }
     },
     "ReceiverUnderscorestartLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscorestartLambdaVersionxXF8umKWBasF44tpKF9lxBk3AfXM1eLS7p1wdQA"
+        "Ref": "ReceiverUnderscorestartLambdaVersiont2FfBHkKwN71OruzgcMbbXab7rkFYJsQ1WbJaPwxU"
       },
       "Export": {
-        "Name": "sls-receivers-test-ReceiverUnderscorestartLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-production-ReceiverUnderscorestartLambdaFunctionQualifiedArn"
       }
     },
     "ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscorepreprocessLambdaVersionCB47ceea1DMoWVYSghhaYl56WzFuFPD5m08KqCfWs"
+        "Ref": "ReceiverUnderscorepreprocessLambdaVersionnNBodjsibe0kMw5cZrZ8rU4qxdR5uzw9x1ssUsm0P8"
       },
       "Export": {
-        "Name": "sls-receivers-test-ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-production-ReceiverUnderscorepreprocessLambdaFunctionQualifiedArn"
       }
     },
     "ReceiverUnderscoreprocessLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscoreprocessLambdaVersionvBwJD8p9ca77WBmpSvbGKGN01sf6JxKBc5gAyvQTs"
+        "Ref": "ReceiverUnderscoreprocessLambdaVersionEDnLtbRqYl3iDLlaRAe7S50QZ4op0GZXZhLMNxnd9lE"
       },
       "Export": {
-        "Name": "sls-receivers-test-ReceiverUnderscoreprocessLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-production-ReceiverUnderscoreprocessLambdaFunctionQualifiedArn"
       }
     },
     "ReceiverUnderscoreendLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscoreendLambdaVersionWen5pv3uWSxLweCrqw5IoCUOzVGozDlX6NYEU5UWh4"
+        "Ref": "ReceiverUnderscoreendLambdaVersionTwTxpjsFzrTyacH20WlPBaMwckzrzsELbTU40wcY"
       },
       "Export": {
-        "Name": "sls-receivers-test-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-production-ReceiverUnderscoreendLambdaFunctionQualifiedArn"
       }
     },
     "ReceiverUnderscorestatusLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReceiverUnderscorestatusLambdaVersionJEew1D9ErUGMmSKk0Wj4IpFRoCIYkuNHlAGTLTX2w"
+        "Ref": "ReceiverUnderscorestatusLambdaVersionp1OeZSnkYEIvwq76AqTZdqwwtuGCRwlXfJFfiv1SM4"
       },
       "Export": {
-        "Name": "sls-receivers-test-ReceiverUnderscorestatusLambdaFunctionQualifiedArn"
+        "Name": "sls-receivers-production-ReceiverUnderscorestatusLambdaFunctionQualifiedArn"
       }
     }
   }

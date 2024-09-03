@@ -1,8 +1,11 @@
 
 import os
+import sys
 import argparse
 from tests.utilities.execute_subprocess import execute_subprocess_command
 current_directory = os.getcwd()
+
+stages = ["test", "test-decoupled", "development", "production"]
 
 
 def deploy_receives(stage: str = "development"):
@@ -35,4 +38,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
     parser.add_argument('stage', type=str, help='stage argument - development, test, or production')
     args = parser.parse_args()
+    if args.stage not in stages:
+        print(f"FAILURE: input stage {args.stage} - available stages are {stages}")
     deploy_receives(args.stage)
