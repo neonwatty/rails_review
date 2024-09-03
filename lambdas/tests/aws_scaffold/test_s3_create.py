@@ -19,6 +19,6 @@ def test_create_bucket(bucket_name):
 
 @pytest.mark.parametrize("bucket_name", bucket_names)
 def test_destroy_bucket(bucket_name):
-    time.sleep(10)
+    time.sleep(5)
     destroy_val = delete_bucket(bucket_name)
     assert destroy_val == True

@@ -19,6 +19,6 @@ def test_create(queue_nane):
 
 @pytest.mark.parametrize("queue_nane", bucket_names)
 def test_destroy(queue_nane):
-    time.sleep(10)
+    time.sleep(5)
     destroy_val = delete_sqs_queue(queue_nane)
     assert destroy_val == True

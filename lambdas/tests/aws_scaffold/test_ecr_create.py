@@ -19,6 +19,6 @@ def test_create(repository_name):
 
 @pytest.mark.parametrize("repository_name", bucket_names)
 def test_destroy(repository_name):
-    time.sleep(10)
+    time.sleep(5)
     destroy_val = delete_ecr_repository(repository_name)
     assert destroy_val == True

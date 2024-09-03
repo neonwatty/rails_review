@@ -1,7 +1,6 @@
 import os
 import boto3
 
-
 aws_profile = os.getenv("AWS_PROFILE")
 bucket_name = os.getenv("BUCKET_APP")
 
