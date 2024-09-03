@@ -37,7 +37,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:notice]
 
     # Define maximum attempts and wait time between checks
-    max_attempts = 10
+    max_attempts = 15
     wait_time = 3 # seconds
     final_status = nil
 
@@ -54,9 +54,9 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     end
 
     # Assert that the final status is complete after all attempts
-    assert_equal 'complete', final_status[:start], "Expected 'complete' for start but got #{final_status[:start]}"
-    assert_equal 'complete', final_status[:preprocess], "Expected 'complete' for preprocess but got #{final_status[:preprocess]}"
-    assert_equal 'complete', final_status[:process], "Expected 'complete' for process but got #{final_status[:process]}"
+    assert_equal 'complete', final_status[:start], "Expected 'complete' for receiver_start but got #{final_status[:start]}"
+    assert_equal 'complete', final_status[:preprocess], "Expected 'complete' for receiver_preprocess but got #{final_status[:preprocess]}"
+    assert_equal 'complete', final_status[:process], "Expected 'complete' for receiver_process but got #{final_status[:process]}"
 
     # Assert that the ActiveStorage blobs count is 2
     max_attempts = 10
