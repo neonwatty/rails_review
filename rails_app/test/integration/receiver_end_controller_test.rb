@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ReceiverEndControllerTest < ActionDispatch::IntegrationTest
-  test 'should update status with valid data' do
+  test 'test_1: should update status with valid data' do
     # Valid JSON payload
     payload = {
       receiver_end: {

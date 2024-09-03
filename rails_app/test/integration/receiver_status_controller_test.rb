@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
 
-  test 'should update status with valid data' do
+  test 'test_1: should update status with valid data' do
     # Valid JSON payload
     payload = {
       receiver_status: {
@@ -30,7 +30,7 @@ class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  test 'should return error for invalid status' do
+  test 'test_2: should return error for invalid status' do
     payload = {
       receiver_status: {
         lambda: 'receiver_start',
