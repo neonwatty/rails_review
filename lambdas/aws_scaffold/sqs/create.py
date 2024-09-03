@@ -1,7 +1,7 @@
-from aws import session
+from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-sqs_client = session.client("sqs")
+sqs_client = session.client("sqs", region_name='us-west-2')
 
 def create_sqs_queue(queue_name:str) -> bool:
     # define sqs attributes

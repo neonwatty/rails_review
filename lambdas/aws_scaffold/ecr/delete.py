@@ -1,9 +1,9 @@
-from aws import session
+from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-ecr_client = session.client("ecr")
+ecr_client = session.client("ecr", region_name='us-west-2')
 
-def delete_ecr_repository(repository_name: str) --> bool:
+def delete_ecr_repository(repository_name: str) -> bool:
     try:
         # Step 1: Delete all images in the repository
         print(f"Deleting images from repository '{repository_name}'...")

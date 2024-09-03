@@ -1,15 +1,12 @@
-from aws import session
+from aws_scaffold import session
 from botocore.exceptions import ClientError
 
+s3_client = session.client("s3", region_name='us-west-2')
 
 def delete_bucket(bucket_name: str):
     try:
-        # First, delete all objects in the bucket
-        bucket = session.resource('s3').Bucket(bucket_name)
-        bucket.objects.delete()
-
         # Now delete the bucket itself
-        session.delete_bucket(Bucket=bucket_name)
+        s3_client.delete_bucket(Bucket=bucket_name)
         print(f"SUCCESS: bucket '{bucket_name}' deleted successfully.")
         return True
     except ClientError as e:

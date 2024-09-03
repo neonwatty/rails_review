@@ -1,7 +1,7 @@
-from aws import session
+from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-ecr_client = session.client("ecr")
+ecr_client = session.client("ecr", region_name='us-west-2')
 
 
 def repository_exists(repository_name, region='us-east-1'):

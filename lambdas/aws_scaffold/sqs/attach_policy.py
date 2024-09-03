@@ -1,8 +1,9 @@
 import json
-from aws import session
+from aws_scaffold import session
+from aws_scaffold import ACCOUNT_ID
 from botocore.exceptions import ClientError
 
-sqs_client = session.client("sqs")
+sqs_client = session.client("sqs", region_name='us-west-2')
 
 
 def get_queue_url(queue_name:str) -> str | None:
@@ -16,7 +17,7 @@ def get_queue_url(queue_name:str) -> str | None:
         print(f"FAILURE: An error occurred: {e}")
         return None
 
-def attach_policy_to_sqs_queue(queue_name: str, account_id: str, bucket_name: str):
+def attach_policy_to_sqs_queue(queue_name: str, bucket_name: str):
     # Get the queue URL
     queue_url = get_queue_url(queue_name)
     if not queue_url:
@@ -31,10 +32,10 @@ def attach_policy_to_sqs_queue(queue_name: str, account_id: str, bucket_name: st
             "Service": "s3.amazonaws.com"
         },
         "Action": "SQS:SendMessage",
-        "Resource": f"arn:aws:sqs:us-west-2:{account_id}:{queue_name}",
+        "Resource": f"arn:aws:sqs:us-west-2:{ACCOUNT_ID}:{queue_name}",
         "Condition": {
             "StringEquals": {
-                "aws:SourceAccount": account_id
+                "aws:SourceAccount": ACCOUNT_ID
             },
             "ArnLike": {
                 "aws:SourceArn": f"arn:aws:s3:::{bucket_name}"

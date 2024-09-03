@@ -1,7 +1,7 @@
-from aws import session
+from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-s3_client = session.client("s3")
+s3_client = session.client("s3", region_name='us-west-2')
 
 def bucket_exists(bucket_name: str):
     try:
