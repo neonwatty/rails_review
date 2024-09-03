@@ -1,5 +1,4 @@
 from aws import session
-from aws.s3.check import bucket_exists
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 
 s3_client = session.client("s3")

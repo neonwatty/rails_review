@@ -1,5 +1,4 @@
 from aws import session
-from aws.s3.check import bucket_exists
 from botocore.exceptions import ClientError
 
 
