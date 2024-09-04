@@ -1,6 +1,0 @@
-boto3==1.28.53
-httpx
-requests==2.31.0
-ffmpeg-python==0.2.0
-moviepy==1.0.3
-pydub==0.25.1
