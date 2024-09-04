@@ -8,3 +8,5 @@
 .venv
 venv/
 venv.bak/
+**/node_modules/
+**/.serverless/
