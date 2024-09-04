@@ -1,12 +1,10 @@
+boto3
 requests
 pytest
 pytest-subtests
 python-dotenv
-boto3
 pytest-xdist
 ruff
 supabase
-pydantic
-requests
 faker
 mypy
