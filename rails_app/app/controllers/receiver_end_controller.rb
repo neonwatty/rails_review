@@ -32,14 +32,14 @@ class ReceiverEndController < ApplicationController
     end
   end
 
-  def process_and_attach(processed_image_key:, bucket_name:, upload:)
+  def process_and_attach(processed_key:, bucket_name:, upload:)
     s3 = Aws::S3::Client.new
-    processed_image_data = s3.get_object(bucket: bucket_name, key: processed_image_key).body.read
+    processed_data = s3.get_object(bucket: bucket_name, key: processed_key).body.read
     
-    upload.files.attach(io: StringIO.new(processed_image_data), filename: File.basename(processed_image_key))
+    upload.files.attach(io: StringIO.new(processed_data), filename: File.basename(processed_key))
     upload.save
 
-    s3.delete_object(bucket: bucket_name, key: processed_image_key)
+    s3.delete_object(bucket: bucket_name, key: processed_key)
   rescue Aws::S3::Errors::ServiceError => e
       Rails.logger.error "S3 Error: #{e.message}"
   end
