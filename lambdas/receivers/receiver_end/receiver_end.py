@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         upload_id = event["upload_id"]
 
         # create payload
-        payload = {"bucket_name": bucket_name, "processed_image_key": processed_key, "upload_id": upload_id}
+        payload = {"bucket_name": bucket_name, "processed_key": processed_key, "upload_id": upload_id}
 
         # create headers
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {LAMBDA_API_KEY}"}
