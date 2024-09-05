@@ -56,4 +56,4 @@ fi
 
 # build docker image
 echo 'INFO: building docker image'
-docker buildx build --platform linux/arm64/v8 . --build-context app_root=$RELATIVE_PATH -f ../Dockerfiles/$SERVICE_NAME -t $SERVICE_NAME
+docker buildx build --platform linux/arm64/v8 . --build-context app_root=$RELATIVE_PATH -f ../Dockerfiles/$SERVICE_NAME -t $ACCOUNT_ID-$SERVICE_NAME

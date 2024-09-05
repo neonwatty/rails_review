@@ -54,7 +54,7 @@ aws ecr get-login-password --region us-west-2 | docker login --username AWS --pa
 
 # tag image for push 
 echo 'INFO: tagging image'
-docker tag $SERVICE_NAME $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME_PRIVATE-$SERVICE_NAME:$STAGE
+docker tag $ACCOUNT_ID-$SERVICE_NAME $ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$APP_NAME_PRIVATE-$SERVICE_NAME:$STAGE
 
 # push image
 echo 'INFO: pushing image'
