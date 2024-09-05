@@ -5,22 +5,19 @@ from decorators.warmer import warmer
 from sqs.messages.message_delete import message_delete
 
 
-STAGE=os.environ["STAGE"]
+STAGE = os.environ["STAGE"]
 RAILS_HOST = os.environ[f"RAILS_HOST"]
 LAMBDA_API_KEY = os.environ[f"LAMBDA_API_KEY"]
 
 
-def process_message(message: str) -> bool:    
-    try:                
+def process_message(message: str) -> bool:
+    try:
         # create headers
-        headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {LAMBDA_API_KEY}'
-        }
+        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {LAMBDA_API_KEY}"}
 
         # create url
         rails_url = f"{RAILS_HOST}/receiver_status/update"
-        
+
         # fire off request
         response = requests.post(rails_url, data=json.dumps(message), headers=headers)
         if response.status_code == 200:
@@ -34,6 +31,7 @@ def process_message(message: str) -> bool:
         failure_message = f"FAILURE: process_message failed with exception {e}"
         print(failure_message)
         return False
+
 
 @warmer
 def lambda_handler(event, context):
@@ -51,7 +49,7 @@ def lambda_handler(event, context):
 
         # delete message from sqs
         del_message_val = message_delete(queue_name, receipt_handle)
-        
+
         # conditional response
         if process_val is True:
             if del_message_val is True:

@@ -43,17 +43,21 @@ def container_controller():
     command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
     print("INFO: ...complete!")
-    
+
     # startup container
     command = [
         "docker",
         "run",
         "--env-file",
         "../.env",
-        "-e", f"STAGE={STAGE}",
-        "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
-        "-e", f"RAILS_HOST={RAILS_HOST}",
-        "-e", f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
+        "-e",
+        f"STAGE={STAGE}",
+        "-e",
+        f"RECEIVER_NAME={RECEIVER_NAME}",
+        "-e",
+        f"RAILS_HOST={RAILS_HOST}",
+        "-e",
+        f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",
@@ -86,10 +90,10 @@ def container_controller():
 
 def test_success(container_controller, subtests):
     print("INFO: starting test_success")
-    
+
     # create sqs event to trigger status receiver with
     event, status_receipt_handle = status_setup(subtests, TEST_STATUS_QUEUE)
-  
+
     # execute lambda in local docker container
     with subtests.test(msg="execute docker lambda locally"):
         # Send a POST request to the Lambda function
@@ -97,14 +101,13 @@ def test_success(container_controller, subtests):
 
         # print docker logs
         print_container_logs(RECEIVER_NAME)
-        
+
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
         assert content["statusCode"] == 500
-        
+
     # delete status message
     with subtests.test(msg="delete status message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
         assert delete_response is True
-    

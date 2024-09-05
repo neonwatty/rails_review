@@ -22,49 +22,43 @@ def receiver_decorator(local_input_ext, local_output_ext):
                     raise KeyError("No 'records' found in the event")
                 records = event.get("Records", [])
                 general_record = records[0]
-                
+
                 if "eventSourceARN" not in general_record:
                     raise KeyError("No 'eventSourceARN' found in general_record")
                 queue_arn = general_record["eventSourceARN"]
-                
+
                 if "receiptHandle" not in general_record:
                     raise KeyError("No 'receiptHandle' found in general_record")
                 receipt_handle = general_record["receiptHandle"]
 
                 # unpack queue_name and s3 record data
                 queue_name = queue_arn.split(":")[-1]
-                s3_record = json.loads(general_record["body"])["Records"][0]    
-                
-                
+                s3_record = json.loads(general_record["body"])["Records"][0]
+
                 ### setup data, download object from s3 ###
                 # setup - download input from s3
-                setup_payload = receiver_setup(RECEIVER_NAME, s3_record, local_input_ext, local_output_ext)       
+                setup_payload = receiver_setup(RECEIVER_NAME, s3_record, local_input_ext, local_output_ext)
 
                 # run function
                 receiver_response = receiver(setup_payload, {})
-                
+
                 # teardown - upload output to s3
                 s3_key_save = receiver_teardown(setup_payload)
-                
+
                 # delete receiver input message
                 del_message_val = message_delete(queue_name, receipt_handle)
-                
+
                 ### route status update message ###
-                status = {
-                    "lambda": RECEIVER_NAME,
-                    "user_id": setup_payload["user_id"],
-                    "upload_id": setup_payload["upload_id"],
-                    "status": "complete"
-                }
+                status = {"lambda": RECEIVER_NAME, "user_id": setup_payload["user_id"], "upload_id": setup_payload["upload_id"], "status": "complete"}
                 if receiver_response["statusCode"] != 200:
                     status["status"] = "failed"
-                else: # load up receiver_response with location metadata
+                else:  # load up receiver_response with location metadata
                     receiver_response["body"]["s3_key_save"] = s3_key_save
                     receiver_response["body"]["bucket_name_save"] = setup_payload["s3_bucket"]
-                                        
+
                 # send message to queue
                 status_response = message_create(STATUS_QUEUE, status)
-                    
+
                 # return receiver response
                 return receiver_response
 
@@ -77,4 +71,5 @@ def receiver_decorator(local_input_ext, local_output_ext):
                 }
 
         return wrapper
+
     return decorator

@@ -47,17 +47,21 @@ def container_controller():
     command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
     print("INFO: ...complete!")
-    
+
     # startup container
     command = [
         "docker",
         "run",
         "--env-file",
         "../.env",
-        "-e", f"STAGE={STAGE}",
-        "-e", f"RECEIVER_NAME={RECEIVER_NAME}",
-        "-e", f"RAILS_HOST={RAILS_HOST}",
-        "-e", f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
+        "-e",
+        f"STAGE={STAGE}",
+        "-e",
+        f"RECEIVER_NAME={RECEIVER_NAME}",
+        "-e",
+        f"RAILS_HOST={RAILS_HOST}",
+        "-e",
+        f"LAMBDA_API_KEY={LAMBDA_API_KEY}",
         "-d",
         "-v",
         f"{home_dir}/.aws:/root/.aws",
@@ -91,7 +95,9 @@ def container_controller():
 def test_success(container_controller, subtests):
     print("INFO: starting test_success")
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress")  
+    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(
+        subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress"
+    )
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     print(f"sqs event maker complete")
     # execute lambda in local docker container
@@ -101,7 +107,7 @@ def test_success(container_controller, subtests):
 
         # print docker logs
         print_container_logs(RECEIVER_NAME)
-        
+
         # check response successful, and tables / files look as they should given success
         assert response.status_code == 200
         if s3_key_save is not None:
@@ -112,34 +118,34 @@ def test_success(container_controller, subtests):
             assert body["receiver_name"] == RECEIVER_NAME
             s3_key_save = body["s3_key_save"]
             bucket_name_save = body["bucket_name_save"]
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
         assert content["statusCode"] == 200
-        
+
     # check for message in test queue
     status_receipt_handle = None
     with subtests.test(msg="check message queue"):
         # poll queue
         queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
-        
+
         # unpack queue data
         message_id = queue_data["message_id"]
         message = queue_data["message"]
         status_receipt_handle = queue_data["receipt_handle"]
-        
+
         # unpack message
         assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
-        
+
     # delete receiver message
     with subtests.test(msg="delete receiver message"):
         delete_response = message_delete(TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
         assert delete_response is True
-        
+
     # delete status message
     with subtests.test(msg="delete status message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
         assert delete_response is True
-    
+
     # delete input test file
     with subtests.test(msg="delete test file"):
         response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)

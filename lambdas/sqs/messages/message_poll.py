@@ -25,13 +25,9 @@ def message_poll_no_id(queue_name: str) -> dict | None:
 
             # Delete the message from the queue
             sqs_client.delete_message(QueueUrl=queue_url, ReceiptHandle=receipt_handle)
-            
+
             # Return the message content or details if needed
-            return {
-                "message_id": message["MessageId"],
-                "message": json.loads(message["Body"]),
-                "receipt_handle": receipt_handle
-            }
+            return {"message_id": message["MessageId"], "message": json.loads(message["Body"]), "receipt_handle": receipt_handle}
 
         # Increment attempt counter and wait before the next poll
         attempt += 1

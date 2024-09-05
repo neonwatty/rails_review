@@ -1,12 +1,13 @@
 from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-ecr_client = session.client("ecr", region_name='us-west-2')
+ecr_client = session.client("ecr", region_name="us-west-2")
+
 
 def create_ecr_repository(repository_name: str) -> bool:
     try:
         response = ecr_client.create_repository(repositoryName=repository_name)
-        if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        if response["ResponseMetadata"]["HTTPStatusCode"] == 200:
             print(f"SUCCESS: Repository '{repository_name}' created successfully.")
             return True
         return False

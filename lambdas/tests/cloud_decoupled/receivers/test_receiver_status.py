@@ -33,6 +33,7 @@ lambda_client = session.client("lambda")
 test_file_name = "receiver_process"
 test_file_path = "tests/test_files/blank.jpg"
 
+
 @pytest.fixture(scope="module")
 def build_deploy():
     # build image
@@ -54,26 +55,24 @@ def build_deploy():
     print("INFO: ...complete!")
 
 
-
 def test_success(build_deploy, subtests):
     print("INFO: starting test_success")
-    
+
     # create sqs event to trigger status receiver with
     event, status_receipt_handle = status_setup(subtests, TEST_STATUS_QUEUE)
-  
+
     # execute function
     with subtests.test(msg="execute function"):
         # invoke lambda
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(event))
-        
+
         # check response successful, and tables / files look as they should given success
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
         content = json.loads(streaming_body.read().decode("utf-8"))
         assert content["statusCode"] == 500
-        
+
     # delete status message
     with subtests.test(msg="delete status message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, status_receipt_handle)
         assert delete_response is True
-    

@@ -32,6 +32,7 @@ lambda_client = session.client("lambda")
 test_file_name = "receiver_process"
 test_file_path = "tests/test_files/blank.jpg"
 
+
 @pytest.fixture(scope="module")
 def build_deploy():
     # build image
@@ -53,19 +54,20 @@ def build_deploy():
     print("INFO: ...complete!")
 
 
-
 def test_success(build_deploy, subtests):
     print("INFO: starting test_success")
     ### setup step ###
-    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress")  
+    file_id, request_id, s3_key, s3_key_save, receiver_receipt_handle = step_setup(
+        subtests, test_file_name, test_file_path, BUCKET_TEST, TEST_RECEIVERS_QUEUE, RECEIVER_NAME, step_progress="in_progress"
+    )
     event = s3sqs_event_maker(BUCKET_TEST, s3_key, TEST_RECEIVERS_QUEUE, receiver_receipt_handle)
     print(f"sqs event maker complete")
-    
+
     # execute function
     with subtests.test(msg="execute function"):
         # invoke lambda
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(event))
-        
+
         # check response successful, and tables / files look as they should given success
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
@@ -77,7 +79,7 @@ def test_success(build_deploy, subtests):
     with subtests.test(msg="check message queue"):
         # poll queue
         queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
-        
+
         # unpack queue data
         message_id = queue_data["message_id"]
         message = queue_data["message"]
@@ -86,12 +88,12 @@ def test_success(build_deploy, subtests):
         # unpack message
         assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
-            
+
     # delete message
     with subtests.test(msg="delete message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, receipt_handle)
         assert delete_response is True
-        
+
     # delete input test file
     with subtests.test(msg="delete test file"):
         response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)

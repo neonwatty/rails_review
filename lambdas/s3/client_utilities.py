@@ -28,7 +28,7 @@ def download(bucket_name: str, object_key: str, local_file_path: str) -> bool:
         failure_message = f"FAILURE: s3 download failed with exception {e}"
         print(failure_message)
         return False
-      
+
 
 def delete(bucket_name: str, object_key: str) -> bool:
     try:

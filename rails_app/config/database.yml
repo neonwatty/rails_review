@@ -21,12 +21,16 @@ default: &default
 
 
 development:
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  url: <%= ENV["DATABASE_URL_DEVELOPMENT"] %>
-  timeout: 5000
-  prepared_statements: false  #  PG::DuplicatePstatement (ERROR:  prepared statement -->  one of the only ways I could get this to work - disable prepared statements
+  <<: *default
+  database: <%= ENV["APP_NAME_PRIVATE"] %>_development
+
+# development:
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: 5
+#   url: <%= ENV["DATABASE_URL_DEVELOPMENT"] %>
+#   timeout: 5000
+#   prepared_statements: false  #  PG::DuplicatePstatement (ERROR:  prepared statement -->  one of the only ways I could get this to work - disable prepared statements
   # statement_limit: 200 # another alternative provided by https://medium.com/@devinburnette/be-prepared-7768d1a111e1
 
 

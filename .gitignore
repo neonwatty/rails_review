@@ -1,12 +1,26 @@
+# mac specific ignores
 .DS_Store
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+# npm
 **/node_modules/
+
+# root env and venv for lambdas
 **/.env
-# Environments
 .venv
 venv/
 venv.bak/
+
+# npm
 **/node_modules/
+
+# linting and serverless
 **/.serverless/
+**/.ruff_cache
+
+
+
+
+

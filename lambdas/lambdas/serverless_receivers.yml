@@ -59,14 +59,14 @@ custom:
 functions:
   receiver_start:
     name: ${env:APP_NAME_PRIVATE}-receiver_start-${opt:stage, 'test-decoupled'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_start:${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.${env:AWS_REGION}.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_start:${opt:stage, 'test-decoupled'}
     description: 'start rails receiver lambda function'
     environment:
       RECEIVER_NAME: receiver_start
 
   receiver_preprocess:
     name: ${env:APP_NAME_PRIVATE}-receiver_preprocess-${opt:stage, 'test-decoupled'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_preprocess:${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.${env:AWS_REGION}.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_preprocess:${opt:stage, 'test-decoupled'}
     description: 'receiver preprocess lambda function'
     events:
       - sqs:
@@ -78,7 +78,7 @@ functions:
 
   receiver_process:
     name: ${env:APP_NAME_PRIVATE}-receiver_process-${opt:stage, 'test-decoupled'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_process:${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.${env:AWS_REGION}.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_process:${opt:stage, 'test-decoupled'}
     description: 'receiver process lambda function'
     events:
       - sqs:
@@ -90,7 +90,7 @@ functions:
 
   receiver_end:
     name: ${env:APP_NAME_PRIVATE}-receiver_end-${opt:stage, 'test-decoupled'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_end:${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.${env:AWS_REGION}.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_end:${opt:stage, 'test-decoupled'}
     description: 'receiver end lambda function'
     events:
       - sqs:
@@ -104,7 +104,7 @@ functions:
 
   receiver_status:
     name: ${env:APP_NAME_PRIVATE}-receiver_status-${opt:stage, 'test-decoupled'}
-    image: ${env:ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_status:${opt:stage, 'test-decoupled'}
+    image: ${env:ACCOUNT_ID}.dkr.ecr.${env:AWS_REGION}.amazonaws.com/${env:APP_NAME_PRIVATE}-receiver_status:${opt:stage, 'test-decoupled'}
     description: 'receiver status lambda function'
     events:
       - sqs:

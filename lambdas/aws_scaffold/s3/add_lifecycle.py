@@ -6,17 +6,8 @@ s3_client = session.client("s3", region_name="us-west-2")
 def add_lifecycle_expire(bucket_name: str, num_days: int = 1) -> bool:
     try:
         # Define the lifecycle configuration
-        lifecycle_config_settings = {
-            'Rules': [{
-                "ID": "ExpireObjectsAfterOneDay",
-                "Expiration": {
-                    "Days": 1
-                },
-                'Status': 'Enabled',
-                'Filter': {}
-            }
-        ]}
-        
+        lifecycle_config_settings = {"Rules": [{"ID": "ExpireObjectsAfterOneDay", "Expiration": {"Days": 1}, "Status": "Enabled", "Filter": {}}]}
+
         # Apply the lifecycle configuration to the bucket
         s3_client.put_bucket_lifecycle_configuration(Bucket=bucket_name, LifecycleConfiguration=lifecycle_config_settings)
 

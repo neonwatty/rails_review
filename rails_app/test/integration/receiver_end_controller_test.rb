@@ -4,8 +4,8 @@ class ReceiverEndControllerTest < ActionDispatch::IntegrationTest
   test 'test_1: should update status with valid data' do
     # Valid JSON payload
     payload = {
-      receiver_end: {
-        bucket_name: 'app-integration-test-data',
+      receiver_end: { 
+        bucket_name: "#{ENV['APP_NAME_PRIVATE']}-integration-test-data",
         processed_image_key: 'integration_test_image.png',
         upload_id: 1
       }

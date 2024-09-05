@@ -4,13 +4,16 @@ from aws_scaffold.ecr.delete import delete_ecr_repository
 import random
 import time
 
-custom_charset = 'abcdefghijklmnopqrstuvwxyz'
+custom_charset = "abcdefghijklmnopqrstuvwxyz"
+
 
 def generate_custom_random_string(length):
-    return ''.join(random.choices(custom_charset, k=length))
-  
+    return "".join(random.choices(custom_charset, k=length))
+
+
 bucket_names = [f"test-repository-{generate_custom_random_string(7)}"]
-  
+
+
 @pytest.mark.parametrize("repository_name", bucket_names)
 def test_create(repository_name):
     create_val = create_ecr_repository(repository_name)

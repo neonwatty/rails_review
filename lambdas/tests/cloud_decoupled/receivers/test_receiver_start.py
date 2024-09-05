@@ -31,6 +31,7 @@ lambda_client = session.client("lambda")
 test_file_name = "receiver_start"
 test_file_path = "tests/test_files/blank.jpg"
 
+
 @pytest.fixture(scope="module")
 def build_deploy():
     # build image
@@ -52,33 +53,32 @@ def build_deploy():
     print("INFO: ...complete!")
 
 
-
 def test_success(build_deploy, subtests):
     # construct event payload for app
     upload_id = 0
     user_id = 0
-    s3_key = "0"*10
+    s3_key = "0" * 10
     payload = {
-      "message": 'File uploaded successfully',
-      "upload_id": upload_id,
-      "user_id": user_id,
-      "file_key": s3_key,
-      "bucket_name": BUCKET_TEST,
-      "stage": "test"
+        "message": "File uploaded successfully",
+        "upload_id": upload_id,
+        "user_id": user_id,
+        "file_key": s3_key,
+        "bucket_name": BUCKET_TEST,
+        "stage": "test",
     }
-  
+
     # upload test file - first create s3_key
-    s3_key_save =  f"{user_id}/{upload_id}/receiver_start"
+    s3_key_save = f"{user_id}/{upload_id}/receiver_start"
 
     with subtests.test(msg="create a test file"):
         with open(test_file_path, "rb") as file_data:
             s3_client.put_object(Bucket=BUCKET_TEST, Key=s3_key, Body=file_data)
-    
+
     # execute function
     with subtests.test(msg="execute function"):
         # invoke lambda
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(payload))
-        
+
         # check response successful, and tables / files look as they should given success
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
@@ -89,32 +89,32 @@ def test_success(build_deploy, subtests):
         assert "bucket_name_save" in list(body.keys()), "FAILURE: return value bucket_name_save from execution not present"
         s3_key_save = body["s3_key_save"]
         bucket_name_save = body["bucket_name_save"]
-        
+
     # check for message in test queue
     receipt_handle = None
     with subtests.test(msg="check message queue"):
         # poll queue
         queue_data = message_poll_no_id(TEST_STATUS_QUEUE)
-        
+
         # unpack queue data
         message_id = queue_data["message_id"]
         message = queue_data["message"]
         receipt_handle = queue_data["receipt_handle"]
-        
+
         # unpack message
         print(f"message --> {message}")
         assert message["lambda"] == RECEIVER_NAME
         assert message["status"] == "complete"
-        
+
     # delete message
     with subtests.test(msg="delete message"):
         delete_response = message_delete(TEST_STATUS_QUEUE, receipt_handle)
         assert delete_response is True
-    
+
     # check output file exists
     with subtests.test(msg="check that output file now exists"):
         s3_client.head_object(Bucket=bucket_name_save, Key=s3_key_save)
-        
+
     # delete input test file
     with subtests.test(msg="delete test file"):
         response = s3_client.delete_object(Bucket=BUCKET_TEST, Key=s3_key)

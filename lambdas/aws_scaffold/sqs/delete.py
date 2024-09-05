@@ -1,7 +1,8 @@
 from aws_scaffold import session
 from botocore.exceptions import ClientError
 
-sqs_client = session.client("sqs", region_name='us-west-2')
+sqs_client = session.client("sqs", region_name="us-west-2")
+
 
 def delete_sqs_queue(queue_url: str) -> bool:
     try:

@@ -37,6 +37,7 @@ LAMBDA_FUNCTION_NAME = f"{APP_NAME_PRIVATE}-{RECEIVER_NAME}-{STAGE}"
 # list of receivers
 receiver_names = ["receiver_start", "receiver_preprocess", "receiver_process", "receiver_preprocess"]
 
+
 # setup fixture
 @pytest.fixture(scope="module")
 def receivers_setup():
@@ -44,44 +45,44 @@ def receivers_setup():
     for receiver_name in receiver_names:
         command = ["bash", "build_image.sh", STAGE, receiver_name]
         stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-    
+
         command = ["bash", "deploy_image.sh", STAGE, receiver_name]
         stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-        
+
     time.sleep(5)
-    
+
     # deploy yamls
     command = ["bash", "adjust_functions.sh", "deploy", STAGE, "serverless_receivers.yml"]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas")
-    
-    
+
+
 def test_success(receivers_setup, subtests):
     # construct event payload for app
     upload_id = 0
     user_id = 0
-    s3_key = "0"*10
+    s3_key = "0" * 10
     payload = {
-      "message": 'File uploaded successfully',
-      "upload_id": upload_id,
-      "user_id": user_id,
-      "file_key": s3_key,
-      "bucket_name": BUCKET_STAGE,
-      "stage": STAGE
+        "message": "File uploaded successfully",
+        "upload_id": upload_id,
+        "user_id": user_id,
+        "file_key": s3_key,
+        "bucket_name": BUCKET_STAGE,
+        "stage": STAGE,
     }
-  
-    # upload test file - first create s3_key
-    s3_key_save =  f"{user_id}/{upload_id}/receiver_start"
 
-    # upload file 
+    # upload test file - first create s3_key
+    s3_key_save = f"{user_id}/{upload_id}/receiver_start"
+
+    # upload file
     with subtests.test(msg="create a test file"):
         with open(test_file_path, "rb") as file_data:
             s3_client.put_object(Bucket=BUCKET_STAGE, Key=s3_key, Body=file_data)
-            
+
     # execute function
     with subtests.test(msg="execute function"):
         # Send a POST request to the Lambda function
         response = lambda_client.invoke(FunctionName=LAMBDA_FUNCTION_NAME, InvocationType="RequestResponse", Payload=json.dumps(payload))
-        
+
         # check response successful, and tables / files look as they should given success
         assert response["StatusCode"] == 200
         streaming_body = response["Payload"]
