@@ -6,7 +6,7 @@ class ReceiverEndControllerTest < ActionDispatch::IntegrationTest
     payload = {
       receiver_end: { 
         bucket_name: "#{ENV['APP_NAME_PRIVATE']}-integration-test-data",
-        processed_image_key: 'integration_test_image.png',
+        processed_key: 'integration_test_image.png',
         upload_id: 1
       }
     }
