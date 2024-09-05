@@ -40,4 +40,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.stage not in stages:
         print(f"FAILURE: input stage {args.stage} - available stages are {stages}")
+        sys.exit(1)
     deploy_receives(args.stage)
