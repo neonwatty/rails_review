@@ -18,36 +18,7 @@
   </head>
   <body>
     <main class="">
-      <!-- Flash messages -->
-      <% if flash[:notice] %>
-        <div class="flash-message flash-message-notice" data-flash="notice">
-          <%= flash[:notice] %>
-        </div>
-      <% end %>
-      <% if flash[:alert] %>
-        <div role="alert" class="alert alert-success">
-          <%= flash[:alert] %>
-        </div>
-      <% end %>
       <%= yield %>
     </main>
-    <!-- JavaScript to hide flash messages after 2 seconds -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // Function to hide flash messages
-        function hideFlashMessages() {
-          document.querySelectorAll('.flash-message').forEach(function(element) {
-            setTimeout(function() {
-              element.style.opacity = 0;
-              setTimeout(function() {
-                element.style.display = 'none';
-              }, 600); // Delay hiding element until fade out is complete
-            }, 2000); // Wait for 2 seconds before starting fade out
-          });
-        }
-
-        hideFlashMessages();
-      });
-    </script>
   </body>
 </html>
