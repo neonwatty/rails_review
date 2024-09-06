@@ -1,5 +1,5 @@
 <%= render 'nav' %>
-<div class="hero bg-base-200 min-h-screen">
+<div class="hero bg-base-200">
   <div class="grid grid-flow-col-dense">
     <div class="p-5">
       <% if @upload.files.attached? %>
@@ -57,7 +57,7 @@
     </div>
   </div>
 </div>
-<div class="flex gap-4 mt-4">
+<div class="flex gap-4 mt-4 justify-center">
   <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
   <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
 </div>
