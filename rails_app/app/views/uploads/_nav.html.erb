@@ -1,5 +1,5 @@
 <div class="navbar bg-base-100">
-  <a class="btn btn-ghost text-xl">daisyUI</a>
+  <%= link_to 'railsTemplate', root_path, class: 'btn btn-ghost text-xl' %>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
       <li>
@@ -7,6 +7,9 @@
       </li>
       <li>
         <%= link_to 'New Upload', new_upload_path, class: "link link-hover"%>
+      </li>
+      <li>
+        <%= link_to 'About', about_path, class: "link link-hover"%>
       </li>
     </ul>
   </div>
