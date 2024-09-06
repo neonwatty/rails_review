@@ -1,32 +1,52 @@
 <%= render 'nav' %>
-<div class="welcome-section">
-  <h1 class="text-3xl font-semibold mb-2">Your input and output file </h1>
-  <hr class="border-t border-gray-300 my-4">
-</div>
-<% if @upload.files.attached? %>
-  <div style="display: flex; gap: 10px;">
-    <!-- Column 1: Input File -->
-    <div style="flex: 1;">
-      <h3>Input File</h3>
-      <% if @upload.files.any? %>
-        <%= image_tag @upload.files.first, alt: 'Uploaded Image', style: 'max-width: 100%; height: auto;' %>
-      <% else %>
-        <p>No input file attached.</p>
-      <% end %>
-    </div>
-    <!-- Column 2: Output File -->
-    <div style="flex: 1;">
-      <h3>Output File</h3>
-      <% if @upload.files.size > 1 %>
-        <%= image_tag @upload.files.second, alt: 'Uploaded Image', style: 'max-width: 100%; height: auto;' %>
-      <% else %>
-        <p>No output file attached.</p>
-      <% end %>
-    </div>
+<div class="hero bg-base-200 min-h-screen">
+  <% if @upload.files.attached? %>
+    <div class="card bg-base-100 w-96 shadow-xl">
+      <figure>
+        <% input_file = @upload.files.first %>
+        <div class="">
+          <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+        </div>
+      </figure>
+      <div class="card-body">
+        <h2 class="card-title">Input</h2>
+        <div class="card-actions justify-end">
+          <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="card-body">
+        <h2 class="card-title">Input</h2>
+        <div class="card-actions justify-end">
+          <p>No input file attached.</p>
+        </div>
+      </div>
+    <% end %>
   </div>
-<% else %>
-  <p>No files attached.</p>
-<% end %>
+  <% if @upload.files.attached? && @upload.files.count > 1 %>
+    <div class="card bg-base-100 w-96 shadow-xl">
+      <figure>
+        <% input_file = @upload.files.first %>
+        <div class="">
+          <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+        </div>
+      </figure>
+      <div class="card-body">
+        <h2 class="card-title">Input</h2>
+        <div class="card-actions justify-end">
+          <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="card-body">
+        <h2 class="card-title">Input</h2>
+        <div class="card-actions justify-end">
+          <p>No input file attached.</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
 <div class="flex gap-4 mt-4">
   <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
   <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
