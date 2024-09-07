@@ -3,6 +3,25 @@
   <div class="hero-content flex-col gap-5">
     <% @uploads.each do |upload| %>
       <div class="card bg-base-100 shadow-xl w-80">
+        <% status_class = status_message_value(upload.id) %>
+        <% case status_class %>
+        <% when 0 %>
+          <div class="badge badge-success">
+            success
+          </div>
+        <% when 1 %>
+          <div class="badge badge-error">
+            failed
+          </div>
+        <% when 2 %>
+          <div class="badge badge-warning">
+            processing
+          </div>
+        <% else %>
+          <div class="badge badge-secondary">
+            unknown
+          </div>
+        <% end %>
         <% if upload.files.attached? %>
           <% input_file = upload.files.first %>
           <% if input_file.content_type.start_with?('image/') %>
