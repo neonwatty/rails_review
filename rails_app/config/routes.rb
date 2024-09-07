@@ -10,12 +10,15 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # lambda routes
+  # receiver routes
   post 'receiver_end/update', to: 'receiver_end#update'
   post 'receiver_status/update', to: 'receiver_status#update'
   patch 'receiver_status/update', to: 'receiver_status#update'
   post 'receiver_outputs/update', to: 'receiver_outputs#update'
   patch 'receiver_outputs/update', to: 'receiver_outputs#update'
+  
+  # maker personal routes
+  get 'about', to: 'uploads#about', as: :about
 
   # Defines the root path route ("/")
   resources :uploads
