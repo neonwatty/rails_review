@@ -1,3 +1,4 @@
+import { Controller } from "@hotwired/stimulus";
 import { DirectUpload } from "@rails/activestorage";
 import Dropzone from "dropzone";
 import {
@@ -6,8 +7,7 @@ import {
   insertAfter,
   removeElement,
   toArray
-} from "helpers";
-import { Controller } from "stimulus";
+} from "../helpers";
 
 export default class extends Controller {
   static targets = ["input"];
