@@ -31,4 +31,12 @@ class UserTest < ActiveSupport::TestCase
     user = User.new(email: "user3@example.com", password: "password")
     assert_not user.save
   end
+
+  test "should not create a new use with the same password as anotherr" do
+    user = User.new(email: "user3@example.com", password: "password", password_confirmation: "password")
+    assert user.save
+
+    user = User.new(email: "user4@example.com", password: "password", password_confirmation: "password")
+    assert_not user.save
+  end
 end
