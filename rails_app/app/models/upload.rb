@@ -14,8 +14,10 @@ class Upload < ApplicationRecord
 
   private
   def set_filename
-    if upload.attached?
-      self.filename = file.filename.to_s
+    if files.attached? && !files_attached
+      if files.count == 1
+        self.filename = files.first.filename.to_s
+      end
     end
   end
 

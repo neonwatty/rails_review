@@ -64,6 +64,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_27_233627) do
 
   create_table "uploads", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.string "filename", limit: 255, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "files_attached"
