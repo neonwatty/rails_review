@@ -13,13 +13,7 @@
         </div>
       <% end %>
       <div class="field mb-5">
-        <div class="dropzone dropzone-default dz-clickable" data-controller="dropzone" data-dropzone-max-file-size="2" data-dropzone-max-files="1">
-          <%= form.file_field :files, multiple: false, direct_upload: true,  data: { dropzone_target: 'input' }  %>
-          <div class="dropzone-msg dz-message needsclick text-gray-600">
-            <h3 class="dropzone-msg-title">Drag here to upload or click here to browse</h3>
-            <span class="dropzone-msg-desc text-sm">2 MB file size maximum. Allowed file types png, jpg.</span>
-          </div>
-        </div>
+        <%= render "uploads/image_form", form: form %>
       </div>
       <div class="grid grid-cols-4 gap-4">
         <%= form.submit 'Submit', class: "btn btn-primary" %>
