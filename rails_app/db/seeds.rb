@@ -8,11 +8,11 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.find_or_create_by(id: 1) do |user|
-  user.email = "neonwatty@gmail.com"
-  user.password = "password" # Ensure proper password setup
-  user.password_confirmation = "password"
-end
+user = User.where(email: "neonwatty@gmail.com").first_or_initialize
+user.update!(
+  password: "password",
+  password_confirmation: "password"
+)
 
 # Upload.find_or_create_by(id: 1, user_id: 1) do |upload|
 #   upload.files.attach(io: File.open(Rails.root.join("test/fixtures/files/cover_image.jpeg")), filename: "cover_image.jpeg")
