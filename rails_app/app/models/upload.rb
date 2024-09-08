@@ -3,6 +3,8 @@ class Upload < ApplicationRecord
   has_many_attached :files
   has_one :status, dependent: :destroy
   has_one :output, dependent: :destroy
+  before_save :set_filename
+
   after_create :create_status
   after_create :create_output
 
@@ -11,6 +13,12 @@ class Upload < ApplicationRecord
   after_commit :check_and_invoke_lambda, on: :create
 
   private
+  def set_filename
+    if upload.attached?
+      self.filename = file.filename.to_s
+    end
+  end
+
   def check_and_invoke_lambda
     if files.attached? && !files_attached
       # Check if this is the first file being attached
