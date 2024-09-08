@@ -1,3 +1,6 @@
+# dev data
+**/dev_data
+
 # mac specific ignores
 .DS_Store
 ._.DS_Store
