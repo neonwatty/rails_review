@@ -1,58 +1,61 @@
 <%= render 'shared/nav' %>
 <div class="hero bg-base-200">
   <div class="grid grid-flow-col-dense">
-    <div class="p-5">
-      <% if @upload.files.attached? %>
-        <div class="card bg-base-100 w-96 shadow-xl">
-          <figure>
-            <% input_file = @upload.files.first %>
-            <div class="w-80 h-50 object-cover">
-              <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+    <div class="card bg-base-150 flex-row p-10">
+      <%= render "uploads/status_badge", upload: @upload %>
+      <div class="p-5">
+        <% if @upload.files.attached? %>
+          <div class="card bg-base-100 w-96 shadow-xl">
+            <figure>
+              <% input_file = @upload.files.first %>
+              <div class="w-80 h-50 object-cover">
+                <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+              </div>
+            </figure>
+            <div class="card-body">
+              <div class="grid grid-flow-col">
+                <h2 class="card-title">Input</h2>
+                <div class="card-actions justify-end">
+                  <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+                </div>
+              </div>
             </div>
-          </figure>
-          <div class="card-body">
-            <div class="grid grid-flow-col">
+          <% else %>
+            <div class="card-body">
               <h2 class="card-title">Input</h2>
               <div class="card-actions justify-end">
-                <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+                <p>No input file attached.</p>
               </div>
             </div>
-          </div>
-        <% else %>
-          <div class="card-body">
-            <h2 class="card-title">Input</h2>
-            <div class="card-actions justify-end">
-              <p>No input file attached.</p>
-            </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
-    </div>
-    <div class="p-5">
-      <% if @upload.files.attached? && @upload.files.count > 1 %>
-        <div class="card bg-base-100 w-96 shadow-xl">
-          <figure>
-            <% output_file = @upload.files.second %>
-            <div class="w-80 object-cover">
-              <%= image_tag rails_blob_path(output_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+      <div class="p-5">
+        <% if @upload.files.attached? && @upload.files.count > 1 %>
+          <div class="card bg-base-100 w-96 shadow-xl">
+            <figure>
+              <% output_file = @upload.files.second %>
+              <div class="w-80 object-cover">
+                <%= image_tag rails_blob_path(output_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+              </div>
+            </figure>
+            <div class="card-body">
+              <div class="grid grid-flow-col">
+                <h2 class="card-title">Output</h2>
+                <div class="card-actions justify-end">
+                  <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+                </div>
+              </div>
             </div>
-          </figure>
-          <div class="card-body">
-            <div class="grid grid-flow-col">
+          <% else %>
+            <div class="card-body">
               <h2 class="card-title">Output</h2>
               <div class="card-actions justify-end">
-                <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
+                <p>No output file attached.</p>
               </div>
             </div>
-          </div>
-        <% else %>
-          <div class="card-body">
-            <h2 class="card-title">Output</h2>
-            <div class="card-actions justify-end">
-              <p>No output file attached.</p>
-            </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
