@@ -1,4 +1,7 @@
 class Upload < ApplicationRecord
+  include PgSearch::Model
+  pg_search_scope :search_by_name, against: :filename, using: { tsearch: { prefix: true } }
+
   belongs_to :user
   has_many_attached :files
   has_one :status, dependent: :destroy
