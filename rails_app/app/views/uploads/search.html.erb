@@ -14,20 +14,26 @@
       <% end %>
     </div>
     <div class="flex-col gap-x-5 gap-y-10 p-10">
-      <% if @results.present? %>
-        <% @results.each_with_index do |upload, index| %>
-          <% if index > 0 %>
-            <div class="w-full h-5"></div>
+      <% Rails.logger.info "Query in view: #{@query.inspect}" %>
+      <% if @query == "" %>
+          <%= render 'uploads/no_search' %>
+      <% else %>
+        <% if @results.present? %>
+          <% @results.each_with_index do |upload, index| %>
+            <% if index > 0 %>
+              <div class="w-full h-5"></div>
+            <% end %>
+            <%= render "uploads/status_badge", upload: upload %>
+            <%= render "uploads/index_card", upload: upload %>
           <% end %>
-          <%= render "uploads/status_badge", upload: upload %>
-          <%= render "uploads/index_card", upload: upload %>
+          <div class="pagy-nav flex my-5 mb-5 justify-center center-content">
+            <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+          </div>
+        <% else %>
+          <%= render 'uploads/no_search_results' %>
         <% end %>
-        <div class="pagy-nav flex my-5 mb-5 justify-center center-content">
-          <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
-        </div>
-      <% elsif @query.present? %>
-        <p>No results found for '<%= @query %>'</p>
-      <% end %>
+         <% end %>
+
     </div>
   </div>
 </div>
