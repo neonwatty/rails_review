@@ -1,11 +1,10 @@
 import os
 import requests
 from s3.object_add import add
-from s3 import bucket_name as bucket_name_main
 
 
 # this function is just for testing
-def upload(user_id: str, file_id: str, filepath: str, bucket_name: str | None = bucket_name_main, stage: str = "dev"):
+def upload(user_id: str, file_id: str, filepath: str, bucket_name: str | None = None, stage: str = "dev"):
     # check that filename exists
     if not os.path.isfile(filepath):
         raise ValueError(f"FAILURE: filepath does not exist to add to s3 bucket - {filepath}")

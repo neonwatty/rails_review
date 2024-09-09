@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 from tests.utilities.execute_subprocess import execute_subprocess_command
+from s3.cors_update import update as cors_update
 
 current_directory = os.getcwd()
 
@@ -32,6 +33,12 @@ def deploy_receives(stage: str = "development"):
     command = ["bash", "adjust_functions.sh", "deploy", stage, config]
     stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas")
     print("INFO: ...done!")
+
+    # prepare to update cors policy on bucket
+    bucket_to_update = f"{os.environ["APP_NAME_PRIVATE"]}-{stage}"
+    host_name = os.environ[f"RAILS_HOST_{stage.upper().replace("-", "_")}"]
+    val = cors_update(bucket_to_update, host_name)
+    assert val is True, f"FAILURE: failed to update cors on bucket {bucket_to_update}"
 
 
 if __name__ == "__main__":
