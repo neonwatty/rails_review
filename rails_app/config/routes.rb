@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get 'about', to: 'uploads#about', as: :about
 
   # search route
-  get 'search', to: 'search#index', as: 'search_index'
+  get 'search', to: 'uploads#search', as: :search
 
 
   # Defines the root path route ("/")
