@@ -35,10 +35,11 @@ def deploy_receives(stage: str = "development"):
     print("INFO: ...done!")
 
     # prepare to update cors policy on bucket
-    bucket_to_update = f"{os.environ["APP_NAME_PRIVATE"]}-{stage}"
-    host_name = os.environ[f"RAILS_HOST_{stage.upper().replace("-", "_")}"]
-    val = cors_update(bucket_to_update, host_name)
-    assert val is True, f"FAILURE: failed to update cors on bucket {bucket_to_update}"
+    if stage != "test-decoupled":
+        bucket_to_update = f"{os.environ["APP_NAME_PRIVATE"]}-{stage}"
+        host_name = os.environ[f"RAILS_HOST_{stage.upper()}"]
+        val = cors_update(bucket_to_update, host_name)
+        assert val is True, f"FAILURE: failed to update cors on bucket {bucket_to_update}"
 
 
 if __name__ == "__main__":
