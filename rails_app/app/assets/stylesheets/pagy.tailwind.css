@@ -1,16 +1,37 @@
-
 .pagy-nav {
   @apply flex items-center space-x-2;
 }
 
+/* Base link styles */
 .pagy-nav a {
   @apply px-3 py-1 border rounded-md text-blue-500;
 }
 
-.pagy-nav .active {
-  @apply bg-blue-500 text-white;
+/* Active link styles */
+.pagy-nav a.current {
+  @apply bg-blue-500 text-white; /* Fill in background color for active link */
 }
 
-.pagy-nav .disabled {
+/* Disabled link styles */
+.pagy-nav a.disabled {
   @apply text-gray-500 cursor-not-allowed;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .pagy-nav {
+    @apply text-gray-300; /* Adjust text color for dark mode */
+  }
+
+  .pagy-nav a {
+    @apply border-gray-700 text-blue-400; /* Adjust border and text colors for links */
+  }
+
+  .pagy-nav a.current {
+    @apply bg-blue-600 text-white; /* Fill in background color for active link in dark mode */
+  }
+
+  .pagy-nav a.disabled {
+    @apply text-gray-600; /* Adjust disabled link color for dark mode */
+  }
 }
