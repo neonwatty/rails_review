@@ -20,7 +20,17 @@ Rails.application.routes.draw do
   # maker personal routes
   get 'about', to: 'uploads#about', as: :about
 
+  # search route
+  get 'search', to: 'uploads#search', as: :search
+
+
   # Defines the root path route ("/")
-  resources :uploads
+  resources :uploads do
+    member do
+      get 'details_card'
+    end
+  end
+
+  # define root
   root "uploads#index"
 end

@@ -1,12 +1,11 @@
 from s3 import s3_client
-from s3 import bucket_name as bucket_name_main
 
 
 def add(
     user_id: str,
     file_id: str,
     filename: str,
-    bucket_name: str | None = bucket_name_main,
+    bucket_name: str | None = None,
     stage: str = "dev",
     conditions: list | None = None,  # [["content-length-range", 0, 5 * 1024 * 1024]],
     expiration: int = 120,

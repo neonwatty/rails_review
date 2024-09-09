@@ -1,8 +1,13 @@
 class Upload < ApplicationRecord
+  include PgSearch::Model
+  pg_search_scope :search_by_name, against: :filename, using: { tsearch: { prefix: true } }
+
   belongs_to :user
   has_many_attached :files
   has_one :status, dependent: :destroy
   has_one :output, dependent: :destroy
+  before_save :set_filename
+
   after_create :create_status
   after_create :create_output
 
@@ -11,6 +16,14 @@ class Upload < ApplicationRecord
   after_commit :check_and_invoke_lambda, on: :create
 
   private
+  def set_filename
+    if files.attached? && !files_attached
+      if files.count == 1
+        self.filename = files.first.filename.to_s
+      end
+    end
+  end
+
   def check_and_invoke_lambda
     if files.attached? && !files_attached
       # Check if this is the first file being attached

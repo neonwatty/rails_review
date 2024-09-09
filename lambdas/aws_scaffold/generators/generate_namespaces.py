@@ -1,3 +1,4 @@
+import os
 from aws_scaffold import APP_NAME_PRIVATE
 
 # define connected stages
@@ -10,22 +11,31 @@ decoupled_stage = "test-decoupled"
 receiver_names = ["receiver_status", "receiver_preprocess", "receiver_process", "receiver_end"]
 
 
-def generate_bucket_names() -> list:
+def generate_bucket_names() -> tuple:
     # generate s3 bucket names for connected stages
-    all_bucket_names = []
+    main_bucket_names = []
+    main_host_names = []
+    trigger_bucket_names = []
     for stage in connected_stages:
-        all_bucket_names += [f"{APP_NAME_PRIVATE}-{stage}"]
-        all_bucket_names += [f"{APP_NAME_PRIVATE}-trigger-{stage}"]
+        main_bucket_names += [f"{APP_NAME_PRIVATE}-{stage}"]
+        main_host_names += [os.environ[f"RAILS_HOST_{stage.upper()}"]]
+        trigger_bucket_names += [f"{APP_NAME_PRIVATE}-trigger-{stage}"]
+    all_bucket_names = main_bucket_names + trigger_bucket_names
+
+    # add host names to main buckets for cors
+    bucket_host_pairs = []
+    for a, b in zip(main_bucket_names, main_host_names):
+        bucket_host_pairs += [a, b]
 
     # generate decoupled s3 bucket names
     all_bucket_names += [f"{APP_NAME_PRIVATE}-trigger-{decoupled_stage}"]
 
     # create app integration test data bucket
     all_bucket_names += [f"{APP_NAME_PRIVATE}-integration-test-data"]
-    
+
     # add serverless directory to list
     all_bucket_names += [f"{APP_NAME_PRIVATE}-serverless-artifacts"]
-    return all_bucket_names
+    return all_bucket_names, bucket_host_pairs
 
 
 def generate_queue_names() -> list:

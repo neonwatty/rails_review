@@ -10,6 +10,9 @@ def lambda_handler(event, context):
         # Open the image using Pillow
         image = Image.open(event["local_input_path"])
 
+        # convert
+        image = image.convert("RGB")
+
         # Resize the image
         new_size = (800, 600)  # Desired size
         resized_image = image.resize(new_size)

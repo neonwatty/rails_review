@@ -4,6 +4,27 @@ class UploadsController < ApplicationController
 
   def index
     @uploads = Upload.all
+    @pagy, @uploads = pagy(@uploads)
+  end
+
+  def search
+    @query = params[:query]
+    Rails.logger.info "Query: #{@query}"
+  
+    if @query.present?
+      @results = Upload.search_by_name(@query)
+                       .where(process_complete: true)
+                       .limit(10)
+      Rails.logger.info "Results after search: #{@results.inspect}"
+    else
+      @results = []
+    end
+  
+    @results = [] if @results.nil?
+    Rails.logger.info "Results after nil check: #{@results.inspect}"
+  
+    @pagy, @results  = @results.present? ? pagy(@results) : []
+    Rails.logger.info "Pagy results: #{@results.inspect}"
   end
 
   def show
@@ -15,10 +36,14 @@ class UploadsController < ApplicationController
     @upload = Upload.new
   end
 
+  def details_card
+    @upload = Upload.find(params[:id])
+  end 
+
   def create
     @upload = Upload.new(upload_params)
     if @upload.save
-      redirect_to @upload, notice: 'Upload was successfully created.'
+      redirect_to details_card_upload_path(@upload), notice: 'Upload was successfully created.'
     else
       render :new
     end
