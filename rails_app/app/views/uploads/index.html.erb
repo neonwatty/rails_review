@@ -1,17 +1,23 @@
 <%= render 'shared/nav' %>
 <% if @uploads.any? %>
   <div class="hero bg-base-200">
-    <div class="flex flex-wrap gap-x-5 gap-y-10 p-10">
-      <%= turbo_frame_tag "all_uploads" do %>
-        <% @uploads.each_with_index do |upload, index| %>
-          <% if index > 0 %>
-            <div class="w-full h-5"></div>
-          <% end %>
-          <div class="card bg-base-100 shadow-xl w-96 p-5">
-            <%= render "uploads/status_badge", upload: upload %>
-            <%= render "uploads/index_card", upload: upload %>
-          </div>
+    <div class="flex-col gap-x-5 gap-y-10 p-10">
+      <div class="flex flex-col items-center justify-center">
+        <button 
+    onclick="window.location.reload();" 
+    class="btn btn-primary btn-sm"
+    aria-label="Refresh"
+  >
+          <i class="fas fa-sync"></i>
+        </button>
+        <div class="w-full h-5"></div>
+      </div>
+      <% @uploads.each_with_index do |upload, index| %>
+        <% if index > 0 %>
+          <div class="w-full h-5"></div>
         <% end %>
+        <%= render "uploads/status_badge", upload: upload %>
+        <%= render "uploads/index_card", upload: upload %>
       <% end %>
     </div>
   </div>

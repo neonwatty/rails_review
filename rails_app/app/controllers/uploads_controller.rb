@@ -16,10 +16,14 @@ class UploadsController < ApplicationController
     @upload = Upload.new
   end
 
+  def details_card
+    @upload = Upload.find(params[:id])
+  end 
+
   def create
     @upload = Upload.new(upload_params)
     if @upload.save
-      redirect_to @upload, notice: 'Upload was successfully created.'
+      redirect_to details_card_upload_path(@upload), notice: 'Upload was successfully created.'
     else
       render :new
     end
