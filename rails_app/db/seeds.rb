@@ -8,17 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-require 'rails_helper'
-
 user = User.where(email: "neonwatty@gmail.com").first_or_initialize
 user.update!(
   password: "password",
   password_confirmation: "password"
 )
-
-upload = Upload.new
-upload.file.attach(
-  io: File.open(Rails.root.join('test/fixtures/files/cover_image.jpeg')),
-  filename: 'cover_image.jpeg'
-)
-upload.save!

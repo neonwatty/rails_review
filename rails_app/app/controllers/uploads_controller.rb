@@ -4,6 +4,7 @@ class UploadsController < ApplicationController
 
   def index
     @uploads = Upload.all
+    @pagy, @uploads = pagy(@uploads)
   end
 
   def show

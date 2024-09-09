@@ -1,4 +1,6 @@
 class ReceiverStatusController < ApplicationController
+  include StatusHelper
+
   # Ensuring this action can handle JSON requests
   protect_from_forgery except: :update
   skip_before_action :verify_authenticity_token, only: :update
@@ -34,6 +36,19 @@ class ReceiverStatusController < ApplicationController
       # Update the status record with the lambda's return value
       status_record.update(lambda_function => status)
 
+      # check complete status
+      status_class = status_message_value(upload_id)
+      if status_class
+        begin
+          upload = Upload.find(upload_id)
+          upload.update(process_complete: true)
+        rescue ActiveRecord::RecordNotFound
+          # Handle the case where the upload is not found
+          Rails.logger.error "Upload with ID #{upload_id} not found"
+        end
+      end
+
+      # return render
       if status_record.save
         render json: { message: 'Status updated successfully' }, status: :ok
       else

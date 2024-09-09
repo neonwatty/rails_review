@@ -1,0 +1,16 @@
+
+.pagy-nav {
+  @apply flex items-center space-x-2;
+}
+
+.pagy-nav a {
+  @apply px-3 py-1 border rounded-md text-blue-500;
+}
+
+.pagy-nav .active {
+  @apply bg-blue-500 text-white;
+}
+
+.pagy-nav .disabled {
+  @apply text-gray-500 cursor-not-allowed;
+}

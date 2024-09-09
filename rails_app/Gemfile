@@ -71,3 +71,5 @@ gem 'aws-sdk-lambda', '~> 1.25'
 
 gem 'pg_search'
 
+
+gem "pagy", "~> 9.0"
