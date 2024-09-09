@@ -1,60 +1,59 @@
 <%= render 'shared/nav' %>
 <%= turbo_frame_tag dom_id(@upload) do %>
-  <div class="grid grid-flow-col-dense">
-    <div class="card bg-base-150 flex-row p-10">
-      <div class="p-5">
-        <% if @upload.files.attached? %>
-          <div class="card bg-base-100 w-96 shadow-xl">
-            <figure>
-              <% input_file = @upload.files.first %>
-              <div class="w-80 h-50 object-cover">
-                <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
-              </div>
-            </figure>
-            <div class="card-body">
-              <div class="grid grid-flow-col">
-                <h2 class="card-title">Input</h2>
-                <div class="card-actions justify-end">
-                  <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
-                </div>
-              </div>
+  <div class="card bg-base-150 flex-row ga justify-center">
+    <div class="p-5">
+      <% if @upload.files.attached? %>
+        <div class="card bg-base-100 w-40 shadow-xl">
+          <figure>
+            <% input_file = @upload.files.first %>
+            <div class="w-80 h-50 object-cover">
+              <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
             </div>
-          <% else %>
-            <div class="card-body">
-              <h2 class="card-title">Input</h2>
+          </figure>
+          <h4 class="card-title text-sm font-semibold mb-4 text-center justify-center"><%= input_file.filename.to_s %></h4>
+          <div class="card-body">
+            <div class="grid grid-flow-row justify-center">
+              <h4 class="card-title">Input</h4>
               <div class="card-actions justify-end">
-                <p>No input file attached.</p>
+                <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
               </div>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% else %>
+          <div class="card-body">
+            <h2 class="card-title">Input</h2>
+            <div class="card-actions justify-end">
+              <p>No input file attached.</p>
+            </div>
+          </div>
+        <% end %>
       </div>
-      <div class="p-5">
-        <% if @upload.files.attached? && @upload.files.count > 1 %>
-          <div class="card bg-base-100 w-96 shadow-xl">
-            <figure>
-              <% output_file = @upload.files.second %>
-              <div class="w-80 object-cover">
-                <%= image_tag rails_blob_path(output_file, disposition: "inline"), alt: 'Input File thumbnail' %>
-              </div>
-            </figure>
-            <div class="card-body">
-              <div class="grid grid-flow-col">
-                <h2 class="card-title">Output</h2>
-                <div class="card-actions justify-end">
-                  <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
-                </div>
-              </div>
+    </div>
+    <div class="p-5">
+      <% if @upload.files.attached? && @upload.files.count > 1 %>
+        <div class="card bg-base-100 w-40 shadow-xl">
+          <figure>
+            <% output_file = @upload.files.second %>
+            <div class="w-80 object-cover">
+              <%= image_tag rails_blob_path(output_file, disposition: "inline"), alt: 'Input File thumbnail' %>
             </div>
-          <% else %>
-            <div class="card-body">
-              <h2 class="card-title">Output</h2>
+          </figure>
+          <div class="card-body">
+            <div class="grid grid-flow-row justify-center">
+              <h4 class="card-title">Output</h4>
               <div class="card-actions justify-end">
-                <p>No output file attached.</p>
+                <%= link_to 'Download', rails_blob_path(input_file, disposition: "attachment"), class: "btn btn-outline btn-accent" %>
               </div>
             </div>
-          <% end %>
-        </div>
+          </div>
+        <% else %>
+          <div class="card-body">
+            <h4 class="card-title">Output</h4>
+            <div class="card-actions justify-end">
+              <p>No output file attached.</p>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

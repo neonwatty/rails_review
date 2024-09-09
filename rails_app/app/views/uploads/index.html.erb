@@ -1,10 +1,13 @@
 <%= render 'shared/nav' %>
 <% if @uploads.any? %>
   <div class="hero bg-base-200">
-    <div class="hero-content flex-col gap-5">
+    <div class="flex flex-wrap gap-x-5 gap-y-10 p-10">
       <%= turbo_frame_tag "all_uploads" do %>
-        <% @uploads.each do |upload| %>
-          <div class="card bg-base-100 shadow-xl w-80">
+        <% @uploads.each_with_index do |upload, index| %>
+          <% if index > 0 %>
+            <div class="w-full h-5"></div>
+          <% end %>
+          <div class="card bg-base-100 shadow-xl w-96 p-5">
             <%= render "uploads/status_badge", upload: upload %>
             <%= render "uploads/index_card", upload: upload %>
           </div>
