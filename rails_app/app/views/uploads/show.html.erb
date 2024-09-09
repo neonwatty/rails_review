@@ -1,8 +1,7 @@
 <%= render 'shared/nav' %>
-<div class="hero bg-base-200">
+<%= turbo_frame_tag dom_id(@upload) do %>
   <div class="grid grid-flow-col-dense">
     <div class="card bg-base-150 flex-row p-10">
-      <%= render "uploads/status_badge", upload: @upload %>
       <div class="p-5">
         <% if @upload.files.attached? %>
           <div class="card bg-base-100 w-96 shadow-xl">
@@ -59,10 +58,10 @@
       </div>
     </div>
   </div>
-</div>
-<div class="flex gap-4 mt-4 justify-center">
-  <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
-  <% if @upload.user_id == current_user.id %>
-    <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
-  <% end%>
-</div>
+  <div class="flex gap-4 mt-4 justify-center">
+    <%= link_to 'Close', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    <% if @upload.user_id == current_user.id %>
+      <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
+    <% end%>
+  </div>
+<% end %>
