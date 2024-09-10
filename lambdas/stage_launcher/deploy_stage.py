@@ -3,8 +3,14 @@ import sys
 import argparse
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from s3.cors_update import update as cors_update
+from dotenv import load_dotenv
 
+# use env file from base directory - above lambdas
 current_directory = os.getcwd()
+print(f"INFO: current_directory: {current_directory}")
+dotenv_path = os.path.abspath(os.path.join(current_directory, "..", ".env"))
+print(f"INFO: dotenv path: {dotenv_path}")
+load_dotenv(dotenv_path)
 
 stages = ["test", "test-decoupled", "development", "production"]
 
