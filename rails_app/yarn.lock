@@ -27,7 +27,7 @@ culori@^3:
 
 daisyui@^4.12.10:
   version "4.12.10"
-  resolved "https://registry.npmjs.org/daisyui/-/daisyui-4.12.10.tgz"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-4.12.10.tgz#fc26b6da72c5855f4677d2f100f02e06c8e8a70f"
   integrity sha512-jp1RAuzbHhGdXmn957Z2XsTZStXGHzFfF0FgIOZj3Wv9sH7OZgLfXTRZNfKVYxltGUOBsG1kbWAdF5SrqjebvA==
   dependencies:
     css-selector-tokenizer "^0.8"

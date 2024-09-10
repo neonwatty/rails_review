@@ -20,18 +20,18 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
-development:
-  <<: *default
-  database: <%= ENV["APP_NAME_PRIVATE"] %>_development
-
 # development:
-#   adapter: postgresql
-#   encoding: unicode
-#   pool: 5
-#   url: <%= ENV["DATABASE_URL_DEVELOPMENT"] %>
-#   timeout: 5000
-#   prepared_statements: false  #  PG::DuplicatePstatement (ERROR:  prepared statement -->  one of the only ways I could get this to work - disable prepared statements
-  # statement_limit: 200 # another alternative provided by https://medium.com/@devinburnette/be-prepared-7768d1a111e1
+#   <<: *default
+#   database: <%= ENV["APP_NAME_PRIVATE"] %>_development
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  url: <%= ENV["DATABASE_URL_DEVELOPMENT"] %>
+  timeout: 5000
+  prepared_statements: false  #  PG::DuplicatePstatement (ERROR:  prepared statement -->  one of the only ways I could get this to work - disable prepared statements
+  statement_limit: 200 # another alternative provided by https://medium.com/@devinburnette/be-prepared-7768d1a111e1
 
 
 
@@ -90,8 +90,13 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  <<: *default
-  database: app_1_production
-  username: app_1
-  password: <%= ENV["APP_1_DATABASE_PASSWORD"] %>
+
+# production:
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: 5
+#   url: <%= ENV["DATABASE_URL_DEVELOPMENT"] %>
+#   timeout: 5000
+#   prepared_statements: false  #  PG::DuplicatePstatement (ERROR:  prepared statement -->  one of the only ways I could get this to work - disable prepared statements
+#   statement_limit: 200 # another alternative provided by https://medium.com/@devinburnette/be-prepared-7768d1a111e1
+

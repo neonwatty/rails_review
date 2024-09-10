@@ -25,9 +25,10 @@ module App1
     # config.eager_load_paths << Rails.root.join("extras")
 
     root = "../"
-    Dotenv.load(
-      File.join(root, ".env")
-    )
+    if defined?(Dotenv)
+      dotenv_path = File.join(root, ".env")
+      Dotenv.load(dotenv_path) if File.exist?(dotenv_path)
+    end
 
     config.lambda_api_key = ENV["LAMBDA_API_KEY_#{Rails.env.upcase}"]
   end
