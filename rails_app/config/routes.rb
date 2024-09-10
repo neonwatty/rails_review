@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   
 
   # search route
-  get 'search', to: 'uploads#search', as: :search
+  get 'search_page', to: 'uploads#search_page', as: :search_page
   resources :uploads do
     collection do
       post 'search'

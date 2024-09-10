@@ -7,24 +7,19 @@ class UploadsController < ApplicationController
     @pagy, @uploads = pagy(@uploads)
   end
 
+  def search_page
+  end
+
   def search
-    @query = params[:query]
-    Rails.logger.info "Query: #{@query}"
-  
-    if @query.present?
-      @results = Upload.search_by_name(@query)
-                       .where(process_complete: true)
-                       .limit(10)
-      Rails.logger.info "Results after search: #{@results.inspect}"
-    else
-      @results = []
+    @query=params[:query]
+    @uploads = Upload.search_by_name(@query)
+    .where(process_complete: true)
+    .limit(10) || []
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update("search_results", partial: "uploads/search_results", locals: { uploads: @uploads })
+      end
     end
-  
-    @results = [] if @results.nil?
-    Rails.logger.info "Results after nil check: #{@results.inspect}"
-  
-    @pagy, @results  = @results.present? ? pagy(@results) : []
-    Rails.logger.info "Pagy results: #{@results.inspect}"
   end
 
   def show

@@ -16,9 +16,6 @@
     <%= render "uploads/status_badge", upload: upload %>
     <%= render "uploads/index_card", upload: upload %>
   <% end %>
-  <div class="pagy-nav flex my-5 mb-5 justify-center center-content">
-    <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
-  </div>
 <% else %>
-  <%= render "uploads/no_uploads" %>
+  <%= render 'uploads/no_search_results' %>
 <% end %>
