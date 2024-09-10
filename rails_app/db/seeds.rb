@@ -10,6 +10,6 @@
 
 user = User.where(email: "neonwatty@gmail.com").first_or_initialize
 user.update!(
-  password: "password",
-  password_confirmation: "password"
+  password: "FartMaster11!",
+  password_confirmation: "FartMaster11!"
 )

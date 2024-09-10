@@ -17,19 +17,26 @@ Rails.application.routes.draw do
   post 'receiver_outputs/update', to: 'receiver_outputs#update'
   patch 'receiver_outputs/update', to: 'receiver_outputs#update'
   
-  # maker personal routes
-  get 'about', to: 'uploads#about', as: :about
 
   # search route
-  get 'search', to: 'uploads#search', as: :search
+  get 'search_page', to: 'uploads#search_page', as: :search_page
+  resources :uploads do
+    collection do
+      post 'search'
+    end
+  end
 
+  # maker personal routes
+  get 'home', to: 'uploads#home', as: :home
 
-  # Defines the root path route ("/")
   resources :uploads do
     member do
       get 'details_card'
     end
   end
+
+  # catch non-existant pages
+  match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 
   # define root
   root "uploads#index"

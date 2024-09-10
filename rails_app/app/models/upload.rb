@@ -3,7 +3,11 @@ class Upload < ApplicationRecord
   pg_search_scope :search_by_name, against: :filename, using: { tsearch: { prefix: true } }
 
   belongs_to :user
-  has_many_attached :files
+
+  has_many_attached :files do |attachable|
+    attachable.variant :thumb, resize_to_limit: [100, 100], preprocessed: true
+  end
+
   has_one :status, dependent: :destroy
   has_one :output, dependent: :destroy
   before_save :set_filename
