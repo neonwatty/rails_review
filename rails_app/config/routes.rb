@@ -23,8 +23,6 @@ Rails.application.routes.draw do
   # search route
   get 'search', to: 'uploads#search', as: :search
 
-
-  # Defines the root path route ("/")
   resources :uploads do
     member do
       get 'details_card'
