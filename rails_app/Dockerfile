@@ -16,6 +16,21 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# Install Node.js 18.x
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+apt-get install -y nodejs && \
+# Verify Node.js installation
+node -v && \
+npm -v
+
+# Install Yarn
+RUN npm install -g yarn && \
+# Verify Yarn installation
+yarn -v
+
+# Install daisyui using Yarn
+RUN yarn add -D daisyui@latest
+
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
