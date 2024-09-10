@@ -17,11 +17,17 @@ Rails.application.routes.draw do
   post 'receiver_outputs/update', to: 'receiver_outputs#update'
   patch 'receiver_outputs/update', to: 'receiver_outputs#update'
   
-  # maker personal routes
-  get 'home', to: 'uploads#home', as: :home
 
   # search route
   get 'search', to: 'uploads#search', as: :search
+  resources :uploads do
+    collection do
+      post 'search'
+    end
+  end
+
+  # maker personal routes
+  get 'home', to: 'uploads#home', as: :home
 
   resources :uploads do
     member do
