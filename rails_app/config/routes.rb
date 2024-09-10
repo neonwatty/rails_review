@@ -39,5 +39,5 @@ Rails.application.routes.draw do
   match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 
   # define root
-  root "uploads#index"
+  root "uploads#home"
 end

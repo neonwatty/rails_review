@@ -29,7 +29,7 @@ RUN npm install -g yarn && \
 yarn -v
 
 # Install daisyui using Yarn
-RUN yarn add -D daisyui@latest
+RUN yarn add -D postcss@latest && yarn add -D daisyui@latest
 
 # Set production environment
 ENV RAILS_ENV="production" \
