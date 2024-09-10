@@ -10,7 +10,7 @@
             <div class="flex flex-col items-center mb-4 space-y-2">
               <div class="avatar">
                 <div class="mask mask-squircle h-24 w-24">
-                  <%= image_tag rails_blob_path(input_file, disposition: "inline"), alt: 'Input File thumbnail' %>
+                  <%= image_tag input_file.variant(:thumb) %>
                 </div>
               </div>
               <% if upload.files.count > 1 %>
