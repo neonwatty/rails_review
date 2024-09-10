@@ -18,8 +18,7 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <main class="">
-      <%= yield %>
-    </main>
+    <%= render partial: "shared/notifications", locals: {message: flash[:notice]}%>
+    <%= yield %>
   </body>
 </html>

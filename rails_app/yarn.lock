@@ -57,7 +57,7 @@ postcss-js@^4:
   dependencies:
     camelcase-css "^2.0.1"
 
-postcss@^8.4.21, postcss@^8.4.45:
+postcss@^8.4.45:
   version "8.4.45"
   resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.45.tgz"
   integrity sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==
