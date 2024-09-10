@@ -20,11 +20,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
-# development:
-#   <<: *default
-#   database: <%= ENV["APP_NAME_PRIVATE"] %>_development
-
 development:
+  <<: *default
+  database: <%= ENV["APP_NAME_PRIVATE"] %>_development
+
+production:
   adapter: postgresql
   encoding: unicode
   pool: 5
