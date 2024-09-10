@@ -6,7 +6,7 @@
         <%= form.search_field :query, data: {action: "input->debounce#search"}, placeholder: 'Enter search terms', class: "search-input-field" %>
       <% end %>
     </div>
-    <div id="search_results" class="flex flex-col gap-x-5 gap-y-10 p-10">
+    <div id="search_results" class="flex-col gap-x-5 gap-y-10 p-10"">
       <%= render "uploads/no_search" %>
     </div>
   </div>

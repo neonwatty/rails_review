@@ -17,8 +17,12 @@ class UploadsController < ApplicationController
     .limit(10) || []
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.update("search_results", partial: "uploads/search_results", locals: { uploads: @uploads })
-      end
+          if @query.blank?
+            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/no_search")
+          else
+            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/search_results", locals: { uploads: @uploads })
+          end
+        end
     end
   end
 
