@@ -18,8 +18,9 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <main class="">
-      <%= yield %>
-    </main>
+    <% flash.each do |key, message| %>
+      <%= render partial: "shared/notifications", locals: {key: key, message: message} %>
+    <% end %>
+    <%= yield %>
   </body>
 </html>
