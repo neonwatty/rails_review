@@ -72,9 +72,10 @@ COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
 # pin add ons
-RUN bin/importmap pin dropzone
-RUN bin/importmap pin @rails/activestorage
-RUN bin/importmap pin @stimulus-components/notification
+# RUN bin/importmap pin dropzone
+# RUN bin/importmap pin @rails/activestorage
+# RUN bin/importmap pin @stimulus-components/notification
+RUN ./bin/importmap
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
