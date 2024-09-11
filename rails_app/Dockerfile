@@ -31,11 +31,6 @@ yarn -v
 # Install daisyui using Yarn
 RUN yarn add -D postcss@latest && yarn add -D daisyui@latest
 
-# pin add ons
-RUN bin/importmap pin dropzone
-RUN bin/importmap pin @rails/activestorage
-RUN bin/importmap pin @stimulus-components/notification
-
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
@@ -74,6 +69,11 @@ FROM base
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
+
+# pin add ons
+RUN bin/importmap pin dropzone
+RUN bin/importmap pin @rails/activestorage
+RUN bin/importmap pin @stimulus-components/notification
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
