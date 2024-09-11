@@ -35,8 +35,7 @@ RUN yarn add -D postcss@latest && yarn add -D daisyui@latest
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development" \
-    RAILS_HOST_PRODUCTION="https://rails-template-8wge.onrender.com"
+    BUNDLE_WITHOUT="development"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
