@@ -24,8 +24,8 @@ module App1
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    root = "../"
     if defined?(Dotenv)
+      root = "../"
       dotenv_path = File.join(root, ".env")
       Dotenv.load(dotenv_path) if File.exist?(dotenv_path)
     end
