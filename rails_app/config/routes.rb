@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   end
 
   # catch non-existant pages
-  match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
+  # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 
   # define root
   root "uploads#home"
