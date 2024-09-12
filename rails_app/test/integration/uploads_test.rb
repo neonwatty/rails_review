@@ -11,12 +11,11 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  test "test 1: should access the index page" do
-    # Visit the index page (replace 'index_path' with your actual path)
-    get "/uploads"
+  test "test 1: should access the home page" do
+    get "/home"
     assert_response :success
-    expected_message = "Welcome to #{ENV['APP_NAME_PUBLIC']}"
-    assert_select 'h1', expected_message
+    expected_message = "Welcome to the #{ENV['APP_NAME_PUBLIC']}"
+    assert_select 'h2', expected_message
   end
 
   test "test 2: can create an upload" do
@@ -36,8 +35,12 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to upload_path(Upload.last)
     assert_not_nil flash[:notice]
 
+    # assert upload process_complete is false
+    upload = Upload.last
+    assert_not upload.process_complete, "process_complete in upload is not false before upload"
+
     # sleep for X secs and query for status completion
-    sleep(45)
+    sleep(30)
     status_record = Status.find_by(upload_id: Upload.last)
     final_status = { start: status_record.receiver_start, preprocess: status_record.receiver_preprocess, process: status_record.receiver_process }
 
@@ -48,6 +51,10 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
 
     # Assert that the ActiveStorage blobs count is 2
     assert_equal 2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
+
+    # assert process_complete field in upload is now true
+    upload = Upload.last
+    assert upload.process_complete, "process_complete in upload is not true after status updates"
   end
 
 end

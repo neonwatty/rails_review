@@ -7,4 +7,5 @@
 one:
   id: 1
   email: "neonwatty@gmail.com"
-  encrypted_password: "<%= Devise::Encryptor.digest(User, 'password') %>"
+  encrypted_password: "<%= Devise::Encryptor.digest(User, 'password123') %>"
+  confirmed_at: "2024-09-12 12:34:56"

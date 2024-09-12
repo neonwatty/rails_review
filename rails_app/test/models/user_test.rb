@@ -32,11 +32,10 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.save
   end
 
-  test "should not create a new use with the same password as anotherr" do
+  test "users can have the same password" do
     user = User.new(email: "user3@example.com", password: "password", password_confirmation: "password")
     assert user.save
-
     user = User.new(email: "user4@example.com", password: "password", password_confirmation: "password")
-    assert_not user.save
+    assert user.save
   end
 end
