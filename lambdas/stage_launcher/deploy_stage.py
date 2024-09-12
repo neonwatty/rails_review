@@ -2,7 +2,6 @@ import os
 import sys
 import argparse
 from tests.utilities.execute_subprocess import execute_subprocess_command
-from s3.cors_update import update as cors_update
 from dotenv import load_dotenv
 
 # use env file from base directory - above lambdas
@@ -42,8 +41,16 @@ def deploy_receives(stage: str = "development"):
 
     # prepare to update cors policy on bucket
     if stage != "test-decoupled":
+        from s3.cors_update import update as cors_update
+
+        print(f"aws_profile --> {os.environ["AWS_PROFILE"]}")
+
         bucket_to_update = f"{os.environ["APP_NAME_PRIVATE"]}-{stage}"
+        print(f"bucket_to_update --> {bucket_to_update}")
+
         host_name = os.environ[f"RAILS_HOST_{stage.upper()}"]
+        print(f"host_name --> {host_name}")
+
         val = cors_update(bucket_to_update, host_name)
         assert val is True, f"FAILURE: failed to update cors on bucket {bucket_to_update}"
 
