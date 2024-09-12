@@ -32,6 +32,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     end
     
     # ensure redirect
+    upload_id = Upload.last.id
     assert_redirected_to details_card_upload_path(Upload.last)
     assert_not_nil flash[:notice]
 
@@ -47,6 +48,10 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
 
     # Assert that the ActiveStorage blobs count is 2
     assert_equal 2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
+
+    # assert process_complete field in upload is now true
+    check_upload = Upload.find(upload_id)
+    assert check_upload.process_complete, "upload process_complete was not set to true"
   end
 
 end
