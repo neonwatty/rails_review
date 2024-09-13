@@ -44,4 +44,14 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     assert_match /<turbo-stream/, @response.body
   end
 
+  test "test_8: search_items failure (:source==not-form provided)" do
+    post search_items_uploads_path, params: @invalid_source_query_params, as: :turbo_stream
+    assert_redirected_to root_path
+  end
+
+  test "test_9: search_items failure (:source not provided)" do
+    post search_items_uploads_path, params: @invalid_nosource_query_params, as: :turbo_stream
+    assert_redirected_to root_path
+  end
+
 end

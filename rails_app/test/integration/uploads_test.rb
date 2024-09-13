@@ -28,12 +28,12 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     # upload file
     assert_difference('Upload.count') do
       post uploads_path, params: { upload: { files: fixture_file_upload('cover_image.jpeg') } }
-      assert_redirected_to details_card_upload_path(Upload.last)
+      assert_redirected_to upload_path(Upload.last)
     end
     
     # ensure redirect
     upload_id = Upload.last.id
-    assert_redirected_to uploads_path(Upload.last)
+    assert_redirected_to upload_path(Upload.last)
     assert_not_nil flash[:notice]
 
     # sleep for X secs and query for status completion
