@@ -39,8 +39,9 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "test_7: search_items success (:source==form provided)" do
-    post search_items_uploads_path, params: @valid_query_params
+    post search_items_uploads_path, params: @valid_query_params, as: :turbo_stream
     assert_response :success
+    assert_match /<turbo-stream/, @response.body
   end
 
 end
