@@ -19,12 +19,13 @@ Rails.application.routes.draw do
   
 
   # search route
-  resources :uploads do
+  get 'search', to: 'uploads#search'
+  resources :uploads, except: [:update, :edit] do
     collection do
-      post 'search'
-      get 'search_page'
+      post 'search_items', to: 'uploads#search_items', as: :search_items
     end
   end
+
 
   # catch non-existant pages
   # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile

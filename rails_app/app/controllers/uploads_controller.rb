@@ -1,6 +1,6 @@
 class UploadsController < ApplicationController
-  before_action :set_upload, only: %i[show edit update destroy]
-  before_action :authenticate_user!, only: %i[show new create edit update destroy]
+  before_action :set_upload, only: %i[show destroy]
+  before_action :authenticate_user!, only: %i[show new create destroy]
 
   def index
     @uploads = Upload.all
@@ -26,28 +26,15 @@ class UploadsController < ApplicationController
     end
   end
 
-  def edit
-  end
-
-  def update
-    @upload = Upload.find(params[:user_id])
-    @upload.files.attach(params[:processed_image_key])
-    if @upload.save
-      redirect_to @upload, notice: 'Update was successfully created.'
-    else
-      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
   def destroy
     @upload.destroy
     redirect_to uploads_url, notice: 'Upload was successfully destroyed.'
   end
 
-  def search_page
+  def search
   end
 
-  def search
+  def search_uploads
     @query=params[:query]
     @uploads = Upload.search_by_name(@query)
     .where(process_complete: true)
