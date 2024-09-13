@@ -1,6 +1,7 @@
 class UploadsController < ApplicationController
   before_action :set_upload, only: %i[show destroy]
   before_action :authenticate_user!, only: %i[show new create destroy]
+  before_action :check_request_from_form, only: [:search_items]
 
   def index
     @uploads = Upload.all
@@ -34,7 +35,7 @@ class UploadsController < ApplicationController
   def search
   end
 
-  def search_uploads
+  def search_items
     @query=params[:query]
     @uploads = Upload.search_by_name(@query)
     .where(process_complete: true)
@@ -51,6 +52,13 @@ class UploadsController < ApplicationController
   end
 
   private
+
+  def check_request_from_form
+    unless request.post? && params[:source] == 'form'
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
+  end
 
   def set_upload
     @upload = Upload.find(params[:id])

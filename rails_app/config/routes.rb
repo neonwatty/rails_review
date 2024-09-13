@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get 'search', to: 'uploads#search'
   resources :uploads, except: [:update, :edit] do
     collection do
-      post 'search_items', to: 'uploads#search_items', as: :search_items
+      post 'search_items', to: 'uploads#search_items'
     end
   end
 

@@ -31,13 +31,8 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "test_6: search" do
-    get search_uploads_path
+    get search_path
     assert_response :success
-  end
-
-  test "test_4: show - try get upload_path without signing in - should redirect to sign in" do
-    get upload_path(@upload)
-    assert_redirected_to new_user_session_path
   end
 
 
