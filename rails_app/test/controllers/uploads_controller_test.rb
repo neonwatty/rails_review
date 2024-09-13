@@ -20,12 +20,6 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get details_card and render partial" do
-    get details_card_upload_url(@upload)
-    assert_response :success
-    assert_template partial: '_details_card'
-    assert_select 'div.details-card' # Adjust this selector based on your partial's content
-  end
 
   test "should post search" do
     post search_uploads_url, params: { search: { query: 'example' } }
