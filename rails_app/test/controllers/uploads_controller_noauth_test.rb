@@ -6,22 +6,22 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "test_1: should get home" do
-    get home_url
+    get root_path
     assert_response :success
+  end
+
+  test "test_2: should get uploads index" do
+    get uploads_path
+    assert_response :success
+  end
+  
+  test "test_3: should get redirected on show page" do
+    get upload_path(@upload)
+    assert_redirected_to new_user_session_path
   end
 
   test "test_2: should get search_page" do
-    get search_page_url
-    assert_response :success
-  end
-
-  test "test_3: should get root" do
-    get root_url
-    assert_response :success
-  end
-
-  test "test_4: get search page" do
-    get search_page_path
+    get search_page_uploads_path
     assert_response :success
   end
 
