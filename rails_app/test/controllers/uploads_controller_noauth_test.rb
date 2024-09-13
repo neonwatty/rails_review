@@ -3,6 +3,9 @@ require 'test_helper'
 class UploadsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @upload = uploads(:one)
+    @valid_query_params = { query: "test query", source: "form" }
+    @invalid_source_query_params = { query: "test query", source: "not-form" }
+    @invalid_nosource_query_params = { query: "test query" }
   end
 
   test "test_1: index" do
@@ -35,5 +38,9 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "test_7: search_items success (:source==form provided)" do
+    post search_items_uploads_path, params: @valid_query_params
+    assert_response :success
+  end
 
 end

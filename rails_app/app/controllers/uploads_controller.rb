@@ -36,7 +36,7 @@ class UploadsController < ApplicationController
   end
 
   def search_items
-    @query=params[:query]
+    @query=search_params["query"]
     @uploads = Upload.search_by_name(@query)
     .where(process_complete: true)
     .limit(10) || []
@@ -66,5 +66,9 @@ class UploadsController < ApplicationController
 
   def upload_params
     params.require(:upload).permit(:files)
+  end
+
+  def search_params
+    params.permit([:query, :authenticity_token, :source, :controller, :action])
   end
 end
