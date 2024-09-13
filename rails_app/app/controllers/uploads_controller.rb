@@ -7,25 +7,6 @@ class UploadsController < ApplicationController
     @pagy, @uploads = pagy(@uploads)
   end
 
-  def search_page
-  end
-
-  def search
-    @query=params[:query]
-    @uploads = Upload.search_by_name(@query)
-    .where(process_complete: true)
-    .limit(10) || []
-    respond_to do |format|
-      format.turbo_stream do
-          if @query.blank?
-            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/no_search")
-          else
-            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/search_results", locals: { uploads: @uploads })
-          end
-        end
-    end
-  end
-
   def new
     @upload = Upload.new
   end
@@ -61,6 +42,25 @@ class UploadsController < ApplicationController
   def destroy
     @upload.destroy
     redirect_to uploads_url, notice: 'Upload was successfully destroyed.'
+  end
+
+  def search_page
+  end
+
+  def search
+    @query=params[:query]
+    @uploads = Upload.search_by_name(@query)
+    .where(process_complete: true)
+    .limit(10) || []
+    respond_to do |format|
+      format.turbo_stream do
+          if @query.blank?
+            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/no_search")
+          else
+            render turbo_stream: turbo_stream.update("search_results", partial: "uploads/search_results", locals: { uploads: @uploads })
+          end
+        end
+    end
   end
 
   private

@@ -19,19 +19,17 @@ Rails.application.routes.draw do
   
 
   # search route
-  get 'search_page', to: 'uploads#search_page', as: :search_page
   resources :uploads do
     collection do
       post 'search'
+      get 'search_page'
     end
   end
-
-  # maker personal routes
-  get 'home', to: 'uploads#home', as: :home
 
   # catch non-existant pages
   # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 
   # define root
-  root "uploads#home"
+  get 'home', to: 'home#index', as: 'home'
+  root "home#index"
 end

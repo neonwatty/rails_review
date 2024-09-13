@@ -3,7 +3,7 @@
   <div class="flex flex-col items-center justify-center">
     <div class="gap-x-5 gap-y-10 p-10">
       <%= form_with url: search_uploads_path, local: true, method: :post, data: {controller: "debounce", debounce_target: "form"} do |form| %>
-        <%= form.search_field :query, data: {action: "input->debounce#search"}, placeholder: 'search file names', class: "search-input-field" %>
+        <%= form.search_field :query, data: {action: "input->debounce#search"}, placeholder: 'search file names', class: "search-input-field", id: "search-box" %>
       <% end %>
     </div>
     <div id="search_results" class="flex-col gap-x-5 gap-y-10 p-10"">
