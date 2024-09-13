@@ -26,23 +26,20 @@ class UploadsController < ApplicationController
     end
   end
 
-  def show
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path
-  end
-
   def new
     @upload = Upload.new
   end
 
-  def details_card
+  def show
     @upload = Upload.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
   end 
 
   def create
     @upload = Upload.new(upload_params)
     if @upload.save
-      redirect_to details_card_upload_path(@upload), notice: 'Upload was successfully created.'
+      redirect_to upload_path(@upload), notice: 'Upload was successfully created.'
     else
       render :new
     end

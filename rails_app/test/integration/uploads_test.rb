@@ -33,7 +33,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     
     # ensure redirect
     upload_id = Upload.last.id
-    assert_redirected_to details_card_upload_path(Upload.last)
+    assert_redirected_to uploads_path(Upload.last)
     assert_not_nil flash[:notice]
 
     # sleep for X secs and query for status completion

@@ -29,12 +29,6 @@ Rails.application.routes.draw do
   # maker personal routes
   get 'home', to: 'uploads#home', as: :home
 
-  resources :uploads do
-    member do
-      get 'details_card'
-    end
-  end
-
   # catch non-existant pages
   # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 
