@@ -1,6 +1,6 @@
 require "application_system_test_case"
 
-class ShowTest < ApplicationSystemTestCase
+class ShowUploadTest < ApplicationSystemTestCase
   fixtures :all  
 
   setup do
