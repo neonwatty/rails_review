@@ -2,13 +2,17 @@ require "test_helper"
 
 class UploadTest < ActiveSupport::TestCase
   # Load the fixtures
-  fixtures :users
+  fixtures :all
+
+  test "check that upload has file attached" do
+      files = uploads(:one).files
+      assert files.attached?
+  end
 
   test "should not save upload without files" do
     upload = Upload.new(user: users(:one))    
     saved = upload.save
     assert_not saved, "Saved the upload without files"
-
   end
 
   test "should associate upload with user" do

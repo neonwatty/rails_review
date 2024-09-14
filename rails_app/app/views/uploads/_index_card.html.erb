@@ -1,6 +1,4 @@
 <div class="card bg-base-100 shadow-xl w-96 p-5"  id="upload_result_<%= upload.id %>">
-  <p>The value of the upload.id: <%= upload.id %></p>
-  <p>The value of the upload.files.attached is: <%= upload.files.attached? %></p>
   <% if upload.files.attached? %>
     <% input_file = upload.files.first %>
     <% if input_file.content_type.start_with?('image/') %>
