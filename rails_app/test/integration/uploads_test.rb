@@ -26,8 +26,11 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
 
   test "test 3: should create upload" do
     # upload file
+    puts Upload.last.inspect
+
     assert_difference('Upload.count') do
-      post uploads_path, params: { upload: { files: fixture_file_upload('cover_image.jpeg') } }
+      post uploads_path, params: { upload: { files: fixture_file_upload('r_l_burnside.png') } }
+      puts Upload.last.inspect
       assert_redirected_to upload_path(Upload.last)
     end
     

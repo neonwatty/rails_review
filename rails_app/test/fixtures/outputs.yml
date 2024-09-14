@@ -2,6 +2,6 @@ one:
   upload: one
   result: MyString
 
-one:
+two:
   upload: two
   result: MyString

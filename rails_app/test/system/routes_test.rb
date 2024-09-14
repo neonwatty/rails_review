@@ -68,6 +68,9 @@ class RoutesTest < ApplicationSystemTestCase
   test "non extant path should redirect to root_path" do
     visit "/non_existant_path"
     assert_current_path root_path
+
+    visit "/non_existant_path/with/multiple/segments"
+    assert_current_path root_path
   end
 
 end

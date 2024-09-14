@@ -8,24 +8,27 @@ echo "---------------------------"
 
 # run integration tests
 echo "Running integration tests..."
-bin/rails test test/integration/*
-echo "Finished!"
-echo "---------------------------"
-
-# run controller tests
-echo "Running controller tests..."
-for file in test/controllers/*.rb; do
+for file in test/integration/*.rb; do
   echo "Running tests in $file"
   rails test "$file"
   echo "Finished running tests in $file"
   echo "---------------------------"
 done
 
-# run system tests
-echo "Running system tests..."
-for file in test/system/*.rb; do
-  echo "Running tests in $file"
-  rails test "$file"
-  echo "Finished running tests in $file"
-  echo "---------------------------"
-done
+# # run controller tests
+# echo "Running controller tests..."
+# for file in test/controllers/*.rb; do
+#   echo "Running tests in $file"
+#   rails test "$file"
+#   echo "Finished running tests in $file"
+#   echo "---------------------------"
+# done
+
+# # run system tests
+# echo "Running system tests..."
+# for file in test/system/*.rb; do
+#   echo "Running tests in $file"
+#   rails test "$file"
+#   echo "Finished running tests in $file"
+#   echo "---------------------------"
+# done

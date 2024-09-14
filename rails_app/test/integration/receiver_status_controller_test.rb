@@ -3,12 +3,12 @@ require 'test_helper'
 class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
 
   test 'test_1: should update status with valid data' do
-    # Valid JSON payload
+    @upload = uploads(:one)
     payload = {
       receiver_status: {
         lambda: 'receiver_start',
         user_id: 1,
-        upload_id: 1,
+        upload_id: @upload.id,
         status: 'complete'
       }
     }
@@ -26,16 +26,17 @@ class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
     assert_equal JSON.parse(response.body)['message'], 'Status updated successfully'
 
     # Assert the status record is updated
-    assert_equal Status.find(1).receiver_start, 'complete'
+    assert_equal Status.find(@upload.id).receiver_start, 'complete'
 
   end
 
   test 'test_2: should return error for invalid status' do
+    @upload = uploads(:one)
     payload = {
       receiver_status: {
         lambda: 'receiver_start',
         user_id: 1,
-        upload_id: 1,
+        upload_id: @upload.id,
         status: 'invalid_status'
       }
     }
@@ -51,11 +52,12 @@ class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should return error for invalid lambda function' do
+    @upload = uploads(:one)
     payload = {
       receiver_status: {
         lambda: 'invalid_lambda',
         user_id: 1,
-        upload_id: 1,
+        upload_id: @upload.id,
         status: 'complete'
       }
     }
@@ -91,11 +93,12 @@ class ReceiverStatusControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should return unauthorized for missing API key' do
+    @upload = uploads(:one)
     payload = {
       receiver_status: {
         lambda: 'receiver_start',
         user_id: 1,
-        upload_id: 1,
+        upload_id: @upload.id,
         status: 'complete'
       }
     }
