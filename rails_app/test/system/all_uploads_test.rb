@@ -5,7 +5,6 @@ class AllUploadsTest < ApplicationSystemTestCase
 
   setup do
     @user = users(:one)
-    sign_in @user
 
     @upload = uploads(:two)
   end
@@ -24,7 +23,8 @@ class AllUploadsTest < ApplicationSystemTestCase
   test "test_3: check that details from upload not accessible if not logged in" do
     visit uploads_path
     assert_selector "#navbar"
-    assert_selector "#all-upload-results"
+    save_screenshot("screenshots/#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.png")
+    assert_selector "#all-uploads-results"
     # visit root_path
 
     # dynamic_id = "upload_result_#{@upload.id}"
