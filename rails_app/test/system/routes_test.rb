@@ -63,7 +63,11 @@ class RoutesTest < ApplicationSystemTestCase
     sign_in @user
     visit root_path
     assert_selector "button", text: "Log out"
+  end
 
+  test "non extant path should redirect to root_path" do
+    visit "/non_existant_path"
+    assert_current_path root_path
   end
 
 end

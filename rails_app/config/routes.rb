@@ -18,19 +18,22 @@ Rails.application.routes.draw do
   patch 'receiver_outputs/update', to: 'receiver_outputs#update'
   
 
-  # search route
+  # Define root path
+  root "home#index"
+
+  # Route for 'home' page
+  get 'home', to: 'home#index', as: 'home'
+
+  # Search route
   get 'search', to: 'uploads#search'
+
+  # Resources for 'uploads' with custom collection route
   resources :uploads, except: [:update, :edit] do
     collection do
-      post 'search_items', to: 'uploads#search_items'
+      post 'search_items'
     end
   end
 
-
-  # catch non-existant pages
-  # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
-
-  # define root
-  get 'home', to: 'home#index', as: 'home'
-  root "home#index"
+  # Catch-all route for non-existent pages, to be used unless assets are being compiled
+  match '*path', to: 'application#not_found', via: :all 
 end
