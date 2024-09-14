@@ -20,3 +20,12 @@ for file in test/controllers/*.rb; do
   echo "Finished running tests in $file"
   echo "---------------------------"
 done
+
+# run system tests
+echo "Running system tests..."
+for file in test/system/*.rb; do
+  echo "Running tests in $file"
+  rails test "$file"
+  echo "Finished running tests in $file"
+  echo "---------------------------"
+done

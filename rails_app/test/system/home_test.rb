@@ -5,8 +5,9 @@ class HomeTest < ApplicationSystemTestCase
     @user = users(:one)
   end
 
-  test "test_1: not logged in user sees menu links" do
+  test "test_1: nav links show to non-logged in user - home page" do
     visit root_url
+    assert_selector '#navbar'
     assert_link "Home", href: root_path
     assert_link "Search", href: search_path
     assert_link "All uploads", href: uploads_path
@@ -17,9 +18,10 @@ class HomeTest < ApplicationSystemTestCase
     assert_no_link "Profile", href: edit_user_registration_path
   end
 
-  test "test_2: logged in user sees menu links" do
+  test "test_2: nav links show to logged in user - home page" do
     sign_in @user
     visit root_url
+    assert_selector '#navbar'
     assert_link "Home", href: root_path
     assert_link "Search", href: search_path
     assert_link "All uploads", href: uploads_path
