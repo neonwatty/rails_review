@@ -2,7 +2,7 @@
 <div class="hero bg-base-200">
   <div class="flex-col gap-x-5 gap-y-10 p-10">
     <%= render "uploads/status_badge", upload: @upload %>
-    <div class="card bg-base-100 shadow-xl w-96 p-5">
+    <div class="card bg-base-100 shadow-xl w-96 p-5" id="upload_details_<%= @upload.id %>">
       <div class="card bg-base-150 flex-row ga justify-center">
         <div class="p-5">
           <% if @upload.files.attached? %>
