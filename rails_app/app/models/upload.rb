@@ -16,10 +16,17 @@ class Upload < ApplicationRecord
   after_create :create_output
 
   validates :files, presence: true
-  before_validation :set_default_user, if: -> { user_id.nil? }
   after_commit :check_and_invoke_lambda, on: :create
 
+  before_destroy :purge_attachments
+
+
   private
+  
+  def purge_attachments
+    files.purge
+  end
+
   def set_filename
     if files.attached? && !files_attached
       if files.count == 1
@@ -38,10 +45,6 @@ class Upload < ApplicationRecord
         update(files_attached: true)
       end
     end
-  end
-
-  def set_default_user
-    self.user = User.find(1)
   end
   def create_status
     Status.create(upload: self)

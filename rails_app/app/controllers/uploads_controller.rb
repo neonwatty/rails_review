@@ -19,9 +19,7 @@ class UploadsController < ApplicationController
   end 
 
   def create
-    puts upload_params
-    @upload = Upload.new(upload_params)
-    puts @upload.inspect
+    @upload = current_user.uploads.build(upload_params)
     if @upload.save
       redirect_to upload_path(@upload), notice: 'Upload was successfully created.'
     else

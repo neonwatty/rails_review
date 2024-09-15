@@ -25,12 +25,12 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "test 3: should create upload" do
-    # upload file
-    puts Upload.last.inspect
+    # get current blob count in active storage
+    current_blob_count = ActiveStorage::Blob.count
 
+    # post to create upload
     assert_difference('Upload.count') do
-      post uploads_path, params: { upload: { files: fixture_file_upload('r_l_burnside.png') } }
-      puts Upload.last.inspect
+      post uploads_path, params: { upload: { files: fixture_file_upload('r_l_burnside.png', 'image/png') } }
       assert_redirected_to upload_path(Upload.last)
     end
     
@@ -50,11 +50,19 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_equal 'complete', final_status[:process], "Expected 'complete' for receiver_process but got #{final_status[:process]}"
 
     # Assert that the ActiveStorage blobs count is 2
-    assert_equal 2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
+    assert_equal current_blob_count+2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
 
     # assert process_complete field in upload is now true
     check_upload = Upload.find(upload_id)
     assert check_upload.process_complete, "upload process_complete was not set to true"
-  end
 
+    # destroy the upload and all active storage blobs
+    assert_difference('Upload.count', -1) do
+      delete upload_path(upload_id)
+    end
+
+    # Assert that the ActiveStorage blobs count is back to the original count
+    # assert_equal current_blob_count, ActiveStorage::Blob.count, "Expected #{current_blob_count} blobs but found #{ActiveStorage::Blob.count}"
+
+  end
 end
