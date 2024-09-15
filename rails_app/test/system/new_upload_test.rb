@@ -36,32 +36,34 @@ class NewUploadTest < ApplicationSystemTestCase
 
     # Wait for the file input to be visible
     sleep 1
-
+    
     # click on the file input
     attach_file('upload[files]', Rails.root + 'test/fixtures/files/r_l_burnside.png')
-
-    # print out the root to test file
-    puts Rails.root + 'test/fixtures/files/r_l_burnside.png'  
 
     # submit the form
     click_button 'Submit'
 
     # sleep for 5 seconds
     sleep 5
-    
-    # refresh the page
-    visit current_path
 
     # assert redirect to show page
     assert_current_path upload_path(Upload.last)
 
-    sleep 30
+    sleep 15
 
     # assert that the ActiveStorage blobs count is 2 more than the original count
     assert_equal 2, ActiveStorage::Blob.count - original_blob_count
 
     # assert that the ActiveStorage attachments count is 1 more than the original count
     assert_equal 2, ActiveStorage::Attachment.count - original_attachment_count
+
+    # print details of all uploads, status, and blobs
+    puts "Upload.all: #{Upload.all.inspect}"
+    puts "Status.all: #{Status.all.inspect}"
+    puts "ActiveStorage::Blob.all: #{ActiveStorage::Blob.all.inspect}"
+
+    ### STOPPED HERE  - LOOK AT SCREENSHOT, IMAGE NOT SHOWING UP ###
+    ### WE SHOULD ASSERT THAT BOTH BEFORE / AFTER IMAGES ARE SHOWING UP ### 
 
     # assert that upload process_complete is true
     assert_equal true, Upload.last.process_complete
