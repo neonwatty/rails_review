@@ -49,8 +49,8 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_equal 'complete', final_status[:preprocess], "Expected 'complete' for receiver_preprocess but got #{final_status[:preprocess]}"
     assert_equal 'complete', final_status[:process], "Expected 'complete' for receiver_process but got #{final_status[:process]}"
 
-    # Assert that the ActiveStorage blobs count is 2
-    assert_equal current_blob_count+2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
+    # Assert that the ActiveStorage blobs count is 4
+    assert_equal current_blob_count+4, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
 
     # assert process_complete field in upload is now true
     check_upload = Upload.find(upload_id)
@@ -62,7 +62,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     end
 
     # Assert that the ActiveStorage blobs count is back to the original count
-    # assert_equal current_blob_count, ActiveStorage::Blob.count, "Expected #{current_blob_count} blobs but found #{ActiveStorage::Blob.count}"
+    assert_equal current_blob_count, ActiveStorage::Blob.count, "Expected #{current_blob_count} blobs but found #{ActiveStorage::Blob.count}"
 
   end
 end

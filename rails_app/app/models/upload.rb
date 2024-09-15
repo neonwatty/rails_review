@@ -18,14 +18,7 @@ class Upload < ApplicationRecord
   validates :files, presence: true
   after_commit :check_and_invoke_lambda, on: :create
 
-  before_destroy :purge_attachments
-
-
   private
-  
-  def purge_attachments
-    files.purge
-  end
 
   def set_filename
     if files.attached? && !files_attached
