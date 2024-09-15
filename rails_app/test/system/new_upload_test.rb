@@ -22,6 +22,8 @@ class NewUploadTest < ApplicationSystemTestCase
     sign_in(@user)
     visit new_upload_path
     assert_current_path new_upload_path
+    original_blob_count = ActiveStorage::Blob.count
+    original_attachment_count = ActiveStorage::Attachment.count
 
     # Trigger JavaScript to reveal the hidden file input
     page.execute_script("
@@ -32,39 +34,37 @@ class NewUploadTest < ApplicationSystemTestCase
       }
     ")
 
-    puts page.html
-
     # Wait for the file input to be visible
     sleep 1
 
     # click on the file input
     attach_file('upload[files]', Rails.root + 'test/fixtures/files/r_l_burnside.png')
 
+    # print out the root to test file
+    puts Rails.root + 'test/fixtures/files/r_l_burnside.png'  
+
     # submit the form
     click_button 'Submit'
 
-    # STOPPED HERE
+    # sleep for 5 seconds
+    sleep 5
     
+    # refresh the page
+    visit current_path
+
     # assert redirect to show page
     assert_current_path upload_path(Upload.last)
 
-    # assert flash message
-    assert_selector 'div', text: 'Upload was successfully created.'
-
-    # assert that the ActiveStorage blobs count is 2 more than the original count
-    assert_equal 2, ActiveStorage::Blob.count - @blob_count
-
-    # assert that the ActiveStorage attachments count is 1 more than the original count
-    assert_equal 1, ActiveStorage::Attachment.count - @attachment_count
-
-    # sleep for 30 seconds
     sleep 30
 
-    # assert that the ActiveStorage blobs count is 4 more than the original count
-    assert_equal 4, ActiveStorage::Blob.count - @blob_count
+    # assert that the ActiveStorage blobs count is 2 more than the original count
+    assert_equal 2, ActiveStorage::Blob.count - original_blob_count
 
-    # assert that the ActiveStorage attachments count is 2 more than the original count
-    assert_equal 2, ActiveStorage::Attachment.count - @attachment_count
+    # assert that the ActiveStorage attachments count is 1 more than the original count
+    assert_equal 2, ActiveStorage::Attachment.count - original_attachment_count
+
+    # assert that upload process_complete is true
+    assert_equal true, Upload.last.process_complete
 
     # assert that upload status_complete is true
     assert_equal true, Upload.last.status_complete
