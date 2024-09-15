@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class NewUploadTest < ApplicationSystemTestCase
   fixtures :all  
-
+  
   setup do
     @user = users(:one)
   end
