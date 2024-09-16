@@ -1,4 +1,4 @@
-name: aws checks
+name: aws tests
 
 on:
   pull_request:

@@ -1,0 +1,39 @@
+name: rails tests
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - 'rails_app/**'
+    paths-ignore:
+      - '**/README.md'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1 # Replace with your Ruby version
+
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install
+
+    - name: Set up database
+      run: |
+        cp config/database.yml.github config/database.yml
+        bundle exec rake db:create
+        bundle exec rake db:migrate
+        bundle exec rake db:test:prepare
+
+    - name: Run tests
+      run: |
+        bundle exec rspec # Or `bundle exec rails test` for Minitest
