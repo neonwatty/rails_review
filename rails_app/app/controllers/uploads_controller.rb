@@ -1,4 +1,6 @@
 class UploadsController < ApplicationController
+  rate_limit to: 20, within: 1.minute, only: [:index], with: -> {redirect_to root_path, alert: 'Too many requests. Please try again'}
+
   before_action :set_upload, only: %i[show destroy]
   before_action :authenticate_user!, only: %i[show new create destroy]
   before_action :check_request_from_form, only: [:search_items]
