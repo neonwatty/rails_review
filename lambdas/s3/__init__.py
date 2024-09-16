@@ -1,6 +1,7 @@
 import os
 import boto3
 from dotenv import load_dotenv
+
 current_directory = os.getcwd()
 print(f"INFO: s3 current_directory: {current_directory}")
 dotenv_path = os.path.abspath(os.path.join(current_directory, "..", ".env"))

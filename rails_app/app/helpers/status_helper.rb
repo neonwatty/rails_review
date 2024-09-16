@@ -8,11 +8,11 @@ module StatusHelper
     receiver_preprocess = status_record.receiver_preprocess
     receiver_process = status_record.receiver_process
 
-    if [receiver_start, receiver_preprocess, receiver_process].all? { |status| status == "complete" }
+    if [ receiver_start, receiver_preprocess, receiver_process ].all? { |status| status == "complete" }
       0  # All steps are complete
-    elsif [receiver_start, receiver_preprocess, receiver_process].any? { |status| status == "failed" }
+    elsif [ receiver_start, receiver_preprocess, receiver_process ].any? { |status| status == "failed" }
       1  # At least one step has failed
-    elsif [receiver_start, receiver_preprocess, receiver_process].any? { |status| status == "pending" }
+    elsif [ receiver_start, receiver_preprocess, receiver_process ].any? { |status| status == "pending" }
       2  # Some steps are pending but none have failed
     else
       2  # Default to 2 (warning) status

@@ -2,7 +2,7 @@ import os
 from receivers import s3_client
 from sqs.messages.message_create import message_create
 from decorators.warmer import warmer
-from receivers.utilities.create_io_dir import local_input_file_path, local_output_file_path
+from receivers.utilities.create_io_dir import local_input_file_path
 
 APP_NAME_PRIVATE = os.environ["APP_NAME_PRIVATE"]
 STAGE = os.environ["STAGE"]
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
             # send status update to queue
             status = {"lambda": "receiver_start", "user_id": user_id, "upload_id": upload_id, "status": "fail"}
             response = message_create(STATUS_QUEUE, status)
-        except:
+        except:  # noqa E722
             pass
 
         failure_message = str(e)

@@ -34,23 +34,25 @@ test_file_path = "tests/test_files/blank.jpg"
 
 @pytest.fixture(scope="module")
 def build_deploy():
-    # build image
-    print("INFO: starting image building process...")
-    command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
-    stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-    print("INFO: ...complete!")
+    # no build / deploy on github yet
+    if os.getenv('GITHUB_ACTIONS') is False:
+        # build image
+        print("INFO: starting image building process...")
+        command = ["bash", "build_image.sh", STAGE, RECEIVER_NAME]
+        stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
+        print("INFO: ...complete!")
 
-    # deploy image
-    print("INFO: starting image deploy process...")
-    command = ["bash", "deploy_image.sh", STAGE, RECEIVER_NAME]
-    stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
-    print("INFO: ...complete!")
+        # deploy image
+        print("INFO: starting image deploy process...")
+        command = ["bash", "deploy_image.sh", STAGE, RECEIVER_NAME]
+        stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas/build_deploy_scripts")
+        print("INFO: ...complete!")
 
-    # deploy lambdas
-    print("INFO: starting service deploy process...")
-    command = ["bash", "adjust_functions.sh", "deploy", STAGE, SERVERLESS_NAME]
-    stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas")
-    print("INFO: ...complete!")
+        # deploy lambdas
+        print("INFO: starting service deploy process...")
+        command = ["bash", "adjust_functions.sh", "deploy", STAGE, SERVERLESS_NAME]
+        stdout = execute_subprocess_command(command, cwd=current_directory + "/lambdas")
+        print("INFO: ...complete!")
 
 
 def test_success(build_deploy, subtests):

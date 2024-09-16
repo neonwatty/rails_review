@@ -45,14 +45,14 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: ENV["RAILS_HOST_DEVELOPMENT"].sub("https://", ""), protocol: "https" }
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :letter_opener #:smtp
+  config.action_mailer.delivery_method = :letter_opener # :smtp
   config.action_mailer.smtp_settings = {
-    address:         'smtp.gmail.com',
+    address:         "smtp.gmail.com",
     port:            587,
     domain:          ENV["RAILS_HOST_DEVELOPMENT"].sub("https://", ""),
     user_name:       "#{ENV['GMAIL_USER_NAME']}",
     password:        "#{ENV['GMAIL_APP_PASSWORD']}",
-    authentication:  'plain',
+    authentication:  "plain",
     enable_starttls: true,
     open_timeout:    5,
     read_timeout:    5 }
@@ -101,6 +101,4 @@ Rails.application.configure do
   "localhost",                    # The localhost reserved domain.
   ENV["RAILS_HOST_DEVELOPMENT"].sub("https://", "")  # Additional comma-separated hosts for development.
 ]
-
 end
-

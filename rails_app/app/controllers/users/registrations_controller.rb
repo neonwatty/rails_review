@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-  rate_limit to: 10, within: 5.minutes, only: [:create], with: -> {redirect_to root_path, alert: 'Too many registration attempts. Please try again'}
+  rate_limit to: 10, within: 5.minutes, only: [ :create ], with: -> { redirect_to root_path, alert: "Too many registration attempts. Please try again" }
 
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]

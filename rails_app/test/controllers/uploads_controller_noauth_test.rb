@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UploadsControllerTest < ActionDispatch::IntegrationTest
   def setup
@@ -17,7 +17,7 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     get new_upload_path
     assert_redirected_to new_user_session_path
   end
-  
+
   test "test_3: show - uploads_controller_noauth_test" do
     get upload_path(@upload)
     assert_redirected_to new_user_session_path
@@ -53,5 +53,4 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     post search_items_uploads_path, params: @invalid_nosource_query_params, as: :turbo_stream
     assert_redirected_to root_path
   end
-
 end

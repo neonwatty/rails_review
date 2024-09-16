@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.1"
 # use dotenv
-gem 'dotenv', groups: [:development, :test, :production]
+gem "dotenv", groups: [ :development, :test, :production ]
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use postgresql as the database for Active Record
@@ -54,7 +54,7 @@ group :development do
   gem "web-console"
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
-  gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem "error_highlight", ">= 0.4.0", platforms: [ :ruby ]
 end
 
 group :test do
@@ -67,9 +67,9 @@ gem "aws-sdk-s3", require: false
 
 gem "devise", "~> 4.9"
 
-gem 'aws-sdk-lambda', '~> 1.25'
+gem "aws-sdk-lambda", "~> 1.25"
 
-gem 'pg_search'
+gem "pg_search"
 
 gem "pagy", "~> 9.0"
 
