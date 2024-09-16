@@ -6,8 +6,6 @@ on:
       - 'main'
     paths:
       - 'rails_app/**'
-    paths-ignore:
-      - '**/README.md'
 
 jobs:
   scan_ruby:
