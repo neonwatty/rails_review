@@ -10,7 +10,6 @@ class ReceiverOutputsController < ApplicationController
     if payload[:upload_id].nil? || payload[:result].nil?
       render json: { error: 'Invalid payload' }, status: :bad_request and return
     end
-
     output_record = find_output_record(payload[:upload_id])
 
     if output_record.nil?

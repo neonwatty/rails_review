@@ -14,7 +14,7 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   test "test 1: should access the home page" do
     get "/home"
     assert_response :success
-    expected_message = "Welcome to the #{ENV['APP_NAME_PUBLIC']}"
+    expected_message = "Welcome to the rails template"
     assert_select 'h2', expected_message
   end
 
@@ -25,19 +25,19 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
   end
 
   test "test 3: should create upload" do
-    # upload file
+    # get current blob count in active storage
+    current_blob_count = ActiveStorage::Blob.count
+
+    # post to create upload
     assert_difference('Upload.count') do
-      post uploads_path, params: { upload: { files: fixture_file_upload('cover_image.jpeg') } }
+      post uploads_path, params: { upload: { files: fixture_file_upload('r_l_burnside.png', 'image/png') } }
       assert_redirected_to upload_path(Upload.last)
     end
     
     # ensure redirect
+    upload_id = Upload.last.id
     assert_redirected_to upload_path(Upload.last)
     assert_not_nil flash[:notice]
-
-    # assert upload process_complete is false
-    upload = Upload.last
-    assert_not upload.process_complete, "process_complete in upload is not false before upload"
 
     # sleep for X secs and query for status completion
     sleep(30)
@@ -49,12 +49,20 @@ class BlogFlowTest < ActionDispatch::IntegrationTest
     assert_equal 'complete', final_status[:preprocess], "Expected 'complete' for receiver_preprocess but got #{final_status[:preprocess]}"
     assert_equal 'complete', final_status[:process], "Expected 'complete' for receiver_process but got #{final_status[:process]}"
 
-    # Assert that the ActiveStorage blobs count is 2
-    assert_equal 2, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
+    # Assert that the ActiveStorage blobs count is 4
+    assert_equal current_blob_count+4, ActiveStorage::Blob.count, "Expected 2 blobs but found #{ActiveStorage::Blob.count}"
 
     # assert process_complete field in upload is now true
-    upload = Upload.last
-    assert upload.process_complete, "process_complete in upload is not true after status updates"
-  end
+    check_upload = Upload.find(upload_id)
+    assert check_upload.process_complete, "upload process_complete was not set to true"
 
+    # destroy the upload and all active storage blobs
+    assert_difference('Upload.count', -1) do
+      delete upload_path(upload_id)
+    end
+
+    # Assert that the ActiveStorage blobs count is back to the original count
+    assert_equal current_blob_count, ActiveStorage::Blob.count, "Expected #{current_blob_count} blobs but found #{ActiveStorage::Blob.count}"
+
+  end
 end

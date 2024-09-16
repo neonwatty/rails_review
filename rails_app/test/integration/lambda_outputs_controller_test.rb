@@ -1,12 +1,13 @@
 require 'test_helper'
 
 class LambdaOutputsControllerTest < ActionDispatch::IntegrationTest
+  fixtures :all  
 
   test 'should update outputs with valid data' do
-    # Valid JSON payload
+    @upload = uploads(:one)
     payload = {
       receiver_outputs: {
-        upload_id: 1,
+        upload_id: @upload.id,
         result: 'this is a result'
       }
     }
@@ -24,7 +25,7 @@ class LambdaOutputsControllerTest < ActionDispatch::IntegrationTest
     assert_equal JSON.parse(response.body)['message'], 'Output updated successfully'
 
     # Assert the status record is updated
-    assert_equal Output.find(1).result, 'this is a result'
+    assert_equal Output.find(@upload.id).result, 'this is a result'
   end
 
   test 'should return error when upload_id not found' do
@@ -34,7 +35,6 @@ class LambdaOutputsControllerTest < ActionDispatch::IntegrationTest
         result: 'this is a result'
       }
     }
-
     # Send a PATCH request to the receiver_outputs controller
     patch "/receiver_outputs/update", params: payload.to_json, headers: {
       'Content-Type': 'application/json',
@@ -46,10 +46,10 @@ class LambdaOutputsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should return unauthorized for missing API key' do
-    # Valid JSON payload
+    @upload = uploads(:one)
     payload = {
       receiver_outputs: {
-        upload_id: 1,
+        upload_id: @upload.id,
         result: 'this is a result'
       }
     }

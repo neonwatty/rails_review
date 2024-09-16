@@ -3,11 +3,12 @@ require 'test_helper'
 class ReceiverEndControllerTest < ActionDispatch::IntegrationTest
   test 'test_1: should update status with valid data' do
     # Valid JSON payload
+    @upload = uploads(:one)
     payload = {
       receiver_end: { 
         bucket_name: "#{ENV['APP_NAME_PRIVATE']}-integration-test-data",
         processed_key: 'integration_test_image.png',
-        upload_id: 1
+        upload_id: @upload.id
       }
     }
 

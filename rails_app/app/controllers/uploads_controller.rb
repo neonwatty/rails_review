@@ -1,17 +1,44 @@
 class UploadsController < ApplicationController
-  before_action :set_upload, only: %i[show edit update destroy]
-  before_action :authenticate_user!, only: %i[show new create edit update destroy]
+  rate_limit to: 20, within: 1.minute, only: [:index], with: -> {redirect_to root_path, alert: 'Too many requests. Please try again'}
+
+  before_action :set_upload, only: %i[show destroy]
+  before_action :authenticate_user!, only: %i[show new create destroy]
+  before_action :check_request_from_form, only: [:search_items]
 
   def index
     @uploads = Upload.all
     @pagy, @uploads = pagy(@uploads)
   end
 
-  def search_page
+  def new
+    @upload = Upload.new
+  end
+
+  def show
+    @upload = Upload.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
+  end 
+
+  def create
+    @upload = current_user.uploads.build(upload_params)
+    if @upload.save
+      redirect_to upload_path(@upload), notice: 'Upload was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    @upload.destroy
+    redirect_to uploads_url, notice: 'Upload was successfully destroyed.'
   end
 
   def search
-    @query=params[:query]
+  end
+
+  def search_items
+    @query=search_params["query"]
     @uploads = Upload.search_by_name(@query)
     .where(process_complete: true)
     .limit(10) || []
@@ -26,53 +53,26 @@ class UploadsController < ApplicationController
     end
   end
 
-  def show
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path
-  end
-
-  def new
-    @upload = Upload.new
-  end
-
-  def details_card
-    @upload = Upload.find(params[:id])
-  end 
-
-  def create
-    @upload = Upload.new(upload_params)
-    if @upload.save
-      redirect_to details_card_upload_path(@upload), notice: 'Upload was successfully created.'
-    else
-      render :new
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    @upload = Upload.find(params[:user_id])
-    @upload.files.attach(params[:processed_image_key])
-    if @upload.save
-      redirect_to @upload, notice: 'Update was successfully created.'
-    else
-      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    @upload.destroy
-    redirect_to uploads_url, notice: 'Upload was successfully destroyed.'
-  end
-
   private
+
+  def check_request_from_form
+    unless request.post? && params[:source] == 'form'
+      flash[:alert] = "Access denied"
+      redirect_to root_path
+    end
+  end
 
   def set_upload
     @upload = Upload.find(params[:id])
-  end
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
+  end 
 
   def upload_params
     params.require(:upload).permit(:files)
+  end
+
+  def search_params
+    params.permit([:query, :authenticity_token, :source, :controller, :action])
   end
 end

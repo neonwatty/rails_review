@@ -1,4 +1,11 @@
 one:
-  id: 1
-  user_id: 1
-  filename: "test.png"
+  user: one
+  filename: "upload_one.png"
+  files_attached: true
+  process_complete: false
+
+two:
+  user: one
+  filename: "upload_two.png"
+  files_attached: true
+  process_complete: true

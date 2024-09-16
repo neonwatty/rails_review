@@ -25,6 +25,8 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = { "Cache-Control" => "public, max-age=#{2.days.to_i}" }
+    config.public_file_server.enabled = true
+
   else
     config.action_controller.perform_caching = false
 
@@ -43,7 +45,7 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: ENV["RAILS_HOST_DEVELOPMENT"].sub("https://", ""), protocol: "https" }
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :letter_opener #:smtp
   config.action_mailer.smtp_settings = {
     address:         'smtp.gmail.com',
     port:            587,

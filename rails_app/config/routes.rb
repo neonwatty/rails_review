@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { confirmations: 'confirmations' }
+  devise_for :users, controllers: { 
+    confirmations: 'users/confirmations',
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,26 +22,24 @@ Rails.application.routes.draw do
   patch 'receiver_outputs/update', to: 'receiver_outputs#update'
   
 
-  # search route
-  get 'search_page', to: 'uploads#search_page', as: :search_page
-  resources :uploads do
+  # Define root path
+  root "home#index"
+
+  # Route for 'home' page
+  get 'home', to: 'home#index', as: 'home'
+
+  # Search route
+  get 'search', to: 'uploads#search'
+
+  # Resources for 'uploads' with custom collection route
+  resources :uploads, except: [:update, :edit] do
     collection do
-      post 'search'
+      post 'search_items'
     end
   end
 
-  # maker personal routes
-  get 'home', to: 'uploads#home', as: :home
-
-  resources :uploads do
-    member do
-      get 'details_card'
-    end
-  end
-
-  # catch non-existant pages
-  # match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
-
-  # define root
-  root "uploads#home"
+  # Catch-all route for non-existent pages, to be used unless assets are being compiled
+  match '*path', via: :all, to: 'application#not_found', constraints: lambda { |req|
+    req.path.exclude? 'rails/active_storage'
+}
 end

@@ -9,7 +9,7 @@
         <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "user-profile-input-field" %>
       </div>
       <div class="actions p-10">
-        <%= f.submit "Send me reset password instructions", class: "btn btn-accent btn-md" %>
+        <%= f.submit "Send me reset password instructions", class: "btn btn-accent btn-md", id: 'send-reset-password-btn' %>
       </div>
     <% end %>
   </div>
