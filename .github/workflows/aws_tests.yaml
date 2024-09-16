@@ -6,8 +6,6 @@ on:
       - 'main'
     paths:
       - 'lambdas/**'
-    paths-ignore:
-      - '**/README.md'
       
 jobs:
   ruff:
