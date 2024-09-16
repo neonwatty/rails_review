@@ -2,8 +2,8 @@ name: aws tests
 
 on:
   pull_request:
-    branches:
-      - 'main'
+  push:
+    branches: [ main ]
     paths:
       - 'lambdas/**'
       
@@ -29,7 +29,7 @@ jobs:
   
   # for now now build / deploy on github
   tests:
-    name: Setup aws profile
+    name: run cloud decoupled tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
