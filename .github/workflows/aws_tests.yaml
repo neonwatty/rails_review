@@ -28,13 +28,37 @@ jobs:
           args: 'format --check'
           config: .ruff.toml
           working-directory: lambdas
-  test:
-    name: Run pytest
+  
+  # for now now build / deploy on github
+  tests:
+    name: Setup aws profile
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set environment variables from secrets
+        run: |
+          echo "AWS_PROFILE=${{ secrets.AWS_PROFILE }}" >> $GITHUB_ENV
+          echo "APP_NAME_PRIVATE=${{ secrets.APP_NAME_PRIVATE }}" >> $GITHUB_ENV
+          echo "SQS_ARN_ROOT=${{ secrets.SQS_ARN_ROOT }}" >> $GITHUB_ENV
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Set up AWS CLI with profile
+        run: |
+          mkdir -p ~/.aws
+          echo "[${{ secrets.AWS_PROFILE }}]" > ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+          echo "[profile ${{ secrets.AWS_PROFILE }}]" > ~/.aws/config
+          echo "region = ${{ secrets.AWS_REGION }}" >> ~/.aws/config
+
+      - name: Verify AWS CLI configuration
+        run: aws sts get-caller-identity --profile ${{ secrets.AWS_PROFILE }}
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -51,14 +75,9 @@ jobs:
       - name: Run tests
         working-directory: lambdas
         run: | 
-          PYTHONPATH=. python3.12 -m pytest tests/test_hello_world.py 
-          &&
-          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_start.py 
-          &&
-          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_preprocess.py
-          &&
-          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_process.py
-          &&
-          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_end.py
-          &&
+          PYTHONPATH=. python3.12 -m pytest tests/test_hello_world.py &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_start.py &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_preprocess.py &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_process.py &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_end.py &&
           PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_status.py
