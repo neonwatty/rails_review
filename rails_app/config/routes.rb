@@ -35,5 +35,5 @@ Rails.application.routes.draw do
   end
 
   # Catch-all route for non-existent pages, to be used unless assets are being compiled
-  match '*path', to: 'application#not_found', via: :all 
+  match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
 end

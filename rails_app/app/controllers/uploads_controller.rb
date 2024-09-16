@@ -62,7 +62,9 @@ class UploadsController < ApplicationController
 
   def set_upload
     @upload = Upload.find(params[:id])
-  end
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
+  end 
 
   def upload_params
     params.require(:upload).permit(:files)
