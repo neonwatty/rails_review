@@ -1,7 +1,7 @@
 require "application_system_test_case"
 
 class ShowUploadTest < ApplicationSystemTestCase
-  fixtures :all  
+  fixtures :all
 
   setup do
     @user = users(:one)
@@ -18,5 +18,4 @@ class ShowUploadTest < ApplicationSystemTestCase
     visit upload_path(@upload)
     assert_current_path upload_path(@upload)
   end
-
 end

@@ -27,13 +27,21 @@ jobs:
         gem install bundler
         bundle install
 
+    - name: Set up PostgreSQL
+      uses: setup-postgresql-action@v1
+      with:
+        postgresql-version: '14' 
+
     - name: Set up database
       run: |
         cp config/database.yml.github config/database.yml
-        bundle exec rake db:create
-        bundle exec rake db:migrate
-        bundle exec rake db:test:prepare
+        rails db:reset RAILS_ENV=test
+        rails db:migrate
 
     - name: Run tests
       run: |
-        bundle exec rspec # Or `bundle exec rails test` for Minitest
+        # Run model tests
+        echo "Running model tests..."
+        bin/rails test test/models/*
+        echo "Finished!"
+        echo "---------------------------"

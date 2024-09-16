@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UploadsControllerTest < ActionDispatch::IntegrationTest
   self.use_transactional_tests = false
@@ -9,8 +9,8 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     @invalid_nosource_query_params = { query: "test query" }
 
     @user = users(:one)
-    @upload = uploads(:one) 
-    sign_in @user 
+    @upload = uploads(:one)
+    sign_in @user
   end
 
   test "test_1: index - uploads_controller_auth_test" do
@@ -22,7 +22,7 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     get new_upload_path
     assert_response :success
   end
-  
+
   test "test_3: show - uploads_controller_auth_test" do
     get upload_path(@upload)
     assert_response :success
@@ -58,5 +58,4 @@ class UploadsControllerTest < ActionDispatch::IntegrationTest
     post search_items_uploads_path, params: @invalid_nosource_query_params, as: :turbo_stream
     assert_redirected_to root_path
   end
-
 end

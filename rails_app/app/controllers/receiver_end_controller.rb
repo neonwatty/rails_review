@@ -12,18 +12,18 @@ class ReceiverEndController < ApplicationController
         bucket_name: payload[:bucket_name],
         upload: upload
       )
-      render json: { status: 'processed image updated' }
+      render json: { status: "processed image updated" }
     else
-      render json: { error: 'Upload not found' }, status: :not_found
+      render json: { error: "Upload not found" }, status: :not_found
     end
   end
 
   private
 
   def authenticate_request
-    auth_header = request.headers['Authorization'] || ''
-    if auth_header.start_with?('Bearer ')
-      token = auth_header.split(' ').last
+    auth_header = request.headers["Authorization"] || ""
+    if auth_header.start_with?("Bearer ")
+      token = auth_header.split(" ").last
       expected_token = Rails.application.config.lambda_api_key
 
       head :unauthorized unless ActiveSupport::SecurityUtils.secure_compare(token, expected_token)
@@ -35,7 +35,7 @@ class ReceiverEndController < ApplicationController
   def process_and_attach(processed_key:, bucket_name:, upload:)
     s3 = Aws::S3::Client.new
     processed_data = s3.get_object(bucket: bucket_name, key: processed_key).body.read
-    
+
     upload.files.attach(io: StringIO.new(processed_data), filename: File.basename(processed_key))
     upload.save
 

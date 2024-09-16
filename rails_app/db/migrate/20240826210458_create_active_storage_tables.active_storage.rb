@@ -21,7 +21,6 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
 
       t.index [ :key ], unique: true
       t.index [ :checksum ], unique: true
-
     end
 
     create_table :active_storage_attachments, id: primary_key_type do |t|

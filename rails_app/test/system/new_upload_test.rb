@@ -1,8 +1,8 @@
 require "application_system_test_case"
 
 class NewUploadTest < ApplicationSystemTestCase
-  fixtures :all  
-  
+  fixtures :all
+
   setup do
     @user = users(:one)
   end
@@ -38,10 +38,10 @@ class NewUploadTest < ApplicationSystemTestCase
     sleep 1
 
     # click on the file input
-    attach_file('upload[files]', Rails.root + 'test/fixtures/files/r_l_burnside.png')
+    attach_file("upload[files]", Rails.root + "test/fixtures/files/r_l_burnside.png")
 
     # submit the form
-    click_button 'Submit'
+    click_button "Submit"
 
     # sleep for 5 seconds
     sleep 5
@@ -50,7 +50,7 @@ class NewUploadTest < ApplicationSystemTestCase
     assert_current_path upload_path(Upload.last)
 
     # destroy the upload - click delete button
-    click_button 'Delete'
+    click_button "Delete"
 
     # click ok on the confirm dialog
     page.driver.browser.switch_to.alert.accept

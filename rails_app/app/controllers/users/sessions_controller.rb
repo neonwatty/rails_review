@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  rate_limit to: 10, within: 5.minutes, only: [:create], with: -> {redirect_to root_path, alert: 'Too many login attempts. Please try again'}
+  rate_limit to: 10, within: 5.minutes, only: [ :create ], with: -> { redirect_to root_path, alert: "Too many login attempts. Please try again" }
 
   # before_action :configure_sign_in_params, only: [:create]
 

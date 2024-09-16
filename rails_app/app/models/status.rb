@@ -3,10 +3,10 @@ class Status < ApplicationRecord
 
   belongs_to :upload
 
-  
+
   private
 
-  
+
   def set_default_receiver_values
     self.receiver_start = "pending"
     self.receiver_preprocess = "pending"
