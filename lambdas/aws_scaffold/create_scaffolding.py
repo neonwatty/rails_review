@@ -21,7 +21,7 @@ connection_records = generate_connection_records()
 @pytest.mark.parametrize("bucket_name", all_bucket_names)
 def test_create_bucket(bucket_name):
     create_val = create_bucket(bucket_name)
-    assert create_val == True
+    assert create_val is True
 
 
 # add cors to main buckets
@@ -36,14 +36,14 @@ def test_create_cors(bucket_host_pair):
 @pytest.mark.parametrize("queue_nane", queue_names)
 def test_create_queue(queue_nane):
     create_val = create_sqs_queue(queue_nane)
-    assert create_val == True
+    assert create_val is True
 
 
 # create connections
 @pytest.mark.parametrize("record", connection_records)
 def test_create_connection(record):
     create_val = create_single_connection(record)
-    assert create_val == True
+    assert create_val is True
 
 
 # create ecr repositories
@@ -51,4 +51,4 @@ def test_create_connection(record):
 def test_create_ecr_repos(receiver_name):
     repo_name = f"{APP_NAME_PRIVATE}-{receiver_name}"
     create_val = create_ecr_repository(repo_name)
-    assert create_val == True
+    assert create_val is True

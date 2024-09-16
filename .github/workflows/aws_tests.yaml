@@ -1,0 +1,64 @@
+name: aws checks
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    paths:
+      - 'lambdas/**'
+    paths-ignore:
+      - '**/README.md'
+      
+jobs:
+  ruff:
+    name: Lint with Ruff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Lint with Ruff
+        uses: chartboost/ruff-action@v1
+        with:
+          args: 'format --check'
+          config: .ruff.toml
+          working-directory: lambdas
+  test:
+    name: Run pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          python -m pip install --upgrade pip
+          pip install -r requirements.test
+        working-directory: lambdas
+
+      - name: Run tests
+        working-directory: lambdas
+        run: | 
+          PYTHONPATH=. python3.12 -m pytest tests/test_hello_world.py 
+          &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_start.py 
+          &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_preprocess.py
+          &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_process.py
+          &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_end.py
+          &&
+          PYTHONPATH=. python3.12 -m pytest tests/cloud_decoupled/receivers/test_receiver_status.py

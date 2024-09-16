@@ -9,6 +9,7 @@ from aws_scaffold.s3.delete import delete_bucket
 from aws_scaffold.sqs.delete import delete_sqs_queue
 from aws_scaffold.ecr.delete import delete_ecr_repository
 from tests.utilities.execute_subprocess import execute_subprocess_command
+
 current_directory = os.getcwd()
 
 
@@ -20,24 +21,25 @@ queue_names = generate_queue_names()
 # delete buckets
 @pytest.mark.parametrize("bucket_name", all_bucket_names)
 def test_delete_bucket(bucket_name):
-    create_val = delete_bucket(bucket_name)
-    assert create_val == True
+    delete_val = delete_bucket(bucket_name)
+    assert delete_val is True
 
 
 # delete queues
 @pytest.mark.parametrize("queue_nane", queue_names)
 def test_delete_queue(queue_nane):
-    create_val = delete_sqs_queue(queue_nane)
-    assert create_val == True
+    delete_val = delete_sqs_queue(queue_nane)
+    assert delete_val is True
 
 
 # delete ecr repo
 @pytest.mark.parametrize("receiver_name", receiver_names)
 def test_delete_ecr_repos(receiver_name):
     repo_name = f"{APP_NAME_PRIVATE}-{receiver_name}"
-    create_val = delete_ecr_repository(repo_name)
-    assert create_val == True
-    
+    delete_val = delete_ecr_repository(repo_name)
+    assert delete_val is True
+
+
 # delete receiver lambdas
 @pytest.mark.parametrize("stage", connected_stages)
 def test_delete_receiver_lambdas(stage):
