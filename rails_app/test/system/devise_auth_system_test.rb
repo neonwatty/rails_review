@@ -58,6 +58,8 @@ class DeviseAuthSystemTest < ApplicationSystemTestCase
 
     # fill in field based on id
     fill_in 'edit-profile-email', with: 'blah@blah.com'
+    fill_in 'edit-profile-password-new', with: 'password456'
+    fill_in 'edit-profile-password-new-confirm', with: 'password456'
     fill_in 'edit-profile-password-current', with: 'password123'
     click_on 'update-profile-btn'
     assert_current_path root_path

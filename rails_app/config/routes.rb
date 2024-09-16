@@ -39,5 +39,7 @@ Rails.application.routes.draw do
   end
 
   # Catch-all route for non-existent pages, to be used unless assets are being compiled
-  match '*path', to: 'application#not_found', via: :all unless Rails.application.config.assets.compile
+  match '*path', via: :all, to: 'application#not_found', constraints: lambda { |req|
+    req.path.exclude? 'rails/active_storage'
+}
 end
