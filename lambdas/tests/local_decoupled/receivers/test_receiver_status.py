@@ -8,7 +8,7 @@ from sqs.messages.message_delete import message_delete
 from tests.utilities.execute_subprocess import execute_subprocess_command
 from tests.utilities.receiver_utilities import status_setup
 from tests.utilities.docker_utilities import print_container_logs
-from config import APP_NAME_PRIVATE, STAGE
+from config import APP_NAME_PRIVATE, STAGE, ACCOUNT_ID
 
 # get current directory paths
 current_directory = os.getcwd()
@@ -65,7 +65,7 @@ def container_controller():
         RECEIVER_NAME,
         "-p",
         f"{DOCKER_PORT}:8080",
-        RECEIVER_NAME,
+        f"{ACCOUNT_ID}-{RECEIVER_NAME}",
     ]
     print("INFO: starting container running process...")
     stdout = execute_subprocess_command(command)
