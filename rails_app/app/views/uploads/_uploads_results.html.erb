@@ -11,7 +11,7 @@
   </div>
   <div class="bg-base-300 rounded-b-box rounded-se-box relative overflow-x-auto">
     <div class="preview border-base-300 bg-base-100 rounded-b-box rounded-se-box flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden bg-cover bg-top p-4 [border-width:var(--tab-border)]" style="">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto" data-controller="checkbox">
         <table class="table">
           <thead>
             <tr>
@@ -23,12 +23,21 @@
             </tr>
           </thead>
           <tbody>
+            <div data-checkbox-target="output">No checkboxes selected.</div>
             <% @uploads.each_with_index do |upload, index| %>
               <% if upload.files.attached? %>
                 <% input_file = upload.files.first %>
                 <% if input_file.representable? %>
                   <tr>
-                    <th><label><input type="checkbox" class="checkbox"></label></th>
+                    <th>
+                      <input type="checkbox" 
+                   data-checkbox-target="checkbox" 
+                   class="checkbox" 
+                   id="checkbox-<%= index %>" 
+                   data-action="change->checkbox#checkStatus" 
+                      value="<%= upload.id %>"
+                      data-upload-id="<%= upload.id %>">
+                    </th>
                     <td>
                       <div class="flex items-center gap-3">
                         <div class="avatar">
