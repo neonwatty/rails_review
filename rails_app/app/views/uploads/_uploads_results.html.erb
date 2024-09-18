@@ -63,7 +63,9 @@
                       <% end %>
                     </td>
                     <td> <%= render "uploads/status_badge", upload: upload %></td>
-                    <th><button class="btn btn-ghost btn-xs">details</button></th>
+                    <th>
+                      <%= link_to "Details", upload_path(upload), class: "btn btn-ghost btn-xs" %>
+                    </th>
                   </tr>
                 <% end %>
               <% end %>

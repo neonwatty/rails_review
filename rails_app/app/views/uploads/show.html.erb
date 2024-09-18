@@ -3,12 +3,6 @@
   <div class="flex-col gap-x-5 gap-y-10 p-10">
     <%= render "uploads/status_badge", upload: @upload %>
     <div class="card bg-base-100 shadow-xl w-96 p-5" id="upload_details_<%= @upload.id %>">
-      <div class="bg-base-200 border border-gray-300 shadow-lg rounded-lg p-3 max-w-md w-full">
-        <% if @upload.files.attached? %>
-          <h4 class="text-sm font-semibold text-white-800 mb-1">file_name: <%= @upload.files.first.filename.to_s %></h4>
-          <h4 class="text-sm font-medium text-white-600">created_at: <%= @upload.files.first.created_at %></h4>
-        <% end %>
-      </div>
       <div class="card bg-base-150 flex-row ga justify-center">
         <div class="p-5">
           <% if @upload.files.attached? %>
