@@ -23,7 +23,6 @@
             </tr>
           </thead>
           <tbody>
-            <div data-checkbox-target="output">No checkboxes selected.</div>
             <% @uploads.each_with_index do |upload, index| %>
               <% if upload.files.attached? %>
                 <% input_file = upload.files.first %>
@@ -74,6 +73,13 @@
                     <td> <%= render "uploads/status_badge", upload: upload %></td>
                     <th>
                       <%= link_to "Details", upload_path(upload), class: "btn btn-ghost btn-xs" %>
+                    </th>
+                    <th>
+                      <% if upload.user_id == current_user.id %>
+                        <%= button_to "Delete", upload_path(upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, 
+                      class: 'delete-button bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 ml-2 hidden', 
+                      id: "delete-checkbox-#{index}" %>
+                      <% end %>
                     </th>
                   </tr>
                 <% end %>
