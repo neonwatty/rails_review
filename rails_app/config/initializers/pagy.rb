@@ -1,7 +1,7 @@
 # config/initializers/pagy.rb
 
 # Configure default Pagy settings
-Pagy::DEFAULT[:limit] = 5 # items per page
+Pagy::DEFAULT[:limit] = 10 # items per page
 Pagy::DEFAULT[:size]  = 9  # nav bar links
 
 # Require Pagy extras
