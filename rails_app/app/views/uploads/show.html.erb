@@ -3,6 +3,12 @@
   <div class="flex-col gap-x-5 gap-y-10 p-10">
     <%= render "uploads/status_badge", upload: @upload %>
     <div class="card bg-base-100 shadow-xl w-96 p-5" id="upload_details_<%= @upload.id %>">
+      <div class="bg-base-200 border border-gray-300 shadow-lg rounded-lg p-3 max-w-md w-full">
+        <% if @upload.files.attached? %>
+          <h4 class="text-sm font-semibold text-white-800 mb-1">title: <%= @upload.files.first.filename.to_s %></h4>
+          <h4 class="text-sm font-medium text-white-600">created_at: <%= @upload.files.first.created_at %></h4>
+        <% end %>
+      </div>
       <div class="card bg-base-150 flex-row ga justify-center">
         <div class="p-5">
           <% if @upload.files.attached? %>
@@ -10,7 +16,7 @@
             <% if input_file.representable? %>
               <div class="grid grid-flow-row justify-center">
                 <h4>Input</h4>
-                <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file" data-gall="gal-1">
+                <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
                   <%= image_tag input_file.representation(resize_to_limit: [200, 200]) %>
                 </a>
               </div>
@@ -26,7 +32,7 @@
               <div class="grid grid-flow-row justify-center">
                 <h4">Output</h4>
                 <% output_file = @upload.files.second %>
-                <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file" data-gall="gal-1">
+                <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
                   <%= image_tag output_file.representation(resize_to_limit: [200, 200]) %>
                 </a>
               </div>
