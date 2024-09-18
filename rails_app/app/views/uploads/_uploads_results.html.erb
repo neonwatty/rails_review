@@ -12,8 +12,10 @@
   <div class="bg-base-300 rounded-b-box rounded-se-box relative overflow-x-auto">
     <div class="preview border-base-300 bg-base-100 rounded-b-box rounded-se-box flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden bg-cover bg-top p-4 [border-width:var(--tab-border)]" style="">
       <div data-controller="file-sort">
-        <button data-action="click->file-sort#sortAscending" class="btn">Sort Ascending</button>
-        <button data-action="click->file-sort#sortDescending" class="btn">Sort Descending</button>
+        <div class="flex justify-center gap-3">
+          <button data-action="click->file-sort#sortAscending" class="btn">&#9650;</button>
+          <button data-action="click->file-sort#sortDescending" class="btn">&#9660;</button>
+        </div>
         <div class="overflow-x-auto">
           <table class="table" data-file-sort-target="fileList">
             <thead>
