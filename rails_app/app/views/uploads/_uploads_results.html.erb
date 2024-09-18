@@ -11,7 +11,7 @@
   </div>
   <div class="bg-base-300 rounded-b-box rounded-se-box relative overflow-x-auto">
     <div class="preview border-base-300 bg-base-100 rounded-b-box rounded-se-box flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden bg-cover bg-top p-4 [border-width:var(--tab-border)]" style="">
-      <div class="overflow-x-auto" data-controller="checkbox">
+      <div class="overflow-x-auto"">
         <table class="table">
           <thead>
             <tr>
@@ -30,12 +30,9 @@
                   <tr>
                     <th>
                       <input type="checkbox" 
-                   data-checkbox-target="checkbox" 
-                   class="checkbox" 
-                   id="checkbox-<%= index %>" 
-                   data-action="change->checkbox#checkStatus" 
-                      value="<%= upload.id %>"
-                      data-upload-id="<%= upload.id %>">
+                   class="checkbox hidden" 
+                   id="checkbox-<%= index %>"
+                   disabled>
                     </th>
                     <td>
                       <div class="flex items-center gap-3">
@@ -73,13 +70,6 @@
                     <td> <%= render "uploads/status_badge", upload: upload %></td>
                     <th>
                       <%= link_to "Details", upload_path(upload), class: "btn btn-ghost btn-xs" %>
-                    </th>
-                    <th>
-                      <% if upload.user_id == current_user.id %>
-                        <%= button_to "Delete", upload_path(upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, 
-                      class: 'delete-button bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 ml-2 hidden', 
-                      id: "delete-checkbox-#{index}" %>
-                      <% end %>
                     </th>
                   </tr>
                 <% end %>

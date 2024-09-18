@@ -5,7 +5,7 @@ export default class extends Controller {
 
   connect() {
     this.loadCheckboxStates();
-    // this.showBoxesChecked();
+    this.showBoxesChecked();
   }
 
   get checkedCheckboxes() {
@@ -18,7 +18,7 @@ export default class extends Controller {
     const checkbox = event.target;
     const index = checkbox.id.split('-')[1]; // Extract the index from the checkbox ID
     this.saveCheckboxState(index, checkbox.checked);
-    // this.showBoxesChecked();
+    this.showBoxesChecked();
     this.showDeleteButton(); // Show or hide the delete button
   }
 
@@ -51,4 +51,18 @@ export default class extends Controller {
       }
     });
   }
+
+  removeCheckboxFromLocalStorage(index) {
+    console.log(`Removing checkbox-${index} from localStorage`);
+    this.saveCheckboxState(index, false); // Save the state as false
+    localStorage.removeItem(`checkbox-${index}`);
+  }
+
+  confirmDelete(index) {
+    if (confirm("Are you sure you want to delete this upload?")) {
+      // load in all checkbox indices
+      
+    }
+  }
+}
 }
