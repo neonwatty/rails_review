@@ -38,9 +38,7 @@
                       <div class="flex items-center gap-3">
                         <div class="avatar">
                           <div class="w-12 h-12 mask mask-squircle">
-                            <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= input_file.filename.to_s%>)" data-gall="gal-<%= index %>">
-                              <%= image_tag input_file.variant(:thumb) %>
-                            </a>
+                            <%= image_tag input_file.variant(:thumb) %>
                           </div>
                         </div>
                         <div>
@@ -55,9 +53,7 @@
                         <div class="flex items-center gap-3">
                           <div class="avatar">
                             <div class="w-12 h-12 mask mask-squircle">
-                              <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= output_file.filename.to_s%>)" data-gall="gal-<%= index %>">
-                                <%= image_tag output_file.variant(:thumb) %>
-                              </a>
+                              <%= image_tag output_file.variant(:thumb) %>
                             </div>
                           </div>
                           <div>
