@@ -1,0 +1,31 @@
+<div data-turbo-prefetch="false">
+  <ul class="menu menu-vertical dropdown-content bg-base-100 rounded-box z-[5] mt-3 w-52 p-2 shadow">
+    <li>
+      <a href="/" data-turbo-prefetch="false">Home</a>
+    </li>
+    <li>
+      <a href="/search" data-turbo-prefetch="false">Search</a>
+    </li>
+    <li>
+      <a href="/uploads_path" data-turbo-prefetch="false">All uploads</a>
+    </li>
+    <li>
+      <a href="/new_upload" data-turbo-prefetch="false">New Upload</a>
+    </li>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to 'Profile', edit_user_registration_path, class: current_page?(edit_user_registration_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
+      </li>
+      <li>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete %>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to "Log in", new_user_session_path, class: current_page?(new_user_session_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
+      </li>
+      <li>
+        <%= link_to "Sign up", new_user_registration_path, class: current_page?(new_user_registration_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
+      </li>
+    <% end %>
+  </ul>
+</div>
