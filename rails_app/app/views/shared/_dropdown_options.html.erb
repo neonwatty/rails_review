@@ -1,16 +1,16 @@
-<div data-turbo-prefetch="false">
-  <ul class="menu menu-vertical dropdown-content bg-base-100 rounded-box z-[5] mt-3 w-52 p-2 shadow">
+<div id="dropdown-options">
+  <ul class="bg-base-100 rounded-box z-[5] mt-3 w-52 p-2 shadow">
     <li>
-      <a href="/" data-turbo-prefetch="false">Home</a>
+      <%= link_to 'Home', root_path, class: current_page?(root_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
     </li>
     <li>
-      <a href="/search" data-turbo-prefetch="false">Search</a>
+      <%= link_to 'Search', search_path, class: current_page?(search_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
     </li>
     <li>
-      <a href="/uploads_path" data-turbo-prefetch="false">All uploads</a>
+      <%= link_to 'All uploads', uploads_path, class: current_page?(uploads_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
     </li>
     <li>
-      <a href="/new_upload" data-turbo-prefetch="false">New Upload</a>
+      <%= link_to 'New upload', new_upload_path, class: current_page?(new_upload_path) ? "link link-hover text-blue-600 bg-blue-100" : "link link-hover" %>
     </li>
     <% if user_signed_in? %>
       <li>
