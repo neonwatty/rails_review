@@ -17,9 +17,9 @@ export default class extends Controller {
     const savedState = localStorage.getItem("appTheme");
     this.checkboxTarget.checked = savedState === "true";
     if (this.checkboxTarget.checked) {
-      document.documentElement.classList.add("dark");
-    } else {
       document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
     }
   }
 }
