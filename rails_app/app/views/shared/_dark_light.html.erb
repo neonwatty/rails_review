@@ -1,10 +1,14 @@
-<div data-controller="theme" data-action="change->theme#saveCheckboxState" >
+<div data-controller="theme" data-action="change->theme#saveCheckboxState" class="pt-1 transition-all ease-in-out duration-350 delay-200">
   <label class="swap swap-rotate">
     <!-- this hidden checkbox controls the state -->
-    <input type="checkbox" data-theme-target="checkbox" class="theme-controller hidden" value="acid" />
+    <input type="checkbox" data-theme-target="checkbox" class="theme-controller hidden" />
     <!-- sun icon -->
-    <%= render 'shared/sun' %>
+    <div id="sun">
+      <%= render 'shared/sun' %>
+    </div>
     <!-- moon icon -->
-    <%= render 'shared/moon' %>
+    <div id="moon">
+      <%= render 'shared/moon' %>
+    </div>
   </label>
 </div>
