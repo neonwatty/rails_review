@@ -1,62 +1,56 @@
 <%= render 'shared/nav' %>
-<div class="hero bg-base-200">
-  <div class="flex-col gap-x-5 gap-y-10 p-10">
-    <%= render "uploads/status_badge", upload: @upload %>
-    <div class="card bg-base-100 shadow-xl w-96 p-5" id="upload_details_<%= @upload.id %>">
-      <div class="card bg-base-150 flex-row ga justify-center">
-        <div class="p-5">
-          <% if @upload.files.attached? %>
-            <% input_file = @upload.files.first %>
-            <% if input_file.representable? %>
-              <div class="grid grid-flow-row justify-center">
-                <h4>Input</h4>
-                <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
-                  <%= image_tag input_file.representation(resize_to_limit: [200, 200]) %>
-                </a>
-              </div>
-            <% else %>
+<div class="flex flex-col items-center justify-center p-5 h-full bg-white dark:bg-slate-800">
+  <%= render "uploads/status_badge", upload: @upload %>
+  <div class="dark:bg-slate-700 bg-gray-100 shadow-lg dark:text-white text-slate-900 p-3 mt-5 rounded-xl" id="upload_details_<%= @upload.id %>">
+    <div class="flex flex-row w-auto h-auto rounded-xl">
+      <div class="p-5">
+        <% if @upload.files.attached? %>
+          <% input_file = @upload.files.first %>
+          <% if input_file.representable? %>
+            <div class="grid grid-flow-row justify-center">
               <h4>Input</h4>
-              <div class="justify-end">
-                <p>No input file attached.</p>
-              </div>
-            <% end %>
-          </div>
-          <div class="p-5">
-            <% if @upload.files.attached? && @upload.files.count > 1 %>
-              <div class="grid grid-flow-row justify-center">
-                <h4">Output</h4>
-                <% output_file = @upload.files.second %>
-                <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
-                  <%= image_tag output_file.representation(resize_to_limit: [200, 200]) %>
-                </a>
-              </div>
+              <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
+                <%= image_tag input_file.representation(resize_to_limit: [200, 200]) %>
+              </a>
             </div>
           <% else %>
-            <h4>Output</h4>
+            <h4>Input</h4>
             <div class="justify-end">
-              <p>No output file attached.</p>
+              <p>No input file attached.</p>
+            </div>
+          <% end %>
+        </div>
+        <div class="p-5">
+          <% if @upload.files.attached? && @upload.files.count > 1 %>
+            <div class="grid grid-flow-row justify-center">
+              <h4">Output</h4>
+              <% output_file = @upload.files.second %>
+              <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
+                <%= image_tag output_file.representation(resize_to_limit: [200, 200]) %>
+              </a>
             </div>
           </div>
-        <% end %>
-      </div>
+        <% else %>
+          <h4>Output</h4>
+          <div class="justify-end">
+            <p>No output file attached.</p>
+          </div>
+        </div>
+      <% end %>
     </div>
-    <div class="flex gap-4 mt-4 justify-center">
-      <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
-      <% if @upload.user_id == current_user.id %>
-        <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
-      <% end%>
-      <button 
+  </div>
+  <div class="flex gap-4 mt-4 justify-center">
+    <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+    <% if @upload.user_id == current_user.id %>
+      <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
+    <% end%>
+    <button 
                   onclick="window.location.reload();" 
                   class="btn btn-primary btn-sm"
                   aria-label="Refresh"
                 >
-        <i class="fas fa-sync"></i>
-      </button>
-    </div>
-  <% end %>
-</div>
-</div>
-</div>
-</div>
-</div>
+      <i class="fas fa-sync"></i>
+    </button>
+  </div>
+<% end %>
 </div>

@@ -1,6 +1,6 @@
 <div id="all-uploads-results">
   <% if @uploads.present? %>
-    <div class="bg-base-100 flex flex-col items-center justify-center p-5 h-full">
+    <div class="flex flex-col items-center justify-center p-5 h-full bg-slate-800 dark:bg-white">
       <button 
           onclick="window.location.reload();" 
           class="btn btn-primary btn-sm"
@@ -10,8 +10,8 @@
       </button>
       <div class="block 2xl:hidden">
         <% @uploads.each_with_index do |upload, index| %>
-          <div class="bg-base-200 border border-base-300 p-3 mt-5 rounded-xl">
-            <div class="w-1/4 h-1/2 rounded-xl bg-base-200">
+          <div class="bg-slate-700 dark:bg-gray-100 shadow-lg text-white dark:text-slate-900 p-3 mt-5 rounded-xl">
+            <div class="w-1/4 h-1/2 rounded-xl">
               <% if upload.files.attached? %>
                 <% input_file = upload.files.first %>
                 <div class="">
@@ -54,7 +54,7 @@
           </div>
         <% end %>
       </div>
-      <div class="hidden 2xl:block">
+      <div class="hidden 2xl:block bg-slate-700 dark:bg-gray-100 shadow-lg text-white dark:text-slate-900">
         <div data-controller="file-sort">
           <div class="flex justify-center gap-3">
             <button data-action="click->file-sort#sortAscending" class="btn">&#9650;</button>

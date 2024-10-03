@@ -1,5 +1,5 @@
 <%= render 'shared/nav' %>
-<div class="hero bg-base-200 p-12">
+<div class="p-12 bg-white dark:bg-slate-800 shadow-lg text-slate-800 dark:text-white">
   <div class="hero-content text-center">
     <%= form_with(model: @upload, local: true) do |form| %>
       <% if @upload.errors.any? %>
