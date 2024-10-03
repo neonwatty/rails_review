@@ -15,13 +15,9 @@ module.exports = {
       },
     },
   },
-  daisyui: {
-    themes: ["dracula", "acid"],
-  },
   plugins: [
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/container-queries"),
-    require("daisyui"),
   ],
 };
