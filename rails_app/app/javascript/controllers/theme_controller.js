@@ -9,11 +9,17 @@ export default class extends Controller {
   }
 
   saveCheckboxState() {
-    localStorage.setItem('synthwaveTheme', this.checkboxTarget.checked);
+    document.documentElement.classList.toggle("dark");
+    localStorage.setItem("appTheme", this.checkboxTarget.checked);
   }
 
   loadCheckboxState() {
-    const savedState = localStorage.getItem('synthwaveTheme');
-    this.checkboxTarget.checked = savedState === 'true';
+    const savedState = localStorage.getItem("appTheme");
+    this.checkboxTarget.checked = savedState === "true";
+    if (this.checkboxTarget.checked) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }
 }
