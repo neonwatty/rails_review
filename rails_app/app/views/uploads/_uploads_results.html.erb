@@ -48,7 +48,7 @@
                 <% end %>
               <% end %>
               <div>
-                <%= link_to "Details", upload_path(upload), class: "btn bg-base-500 px-5 mt-2 border border-violet-300 hover hover:bg-blue-500 btn-xs" %>
+                <%= link_to "Details", upload_path(upload), class: "transition bg-slate-800 dark:bg-white ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-slate-800 bg:text-white btn btn-xs" %>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
                         </td>
                         <td> <%= render "uploads/status_badge", upload: upload %></td>
                         <th>
-                          <%= link_to "Details", upload_path(upload), class: "btn bg-base-500 border border-violet-300 btn-xs" %>
+                          <%= link_to "Details", upload_path(upload), class: "transition bg-slate-800 dark:bg-white ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-slate-800 bg:text-white btn btn-xs" %>
                         </th>
                       </tr>
                     <% end %>
