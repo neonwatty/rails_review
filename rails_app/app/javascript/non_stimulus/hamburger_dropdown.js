@@ -30,5 +30,5 @@ function dropdownLogic() {
   mobileMenuButton.addEventListener("click", toggleMobileMenu);
 }
 
-document.addEventListener("turbolinks:load", dropdownLogic);
-dropdownLogic();
+document.addEventListener("DOMContentLoaded", dropdownLogic);
+// dropdownLogic();
