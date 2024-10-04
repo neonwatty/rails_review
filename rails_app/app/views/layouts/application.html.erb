@@ -30,16 +30,5 @@
         <%= render partial: "shared/notifications", locals: {key: key, message: message} %>
       <% end %>
       <%= yield %>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/2.1.8/venobox.min.js" integrity="sha512-LvcjoBF1sjBfiAJpi1Vt5pJXcT7A+0BK6nvwYkp0PwL3zNswVsRi3GURZXlRN8o6E9p0pJUJi5vsp6LSqVBzhw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <script>
-        new VenoBox({
-          overlayClose: true,
-          spinner: 'cube-grid',
-          closeBackground: 'transparent',
-          overlayColor: "rgba(82, 52, 235,0.8)",
-          share: true,
-          titleattr: 'data-title',
-        });
-      </script>
     </body>
   </html>

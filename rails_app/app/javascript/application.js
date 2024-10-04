@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails";
 import "controllers";
 import "non_stimulus/hamburger_dropdown";
+import "non_stimulus/venobox-init";
