@@ -3,7 +3,7 @@
     <div class="flex flex-col items-center justify-center p-5 h-full bg-white dark:bg-slate-800">
       <button 
           onclick="window.location.reload();" 
-          class="btn btn-primary btn-sm"
+          class="btn btn-primary btn-sm bg-fuchsia-400 text-black p-3 rounded-xl"
           aria-label="Refresh"
         >
         <i class="fas fa-sync"></i>
@@ -11,12 +11,9 @@
       <div class="block 2xl:hidden">
         <% @uploads.each_with_index do |upload, index| %>
           <div class="bg-gray-100 dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white p-3 mt-5 rounded-xl">
-            <div class="w-1/4 h-1/2 rounded-xl">
+            <div class="w-auto h-1/2 rounded-xl">
               <% if upload.files.attached? %>
                 <% input_file = upload.files.first %>
-                <div class="">
-                  <%= render "uploads/status_badge", upload: upload %>
-                </div>
                 <div class="flex items-center gap-3">
                   <div class="avatar">
                     <div class="w-12 h-12 mask mask-squircle">
@@ -48,19 +45,19 @@
                 <% end %>
               <% end %>
               <div>
-                <%= link_to "Details", upload_path(upload), class: "transition bg-slate-800 dark:bg-white ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-slate-800 bg:text-white btn btn-xs" %>
+                <%= link_to "Details", upload_path(upload), class: "transition bg-violet-500 px-2 py-1 rounded-lg ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-black btn btn-sm" %>
               </div>
             </div>
           </div>
         <% end %>
       </div>
-      <div class="bg-gray-100 dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white p-3 mt-5 rounded-xl">
+      <div class="hidden w-auto 2xl:block bg-gray-100 dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white p-3 mt-5 rounded-xl">
         <div data-controller="file-sort">
           <div class="flex justify-center gap-3">
             <button data-action="click->file-sort#sortAscending" class="btn">&#9650;</button>
             <button data-action="click->file-sort#sortDescending" class="btn">&#9660;</button>
           </div>
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto flex flex-col items-center justify-center">
             <table class="table" data-file-sort-target="fileList">
               <thead>
                 <tr>
@@ -118,7 +115,7 @@
                         </td>
                         <td> <%= render "uploads/status_badge", upload: upload %></td>
                         <th>
-                          <%= link_to "Details", upload_path(upload), class: "transition bg-slate-800 dark:bg-white ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-slate-800 bg:text-white btn btn-xs" %>
+                          <%= link_to "Details", upload_path(upload), class: "transition bg-violet-500 px-2 py-1 rounded-lg ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-black btn btn-sm" %>
                         </th>
                       </tr>
                     <% end %>

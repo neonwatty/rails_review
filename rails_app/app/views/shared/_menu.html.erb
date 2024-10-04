@@ -25,10 +25,10 @@
         <%= button_to "Log out", destroy_user_session_path, method: :delete %>
       </li>
     <% else %>
-      <li class="mx-3">
+      <li class="mx-3 mt-3">
         <%= link_to "Log in", new_user_session_path, class: current_page?(new_user_session_path) ? "link link-hover text-black bg-fuchsia-300 px-2 py-3 rounded-xl" : "link link-hover hover:text-black hover:bg-indigo-300 hover:px-2 hover:py-3 hover:rounded-xl" %>
       </li>
-      <li class="mx-4 me-6">
+      <li class="mx-4 mt-3 me-6">
         <%= link_to "Sign up", new_user_registration_path, class: current_page?(new_user_registration_path) ? "link link-hover text-black bg-fuchsia-300 px-2 py-3 rounded-xl" : "link link-hover hover:text-black hover:bg-indigo-300 hover:px-2 hover:py-3 hover:rounded-xl" %>
       </li>
     <% end %>
