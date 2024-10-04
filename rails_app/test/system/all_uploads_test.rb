@@ -30,7 +30,7 @@ class AllUploadsTest < ApplicationSystemTestCase
   end
 
 
-  test "test_4: check that details from upload not accessible if logged in" do
+  test "test_4: check that details from upload accessible if logged in" do
     # visit
     visit uploads_path
     assert_selector "#navbar"

@@ -11,7 +11,7 @@ def create_sqs_queue(queue_name: str) -> bool:
         "MaximumMessageSize": "262144",
         "MessageRetentionPeriod": "300",
         "VisibilityTimeout": "300",
-        "ReceiveMessageWaitTimeSeconds": "0",
+        "ReceiveMessageWaitTimeSeconds": "20",
     }
 
     # create queue

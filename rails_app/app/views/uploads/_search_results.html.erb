@@ -1,17 +1,57 @@
-<% if @uploads.present? %>
-  <div class="flex flex-col items-center justify-center" id="search-results-returned">
-    <button 
+<div id="search-results-returned">
+  <% if @uploads.present? %>
+    <div class="flex flex-col items-center justify-center p-5 h-full bg-white dark:bg-slate-800">
+      <button 
           onclick="window.location.reload();" 
           class="btn btn-primary btn-sm"
           aria-label="Refresh"
         >
-      <i class="fas fa-sync"></i>
-    </button>
-    <div class="w-full h-5"></div>
-  </div>
-  <div class="bg-base-300 rounded-b-box rounded-se-box relative overflow-x-auto">
-    <div class="preview border-base-300 bg-base-100 rounded-b-box rounded-se-box flex min-h-[6rem] min-w-[18rem] max-w-4xl flex-wrap items-center justify-center gap-2 overflow-x-hidden bg-cover bg-top p-4 [border-width:var(--tab-border)]" style="">
-      <div class="overflow-x-auto"">
+        <i class="fas fa-sync"></i>
+      </button>
+      <div class="block 2xl:hidden">
+        <% @uploads.each_with_index do |upload, index| %>
+          <div class="bg-gray-100 dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white p-3 mt-5 rounded-xl">
+            <div class="w-full h-1/2 rounded-xl">
+              <% if upload.files.attached? %>
+                <% input_file = upload.files.first %>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="w-12 h-12 mask mask-squircle">
+                      <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= input_file.filename.to_s%>)" data-gall="gal-<%= index %>">
+                        <%= image_tag input_file.variant(:thumb) %>
+                      </a>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold"><%= input_file.filename.to_s %></div>
+                    <div class="text-sm opacity-50"><%= input_file.created_at.to_s %></div>
+                  </div>
+                </div>
+                <% if upload.files.attached? && upload.files.count > 1 %>
+                  <% output_file = upload.files.second %>
+                  <div class="flex items-center gap-3">
+                    <div class="avatar">
+                      <div class="w-12 h-12 mask mask-squircle">
+                        <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= output_file.filename.to_s%>)" data-gall="gal-<%= index %>">
+                          <%= image_tag output_file.variant(:thumb) %>
+                        </a>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-bold"><%= output_file.filename.to_s %></div>
+                      <div class="text-sm opacity-50"><%= upload.updated_at.to_s %></div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+              <div>
+                <%= link_to "Details", upload_path(upload), class: "transition bg-violet-500 px-2 py-1 rounded-lg ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-black btn btn-sm" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="hidden w-auto 2xl:block bg-gray-100 dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white p-3 mt-5 rounded-xl">
         <table class="table">
           <thead>
             <tr>
@@ -38,9 +78,7 @@
                       <div class="flex items-center gap-3">
                         <div class="avatar">
                           <div class="w-12 h-12 mask mask-squircle">
-                            <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= input_file.filename.to_s%>)" data-gall="gal-<%= index %>">
-                              <%= image_tag input_file.variant(:thumb) %>
-                            </a>
+                            <%= image_tag input_file.variant(:thumb) %>
                           </div>
                         </div>
                         <div>
@@ -55,9 +93,7 @@
                         <div class="flex items-center gap-3">
                           <div class="avatar">
                             <div class="w-12 h-12 mask mask-squircle">
-                              <a href="<%= rails_blob_path(output_file, disposition: "attachment") %>" class="venobox" data-title="output file (<%= output_file.filename.to_s%>)" data-gall="gal-<%= index %>">
-                                <%= image_tag output_file.variant(:thumb) %>
-                              </a>
+                              <%= image_tag output_file.variant(:thumb) %>
                             </div>
                           </div>
                           <div>
@@ -69,7 +105,7 @@
                     </td>
                     <td> <%= render "uploads/status_badge", upload: upload %></td>
                     <th>
-                      <%= link_to "Details", upload_path(upload), class: "btn btn-ghost btn-xs" %>
+                      <%= link_to "Details", upload_path(upload), class: "transition bg-violet-500 px-2 py-1 rounded-lg ease-in-out delay-100 hover hover:bg-violet-500 hover:text-white text-black btn btn-sm" %>
                     </th>
                   </tr>
                 <% end %>
@@ -87,8 +123,8 @@
           </tfoot>
         </table>
       </div>
-    </div>
+    <% else %>
+      <%= render 'uploads/no_search_results' %>
+    <% end %>
   </div>
-<% else %>
-  <%= render 'uploads/no_search_results' %>
-<% end %>
+</div>
