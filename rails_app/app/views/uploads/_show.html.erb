@@ -3,6 +3,9 @@
     <% input_file = @upload.files.first %>
     <% if input_file.representable? %>
       <div class="grid grid-flow-row justify-center">
+        <div class="pb-2 pt-2">
+          <td><%= render "uploads/status_badge", upload: @upload %></td>
+        </div>
         <h4>Input</h4>
         <a href="<%= rails_blob_path(input_file, disposition: "attachment") %>" class="venobox" data-title="input file (<%= @upload.files.first.filename.to_s%>)" data-gall="gal-1">
           <%= image_tag input_file.representation(resize_to_limit: [200, 200]) %>
@@ -33,7 +36,7 @@
     <div class="flex gap-4 mt-4 justify-center">
       <%= link_to 'Back', uploads_path, class:  'bg-blue-500 text-white px-3 py-2 text-center rounded-xl hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-500' %>
       <% if @upload.user_id == current_user.id %>
-        <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
+        <%= button_to "Delete", upload_path(@upload), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'bg-red-500 text-white px-3 py-2 text-center rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500' %>
       <% end %>
       <button 
                   onclick="window.location.reload();" 
